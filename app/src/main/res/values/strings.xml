@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">MusicPlayer</string>
+    <string name="song">Songs</string>
+    <string name="artist">Artists</string>
+    <string name="album">Albums</string>
+    <string name="library">Library</string>
+    <string name="play_list">Playlist</string>
+    <string name="playing_queue">Playing Queue</string>
+    <string name="now_playing">Now Playing</string>
+    <string name="about">About</string>
+    <string name="license">License</string>
+    <string name="feedback">Feedback</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="search_hint">Enter name..</string>
+    <string name="permission_denied">Permission Denied, You cannot access database</string>
+    <string name="ask_permission">You need to allow access to the permissions</string>
+    <string name="btn_ok">OK</string>
+    <string name="btn_cancel">Cancel</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

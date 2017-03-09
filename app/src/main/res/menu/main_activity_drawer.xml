@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:id="@+id/menu_top"
+        android:checkableBehavior="single">
+        <item android:id="@+id/btn_lib_nav"
+            android:title="@string/library"
+            android:icon="@drawable/ic_library_music_black_24dp" />
+        <item android:id="@+id/btn_playlist_nav"
+            android:title="@string/play_list"
+            android:icon="@drawable/ic_playlist_play_black_24dp"/>
+        <item android:id="@+id/btn_play_queue_nav"
+            android:title="@string/playing_queue"
+            android:icon="@drawable/ic_queue_music_black_24dp"/>
+        <item android:id="@+id/btn_now_playing_nav"
+            android:title="@string/now_playing"
+            android:icon="@drawable/ic_now_play_24dp"/>
+    </group>
+    <group
+        android:id="@+id/menu_bottom"
+        android:checkableBehavior="none">
+        <item android:id="@+id/btn_about_nav"
+            android:title="@string/about"
+            android:icon="@drawable/ic_info_black_24dp"/>
+        <item android:id="@+id/btn_license_nav"
+            android:title="@string/license"
+            android:icon="@drawable/ic_feedback_black_24dp"/>
+        <item android:id="@+id/btn_feedback_nav"
+            android:title="@string/feedback"
+            android:icon="@drawable/ic_feedback_black_24dp"/>
+    </group>
+</menu>
