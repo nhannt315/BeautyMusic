@@ -19,7 +19,7 @@
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:scaleType="centerCrop"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@drawable/music_background" />
     </LinearLayout>
 
     <LinearLayout

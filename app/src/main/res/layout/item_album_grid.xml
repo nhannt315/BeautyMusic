@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<nhannt.musicplayer.widget.SquareRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<nhannt.musicplayer.ui.custom.SquareRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <ImageView
@@ -44,4 +44,4 @@
     </LinearLayout>
 
 
-</nhannt.musicplayer.widget.SquareRelativeLayout>
+</nhannt.musicplayer.ui.custom.SquareRelativeLayout>

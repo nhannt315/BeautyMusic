@@ -2,11 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="nhannt.musicplayer.views.fragment.FragmentArtistList">
+    tools:context="nhannt.musicplayer.ui.itemlist.artistlist.FragmentArtistList">
 
     <!-- TODO: Update blank fragment layout -->
     <ProgressBar
-        android:id="@+id/progress_bar"
+        android:id="@+id/progress_bar_artist"
         android:layout_centerInParent="true"
         android:visibility="gone"
         android:layout_width="wrap_content"

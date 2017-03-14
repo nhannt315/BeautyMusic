@@ -40,6 +40,10 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ArtistView
         this.layoutType = layoutType;
     }
 
+    public int getLayoutType(){
+        return layoutType;
+    }
+
     @Override
     public ArtistViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ArtistViewHolder holder;
@@ -68,7 +72,7 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ArtistView
 
         @BindView(R.id.iv_cover_item_artist)
         protected ImageView artistArt;
-        @BindView(R.id.tv_album_title_item)
+        @BindView(R.id.tv_artist_title_item)
         protected TextView tvArtistName;
         @BindView(R.id.tv_album_song_artist_item)
         protected TextView tvArtistInfo;

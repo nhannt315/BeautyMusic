@@ -17,6 +17,7 @@
     <string name="ask_permission">You need to allow access to the permissions</string>
     <string name="btn_ok">OK</string>
     <string name="btn_cancel">Cancel</string>
+    <string name="shuffle_all">Shuffle all</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

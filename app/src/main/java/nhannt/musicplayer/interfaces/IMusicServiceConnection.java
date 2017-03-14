@@ -1,6 +1,6 @@
 package nhannt.musicplayer.interfaces;
 
-import nhannt.musicplayer.media.MusicService;
+import nhannt.musicplayer.service.MusicService;
 
 /**
  * Created by nhannt on 01/03/2017.

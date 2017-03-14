@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="nhannt.musicplayer.views.fragment.FragmentSongList">
+    tools:context="nhannt.musicplayer.ui.itemlist.songlist.FragmentSongList">
 
     <!-- TODO: Update blank fragment layout -->
     <ProgressBar

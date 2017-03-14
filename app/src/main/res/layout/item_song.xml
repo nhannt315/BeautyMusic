@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="55dp"
     android:layout_alignParentBottom="true"
-    android:background="@color/current_play_bar_background"
+    android:background="?attr/selectableItemBackgroundBorderless"
+
     android:orientation="horizontal">
 
     <LinearLayout
@@ -64,5 +65,6 @@
         android:layout_height="match_parent"
         android:paddingEnd="5dp"
         android:paddingStart="5dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/ic_more_vert_black_24dp" />
 </LinearLayout>

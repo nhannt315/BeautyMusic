@@ -16,7 +16,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.model.Song;
-import nhannt.musicplayer.presenter.RecyclerItemClickListener;
+import nhannt.musicplayer.interfaces.RecyclerItemClickListener;
 
 /**
  * Created by nhannt on 03/03/2017.

@@ -41,6 +41,10 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
         this.layoutType = layoutType;
     }
 
+    public int getLayoutType(){
+        return layoutType;
+    }
+
     @Override
     public AlbumViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         AlbumViewHolder holder;

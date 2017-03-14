@@ -12,4 +12,5 @@
     <dimen name="card_insets">8dp</dimen>
     <dimen name="item_decoration">6dp</dimen>
     <dimen name="column_width">250dp</dimen>
+    <dimen name="playing_bar_height">55dp</dimen>
 </resources>

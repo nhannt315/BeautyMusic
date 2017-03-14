@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".views.activity.HomeActivity">
+    tools:context=".ui.home.HomeActivity"
+    android:layout_marginBottom="@dimen/playing_bar_height">
     <android.support.design.widget.TabLayout
         android:id="@+id/main_tab_layout"
         android:layout_width="match_parent"

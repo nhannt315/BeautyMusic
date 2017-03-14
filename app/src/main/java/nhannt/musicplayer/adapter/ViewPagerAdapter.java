@@ -4,9 +4,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import nhannt.musicplayer.views.fragment.FragmentAlbumList;
-import nhannt.musicplayer.views.fragment.FragmentArtistList;
-import nhannt.musicplayer.views.fragment.FragmentSongList;
+import nhannt.musicplayer.ui.itemlist.albumlist.FragmentAlbumList;
+import nhannt.musicplayer.ui.itemlist.artistlist.FragmentArtistList;
+import nhannt.musicplayer.ui.itemlist.songlist.FragmentSongList;
 
 /**
  * Created by nhannt on 03/03/2017.
