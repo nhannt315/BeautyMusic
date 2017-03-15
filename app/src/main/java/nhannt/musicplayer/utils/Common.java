@@ -7,6 +7,14 @@ import android.os.Build;
  */
 
 public class Common {
+
+    public static final String FIRST_LAUNCH = "first_launch";
+    public static final String ALBUM_VIEW_MODE="album_view_mode";
+    public static final String ARTIST_VIEW_MODE="artist_view_mode";
+    public static final String SONG_SORT_MODE="song_sort_mode";
+    public static final String ALBUM_SORT_MODE="album_sort_mode";
+    public static final String ARTIST_SORT_MODE="artist_sort_mode";
+
     /**
      * @return true when the caller API version is at least lollipop 21
      */

@@ -18,7 +18,7 @@ public interface ItemListMvpView<T> {
 
     void showMessage(String message);
 
-    void notifyDataSetChange();
+    void notifyDataSetChanged();
 
     ArrayList<T> getListItem();
 }

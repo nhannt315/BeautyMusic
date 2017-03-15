@@ -35,7 +35,8 @@ public class MediaProvider {
                 new String[]{MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.ALBUM,
                         MediaStore.Audio.Media.ARTIST, MediaStore.Audio.Media._ID,
                         MediaStore.Audio.Media.DURATION, MediaStore.Audio.Media.DATA,
-                        MediaStore.Audio.Media.ALBUM_ID}
+                        MediaStore.Audio.Media.ALBUM_ID,
+                        MediaStore.Audio.Media.YEAR}
                 , null, null, MediaStore.Audio.Media.TITLE + " ASC");
 
         if (cursor != null && cursor.moveToFirst()) {
@@ -46,9 +47,10 @@ public class MediaProvider {
                 String songId = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media._ID));
                 int duration = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
                 String path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
+                int year = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.YEAR));
                 int albumID = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
                 String albumPath = getCoverArtPath(albumID);
-                Song item = new Song(songId, title, album, artist, albumPath, duration, path);
+                Song item = new Song(songId, title, album, artist, albumPath, year, duration, path);
 
                 lstSong.add(item);
 
@@ -64,7 +66,9 @@ public class MediaProvider {
 
         Cursor cursor = mContext.getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
                 new String[]{MediaStore.Audio.Albums.ALBUM, MediaStore.Audio.Albums.ALBUM_ART, MediaStore.Audio.Albums._ID,
-                        MediaStore.Audio.Albums.ARTIST}, null, null, MediaStore.Audio.Albums.ALBUM + " ASC");
+                        MediaStore.Audio.Albums.ARTIST, MediaStore.Audio.Albums.NUMBER_OF_SONGS,
+                        MediaStore.Audio.Albums.FIRST_YEAR}
+                , null, null, MediaStore.Audio.Albums.ALBUM + " ASC");
 
         if (cursor != null && cursor.moveToFirst()) {
             do {
@@ -72,12 +76,13 @@ public class MediaProvider {
                 String pathArt = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
                 int id = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Albums._ID));
                 String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ARTIST));
-//                int songCount = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Albums.NUMBER_OF_SONGS));
-                Album item = new Album(id, title, artist, pathArt, 0);
+                int songCount = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Albums.NUMBER_OF_SONGS));
+                int year = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Albums.FIRST_YEAR));
+                Album item = new Album(id, title, artist, pathArt, year, songCount);
                 lstAlbum.add(item);
             } while (cursor.moveToNext());
         }
-        if(cursor != null){
+        if (cursor != null) {
             cursor.close();
         }
         return lstAlbum;
@@ -87,14 +92,17 @@ public class MediaProvider {
         ArrayList<Artist> lstArtist = new ArrayList<>();
 
         Cursor cursor = mContext.getContentResolver().query(MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI,
-                new String[]{MediaStore.Audio.Artists.ARTIST, MediaStore.Audio.Artists._ID}, null, null, MediaStore.Audio.Artists.ARTIST + " ASC");
+                new String[]{MediaStore.Audio.Artists.ARTIST, MediaStore.Audio.Artists._ID, MediaStore.Audio.Artists.NUMBER_OF_TRACKS,
+                        MediaStore.Audio.Artists.NUMBER_OF_ALBUMS}
+                , null, null, MediaStore.Audio.Artists.ARTIST + " ASC");
 
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 String title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Artists.ARTIST));
                 int id = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Artists._ID));
-
-                Artist item = new Artist(id, title);
+                int numberSong = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Artists.NUMBER_OF_TRACKS));
+                int numberAlbum = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Artists.NUMBER_OF_ALBUMS));
+                Artist item = new Artist(id, title, numberAlbum, numberSong);
                 lstArtist.add(item);
             } while (cursor.moveToNext());
             cursor.close();
@@ -108,7 +116,8 @@ public class MediaProvider {
 
         Cursor cursor = mContext.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 new String[]{MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.ALBUM, MediaStore.Audio.Media.ARTIST, MediaStore.Audio.Media._ID,
-                        MediaStore.Audio.Media.DURATION, MediaStore.Audio.Media.DATA, MediaStore.Audio.Media.ALBUM_ID},
+                        MediaStore.Audio.Media.DURATION, MediaStore.Audio.Media.DATA, MediaStore.Audio.Media.ALBUM_ID,
+                        MediaStore.Audio.Media.YEAR},
                 MediaStore.Audio.Media.ALBUM_ID + "=?", new String[]{String.valueOf(albumId)}, MediaStore.Audio.Media.TITLE + " ASC");
 
         if (cursor != null && cursor.moveToFirst()) {
@@ -119,9 +128,10 @@ public class MediaProvider {
                 String songId = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media._ID));
                 int duration = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
                 String path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
+                int year = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.YEAR));
                 int albumID = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
                 String albumPath = getCoverArtPath(albumID);
-                Song item = new Song(songId, title, album, artist, albumPath, duration, path);
+                Song item = new Song(songId, title, album, artist, albumPath, year, duration, path);
                 lstSong.add(item);
 
             } while (cursor.moveToNext());
@@ -135,7 +145,8 @@ public class MediaProvider {
 
         Cursor cursor = mContext.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 new String[]{MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.ALBUM, MediaStore.Audio.Media.ARTIST, MediaStore.Audio.Media._ID,
-                        MediaStore.Audio.Media.DURATION, MediaStore.Audio.Media.DATA, MediaStore.Audio.Media.ALBUM_ID},
+                        MediaStore.Audio.Media.DURATION, MediaStore.Audio.Media.DATA, MediaStore.Audio.Media.ALBUM_ID,
+                        MediaStore.Audio.Media.YEAR},
                 MediaStore.Audio.Media.ARTIST_ID + "=?", new String[]{String.valueOf(artistId)}, MediaStore.Audio.Media.TITLE + " ASC");
 
         if (cursor != null && cursor.moveToFirst()) {
@@ -146,9 +157,10 @@ public class MediaProvider {
                 String songId = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media._ID));
                 int duration = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
                 String path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
+                int year = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.YEAR));
                 int albumID = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
                 String albumPath = getCoverArtPath(albumID);
-                Song item = new Song(songId, title, album, artist, albumPath, duration, path);
+                Song item = new Song(songId, title, album, artist, albumPath, year, duration, path);
                 lstSong.add(item);
 
             } while (cursor.moveToNext());

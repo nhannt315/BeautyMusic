@@ -18,7 +18,7 @@
         android:orientation="vertical"
         android:layout_weight="1"
         android:gravity="center_vertical"
-        android:paddingStart="20dp">
+        android:paddingStart="10dp">
         <TextView
             android:id="@+id/tv_album_title_item"
             android:layout_width="match_parent"

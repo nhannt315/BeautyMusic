@@ -4,13 +4,13 @@ import android.os.Handler;
 
 import nhannt.musicplayer.data.MediaProvider;
 import nhannt.musicplayer.interfaces.LoaderListener;
-import nhannt.musicplayer.ui.itemlist.Interactor;
+import nhannt.musicplayer.ui.itemlist.ItemListInteractor;
 
 /**
  * Created by nhannt on 14/03/2017.
  */
 
-public class ArtistListInteractor implements Interactor {
+public class ArtistListInteractor implements ItemListInteractor {
 
     private MediaProvider mediaProvider = MediaProvider.getInstance();
 

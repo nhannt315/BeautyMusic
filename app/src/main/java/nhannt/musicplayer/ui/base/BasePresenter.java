@@ -11,5 +11,5 @@ public interface BasePresenter<V> {
 
     void onResume();
 
-    void onItemSelected(int position);
+
 }

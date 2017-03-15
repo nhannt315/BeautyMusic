@@ -11,13 +11,15 @@ public class Album implements Serializable {
     private String title;
     private String artist;
     private String coverPath;
+    private int year;
     private int songCount;
 
-    public Album(int id, String title, String artist, String coverPath, int songCount) {
+    public Album(int id, String title, String artist, String coverPath, int year, int songCount) {
         this.id = id;
         this.title = title;
         this.artist = artist;
         this.coverPath = coverPath;
+        this.year = year;
         this.songCount = songCount;
     }
 
@@ -59,5 +61,13 @@ public class Album implements Serializable {
 
     public void setSongCount(int songCount) {
         this.songCount = songCount;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
     }
 }

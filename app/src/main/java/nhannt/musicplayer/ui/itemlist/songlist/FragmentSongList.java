@@ -12,9 +12,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -27,6 +29,9 @@ import nhannt.musicplayer.interfaces.RecyclerItemClickListener;
 import nhannt.musicplayer.ui.base.BaseFragment;
 import nhannt.musicplayer.ui.itemlist.ItemListMvpView;
 import nhannt.musicplayer.ui.custom.DividerDecoration;
+import nhannt.musicplayer.ui.itemlist.ItemListPresenter;
+import nhannt.musicplayer.utils.Common;
+import nhannt.musicplayer.utils.Setting;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -62,8 +67,8 @@ public class FragmentSongList extends BaseFragment implements ItemListMvpView<So
         super.onResume();
         setHasOptionsMenu(true);
         songPresenter.onResume();
-
     }
+
 
     @Nullable
     @Override
@@ -80,12 +85,51 @@ public class FragmentSongList extends BaseFragment implements ItemListMvpView<So
         }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.bt_view_as_list:
+                songPresenter.viewAs(ItemListPresenter.VIEW_AS_LIST);
+                break;
+            case R.id.bt_view_as_grid:
+                songPresenter.viewAs(ItemListPresenter.VIEW_AS_GRID);
+                break;
+            case R.id.bt_sort_a_z:
+                songPresenter.sortAs(ItemListPresenter.SORT_AS_A_Z);
+                break;
+            case R.id.bt_sort_z_a:
+                songPresenter.sortAs(ItemListPresenter.SORT_AS_Z_A);
+                break;
+            case R.id.bt_sort_year:
+                songPresenter.sortAs(ItemListPresenter.SORT_AS_YEAR);
+                break;
+            case R.id.bt_sort_artist:
+                songPresenter.sortAs(ItemListPresenter.SORT_AS_ARTIST);
+                break;
+            case R.id.bt_sort_album:
+                songPresenter.sortAs(ItemListPresenter.SORT_AS_ALBUM);
+                break;
+            case R.id.bt_sort_duration:
+                songPresenter.sortAs(ItemListPresenter.SORT_AS_DURATION);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        MenuItem itemSortBy = menu.findItem(R.id.bt_sort_by);
+        Menu menuSortBy = itemSortBy.getSubMenu();
+        menuSortBy.removeItem(R.id.bt_sort_album_no);
+        menuSortBy.removeItem(R.id.bt_sort_song_no);
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.main_menu, menu);
-        Log.d("Option","here");
+        Log.d("Option", "here");
     }
 
     @Override
@@ -98,9 +142,8 @@ public class FragmentSongList extends BaseFragment implements ItemListMvpView<So
     }
 
     private void setupRecyclerView() {
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         rvSongList.setLayoutManager(layoutManager);
-//        rvSongList.addItemDecoration(new ItemOffsetDecoration(rvSongList.getContext(), R.dimen.item_decoration));
         rvSongList.addItemDecoration(new DividerDecoration(getActivity()));
         rvSongList.setItemAnimator(new DefaultItemAnimator());
 
@@ -128,8 +171,8 @@ public class FragmentSongList extends BaseFragment implements ItemListMvpView<So
         songAdapter.setRecyclerItemClickListener(this);
         rvSongList.setAdapter(songAdapter);
         mData = itemList;
+        songPresenter.sortAs(Setting.getInstance().get(Common.SONG_SORT_MODE, ItemListPresenter.SORT_AS_A_Z));
     }
-
 
 
     @Override
@@ -150,7 +193,7 @@ public class FragmentSongList extends BaseFragment implements ItemListMvpView<So
     }
 
     @Override
-    public void notifyDataSetChange() {
+    public void notifyDataSetChanged() {
         songAdapter.notifyDataSetChanged();
     }
 

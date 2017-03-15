@@ -13,13 +13,14 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import nhannt.musicplayer.R;
+import nhannt.musicplayer.interfaces.RecyclerItemClickListener;
 import nhannt.musicplayer.model.Artist;
 
 /**
  * Created by nhannt on 03/03/2017.
  */
 
-public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ArtistViewHolder>{
+public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ArtistViewHolder> {
 
     public static int LAYOUT_ITEM_LIST = 0;
     public static int LAYOUT_ITEM_GRID = 1;
@@ -27,20 +28,24 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ArtistView
     private Context mContext;
     private ArrayList<Artist> mData;
     private LayoutInflater mLayoutInflater;
+    private RecyclerItemClickListener recyclerItemClickListener;
     private int layoutType;
 
-    public ArtistAdapter(Context mContext, ArrayList<Artist> mData, int layoutType) {
+    public ArtistAdapter(Context mContext, ArrayList<Artist> mData) {
         this.mContext = mContext;
         this.mData = mData;
         mLayoutInflater = LayoutInflater.from(mContext);
-        this.layoutType = layoutType;
     }
 
     public void setLayoutType(int layoutType) {
         this.layoutType = layoutType;
     }
 
-    public int getLayoutType(){
+    public void setRecyclerItemClickListener(RecyclerItemClickListener recyclerItemClickListener) {
+        this.recyclerItemClickListener = recyclerItemClickListener;
+    }
+
+    public int getLayoutType() {
         return layoutType;
     }
 
@@ -48,10 +53,10 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ArtistView
     public ArtistViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ArtistViewHolder holder;
         View itemView;
-        if(layoutType == LAYOUT_ITEM_LIST){
+        if (layoutType == LAYOUT_ITEM_LIST) {
             itemView = mLayoutInflater.inflate(R.layout.item_artist_list, parent, false);
-        }else{
-            itemView = mLayoutInflater.inflate(R.layout.item_artist_list, parent, false);
+        } else {
+            itemView = mLayoutInflater.inflate(R.layout.item_artist_grid, parent, false);
         }
         holder = new ArtistViewHolder(itemView);
         return holder;
@@ -61,6 +66,8 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ArtistView
     public void onBindViewHolder(ArtistViewHolder holder, int position) {
         Artist item = mData.get(position);
         holder.tvArtistName.setText(item.getName());
+        holder.tvArtistInfo.setText(item.getNumberOfSong() + " " + mContext.getString(R.string.song_low_case) +
+                " | " + item.getNumberOfAlbum() + " " + mContext.getString(R.string.album_low_case));
     }
 
     @Override
@@ -68,7 +75,7 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ArtistView
         return mData.size();
     }
 
-    public class ArtistViewHolder extends RecyclerView.ViewHolder{
+    public class ArtistViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.iv_cover_item_artist)
         protected ImageView artistArt;

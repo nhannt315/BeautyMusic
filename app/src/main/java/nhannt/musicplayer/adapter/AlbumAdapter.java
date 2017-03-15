@@ -14,7 +14,9 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 import nhannt.musicplayer.R;
+import nhannt.musicplayer.interfaces.RecyclerItemClickListener;
 import nhannt.musicplayer.model.Album;
 
 /**
@@ -29,11 +31,11 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
     private ArrayList<Album> mData;
     private int layoutType;
     private LayoutInflater mLayoutInflater;
+    private RecyclerItemClickListener recyclerItemClickListener;
 
-    public AlbumAdapter(Context mContext, ArrayList<Album> mData, int layoutType) {
+    public AlbumAdapter(Context mContext, ArrayList<Album> mData) {
         this.mContext = mContext;
         this.mData = mData;
-        this.layoutType = layoutType;
         mLayoutInflater = LayoutInflater.from(mContext);
     }
 
@@ -41,7 +43,11 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
         this.layoutType = layoutType;
     }
 
-    public int getLayoutType(){
+    public void setRecyclerItemClickListener(RecyclerItemClickListener recyclerItemClickListener) {
+        this.recyclerItemClickListener = recyclerItemClickListener;
+    }
+
+    public int getLayoutType() {
         return layoutType;
     }
 
@@ -49,9 +55,9 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
     public AlbumViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         AlbumViewHolder holder;
         View itemView;
-        if(layoutType == LAYOUT_ITEM_LIST){
+        if (layoutType == LAYOUT_ITEM_LIST) {
             itemView = mLayoutInflater.inflate(R.layout.item_album_list, parent, false);
-        }else{
+        } else {
             itemView = mLayoutInflater.inflate(R.layout.item_album_grid, parent, false);
         }
         holder = new AlbumViewHolder(itemView);
@@ -67,6 +73,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
                 .placeholder(R.drawable.music_background)
                 .centerCrop()
                 .into(holder.albumCover);
+
     }
 
     @Override
@@ -74,7 +81,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
         return mData.size();
     }
 
-    public class AlbumViewHolder extends RecyclerView.ViewHolder{
+    public class AlbumViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.iv_cover_item_album)
         protected ImageView albumCover;

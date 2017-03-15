@@ -8,6 +8,9 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -17,18 +20,22 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.adapter.AlbumAdapter;
+import nhannt.musicplayer.interfaces.RecyclerItemClickListener;
 import nhannt.musicplayer.model.Album;
 import nhannt.musicplayer.ui.base.BaseFragment;
 import nhannt.musicplayer.ui.custom.DividerDecoration;
 import nhannt.musicplayer.ui.custom.ItemOffsetDecoration;
 import nhannt.musicplayer.ui.itemlist.ItemListMvpView;
+import nhannt.musicplayer.ui.itemlist.ItemListPresenter;
+import nhannt.musicplayer.utils.Common;
+import nhannt.musicplayer.utils.Setting;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link FragmentAlbumList#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentAlbumList extends BaseFragment implements ItemListMvpView<Album> {
+public class FragmentAlbumList extends BaseFragment implements ItemListMvpView<Album>, RecyclerItemClickListener {
 
     public static final String TAG = FragmentAlbumList.class.getName();
     public static final String TITLE = "Albums";
@@ -41,6 +48,8 @@ public class FragmentAlbumList extends BaseFragment implements ItemListMvpView<A
     private AlbumListPresenter albumPresenter;
     private ArrayList<Album> mData;
     private AlbumAdapter mAlbumAdapter;
+    private DividerDecoration dividerDecoration;
+    private ItemOffsetDecoration offsetDecoration;
 
     public FragmentAlbumList() {
         // Required empty public constructor
@@ -66,6 +75,31 @@ public class FragmentAlbumList extends BaseFragment implements ItemListMvpView<A
         ButterKnife.bind(this, view);
         albumPresenter = new AlbumListPresenter();
         albumPresenter.attachedView(this);
+        setUpRecyclerView();
+    }
+
+
+    private void setUpRecyclerView() {
+        mRvAlbumList.addItemDecoration(new DividerDecoration(getActivity()));
+        mRvAlbumList.addItemDecoration(new ItemOffsetDecoration(getActivity(), R.dimen.item_decoration));
+        mRvAlbumList.setItemAnimator(new DefaultItemAnimator());
+    }
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.main_menu, menu);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        MenuItem itemSortBy = menu.findItem(R.id.bt_sort_by);
+        Menu menuSortBy = itemSortBy.getSubMenu();
+        menuSortBy.removeItem(R.id.bt_sort_album);
+        menuSortBy.removeItem(R.id.bt_sort_album_no);
+        menuSortBy.removeItem(R.id.bt_sort_duration);
     }
 
     @Override
@@ -80,6 +114,41 @@ public class FragmentAlbumList extends BaseFragment implements ItemListMvpView<A
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.bt_view_as_list:
+                mAlbumAdapter.setLayoutType(AlbumAdapter.LAYOUT_ITEM_LIST);
+                Setting.getInstance().put(Common.ALBUM_VIEW_MODE, AlbumAdapter.LAYOUT_ITEM_LIST);
+                refreshRecyclerView();
+                notifyDataSetChanged();
+                break;
+            case R.id.bt_view_as_grid:
+                mAlbumAdapter.setLayoutType(AlbumAdapter.LAYOUT_ITEM_GRID);
+                Setting.getInstance().put(Common.ALBUM_VIEW_MODE, AlbumAdapter.LAYOUT_ITEM_GRID);
+                refreshRecyclerView();
+                notifyDataSetChanged();
+                break;
+            case R.id.bt_sort_a_z:
+                albumPresenter.sortAs(ItemListPresenter.SORT_AS_A_Z);
+                break;
+            case R.id.bt_sort_z_a:
+                albumPresenter.sortAs(ItemListPresenter.SORT_AS_Z_A);
+                break;
+            case R.id.bt_sort_artist:
+                albumPresenter.sortAs(ItemListPresenter.SORT_AS_ARTIST);
+                break;
+            case R.id.bt_sort_year:
+                albumPresenter.sortAs(ItemListPresenter.SORT_AS_YEAR);
+                break;
+            case R.id.bt_sort_song_no:
+                albumPresenter.sortAs(ItemListPresenter.SORT_AS_NUMBER_OF_SONG);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
     protected int getLayout() {
         return R.layout.fragment_album_list;
     }
@@ -87,24 +156,24 @@ public class FragmentAlbumList extends BaseFragment implements ItemListMvpView<A
     @Override
     public void setItems(ArrayList<Album> itemList) {
         mData = itemList;
-        mAlbumAdapter = new AlbumAdapter(getActivity(), itemList, AlbumAdapter.LAYOUT_ITEM_LIST);
+        mAlbumAdapter = new AlbumAdapter(getActivity(), itemList);
+        mAlbumAdapter.setLayoutType(Setting.getInstance().get(Common.ALBUM_VIEW_MODE, AlbumAdapter.LAYOUT_ITEM_LIST));
+        mAlbumAdapter.setRecyclerItemClickListener(this);
         refreshRecyclerView();
+        albumPresenter.sortAs(Setting.getInstance().get(Common.ALBUM_SORT_MODE, ItemListPresenter.SORT_AS_A_Z));
     }
 
-    private void refreshRecyclerView() {
+    private void refreshRecyclerView(){
         RecyclerView.LayoutManager layoutManager;
         if (mAlbumAdapter.getLayoutType() == mAlbumAdapter.LAYOUT_ITEM_LIST) {
             layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-            mRvAlbumList.addItemDecoration(new DividerDecoration(getActivity()));
         } else {
             layoutManager = new GridLayoutManager(getActivity(), 2);
-            mRvAlbumList.addItemDecoration(new ItemOffsetDecoration(getActivity(), R.dimen.item_decoration));
         }
         mRvAlbumList.setAdapter(mAlbumAdapter);
         mRvAlbumList.setLayoutManager(layoutManager);
-        mRvAlbumList.setItemAnimator(new DefaultItemAnimator());
-        mAlbumAdapter.notifyDataSetChanged();
     }
+
 
     @Override
     public void showProgress() {
@@ -131,12 +200,17 @@ public class FragmentAlbumList extends BaseFragment implements ItemListMvpView<A
     }
 
     @Override
-    public void notifyDataSetChange() {
+    public void notifyDataSetChanged() {
         mAlbumAdapter.notifyDataSetChanged();
     }
 
     @Override
     public ArrayList<Album> getListItem() {
         return mData;
+    }
+
+    @Override
+    public void onItemClickListener(int position) {
+        albumPresenter.onItemSelected(position);
     }
 }

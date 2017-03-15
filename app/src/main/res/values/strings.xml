@@ -18,6 +18,17 @@
     <string name="btn_ok">OK</string>
     <string name="btn_cancel">Cancel</string>
     <string name="shuffle_all">Shuffle all</string>
+    <string name="view_as">View as</string>
+    <string name="list">List</string>
+    <string name="grid">Grid</string>
+    <string name="sort_by">Sort by</string>
+    <string name="duration">Duration</string>
+    <string name="equalizer">Equalizer</string>
+    <string name="year">Year</string>
+    <string name="number_of_song">Number of songs</string>
+    <string name="number_of_ablum">Number of albums</string>
+    <string name="song_low_case">songs</string>
+    <string name="album_low_case">albums</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

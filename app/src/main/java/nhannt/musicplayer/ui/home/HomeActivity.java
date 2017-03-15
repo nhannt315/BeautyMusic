@@ -23,6 +23,7 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.ui.base.BaseActivity;
+import nhannt.musicplayer.utils.AppController;
 import nhannt.musicplayer.utils.Common;
 import nhannt.musicplayer.ui.itemlist.FragmentMain;
 
@@ -55,9 +56,9 @@ public class HomeActivity extends BaseActivity implements DrawerPresenterImpl.Dr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(getLayout());
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setContentView(getLayout());
         ButterKnife.bind(this);
         drawerPresenter = new DrawerPresenterImpl(this);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, getToolbar(),
@@ -74,11 +75,11 @@ public class HomeActivity extends BaseActivity implements DrawerPresenterImpl.Dr
         } else {
             doMainWork();
         }
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

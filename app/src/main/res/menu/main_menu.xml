@@ -1,13 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/search_view"
-        app:actionViewClass="android.support.v7.widget.SearchView"
+    <item
+        android:id="@+id/search_view"
         android:icon="@drawable/ic_search_white_24dp"
         android:orderInCategory="100"
         android:title="@string/search_hint"
-        app:showAsAction = "always"/>
-    <item android:id="@+id/btn_shuffle_all_menu"
-        android:title="@string/shuffle_all"
-        />
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/btn_shuffle_all_menu"
+        android:title="@string/shuffle_all" />
+    <item
+        android:id="@+id/bt_view_as"
+        android:title="@string/view_as">
+        <menu>
+            <item
+                android:id="@+id/bt_view_as_list"
+                android:title="@string/list" />
+            <item
+                android:id="@+id/bt_view_as_grid"
+                android:title="@string/grid" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/bt_sort_by"
+        android:title="@string/sort_by">
+        <menu>
+            <item
+                android:id="@+id/bt_sort_a_z"
+                android:title="A-Z" />
+            <item
+                android:id="@+id/bt_sort_z_a"
+                android:title="Z-A" />
+            <item
+                android:id="@+id/bt_sort_artist"
+                android:title="@string/artist" />
+            <item
+                android:id="@+id/bt_sort_year"
+                android:title="@string/year" />
+            <item
+                android:id="@+id/bt_sort_album"
+                android:title="@string/album" />
+            <item
+                android:id="@+id/bt_sort_duration"
+                android:title="@string/duration" />
+            "
+            <item
+                android:id="@+id/bt_sort_song_no"
+                android:title="@string/number_of_song" />
+            <item
+                android:id="@+id/bt_sort_album_no"
+                android:title="@string/number_of_ablum" />
+
+
+        </menu>
+
+    </item>
+    <item
+        android:id="@+id/bt_equalizer"
+        android:title="@string/equalizer" />
 </menu>
