@@ -19,9 +19,10 @@ import nhannt.musicplayer.R;
  * Created by nhannt on 01/03/2017.
  */
 
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment implements BaseView {
 
     protected Toolbar toolbar;
+    private Context mContext;
 
     @Nullable
     @Override
@@ -35,6 +36,12 @@ public abstract class BaseFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
         settingToolbar(view);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        this.mContext = context;
+        super.onAttach(context);
     }
 
     private void settingToolbar(View view) {
@@ -54,7 +61,10 @@ public abstract class BaseFragment extends Fragment {
         }
     }
 
-
+    @Override
+    public Context getViewContext() {
+        return mContext;
+    }
 
     protected abstract int getLayout();
 

@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import nhannt.musicplayer.interfaces.LoaderListener;
+import nhannt.musicplayer.ui.itemlist.LoaderListener;
 import nhannt.musicplayer.model.Album;
-import nhannt.musicplayer.ui.base.BasePresenter;
 import nhannt.musicplayer.ui.itemlist.ItemListMvpView;
 import nhannt.musicplayer.ui.itemlist.ItemListPresenter;
 import nhannt.musicplayer.utils.Common;

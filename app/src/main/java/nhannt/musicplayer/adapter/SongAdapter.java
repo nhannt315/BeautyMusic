@@ -55,6 +55,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
         Glide.with(mContext).load(item.getCoverPath())
                 .placeholder(R.drawable.music_background)
                 .centerCrop()
+                .dontAnimate()
                 .into(holder.ivAlbumCover);
     }
 

@@ -72,6 +72,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
         Glide.with(mContext).load(item.getCoverPath())
                 .placeholder(R.drawable.music_background)
                 .centerCrop()
+                .dontAnimate()
                 .into(holder.albumCover);
 
     }

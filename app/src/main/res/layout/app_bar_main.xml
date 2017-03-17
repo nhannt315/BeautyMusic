@@ -14,8 +14,12 @@
         android:theme="@style/AppTheme.AppBarOverlay"
         app:elevation="0dp">
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <include layout="@layout/toolbar" />
+        </FrameLayout>
 
-        <include layout="@layout/toolbar" />
 
     </android.support.design.widget.AppBarLayout>
     <FrameLayout

@@ -50,7 +50,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    protected Toolbar getToolbar(){
+    protected Toolbar getToolbar() {
         return this.toolbar;
     }
 
@@ -92,7 +92,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    public void showFragment(Fragment fragment, String tag){
+    public void showFragment(Fragment fragment, String tag) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.addToBackStack("");
@@ -100,7 +100,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-    public void popFragment(String tag){
+    public void popFragment(String tag) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.popBackStack(tag, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }

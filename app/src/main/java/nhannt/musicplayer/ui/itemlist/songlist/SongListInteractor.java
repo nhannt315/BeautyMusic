@@ -1,9 +1,9 @@
 package nhannt.musicplayer.ui.itemlist.songlist;
 
 import android.os.Handler;
-import nhannt.musicplayer.data.MediaProvider;
+import nhannt.musicplayer.data.provider.MediaProvider;
 import nhannt.musicplayer.ui.itemlist.ItemListInteractor;
-import nhannt.musicplayer.interfaces.LoaderListener;
+import nhannt.musicplayer.ui.itemlist.LoaderListener;
 
 /**
  * Created by nhannt on 07/03/2017.

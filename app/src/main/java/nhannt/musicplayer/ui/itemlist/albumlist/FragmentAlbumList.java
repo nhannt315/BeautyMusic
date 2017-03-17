@@ -48,12 +48,12 @@ public class FragmentAlbumList extends BaseFragment implements ItemListMvpView<A
     private AlbumListPresenter albumPresenter;
     private ArrayList<Album> mData;
     private AlbumAdapter mAlbumAdapter;
-    private DividerDecoration dividerDecoration;
-    private ItemOffsetDecoration offsetDecoration;
 
     public FragmentAlbumList() {
         // Required empty public constructor
     }
+
+
 
     public static FragmentAlbumList newInstance() {
         FragmentAlbumList fragment = new FragmentAlbumList();
@@ -213,4 +213,5 @@ public class FragmentAlbumList extends BaseFragment implements ItemListMvpView<A
     public void onItemClickListener(int position) {
         albumPresenter.onItemSelected(position);
     }
+
 }

@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/search_view"
-        android:icon="@drawable/ic_search_white_24dp"
-        android:orderInCategory="100"
-        android:title="@string/search_hint"
-        app:actionViewClass="android.support.v7.widget.SearchView"
-        app:showAsAction="always" />
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
     <item
         android:id="@+id/btn_shuffle_all_menu"
         android:title="@string/shuffle_all" />
@@ -45,15 +38,12 @@
             <item
                 android:id="@+id/bt_sort_duration"
                 android:title="@string/duration" />
-            "
             <item
                 android:id="@+id/bt_sort_song_no"
                 android:title="@string/number_of_song" />
             <item
                 android:id="@+id/bt_sort_album_no"
                 android:title="@string/number_of_ablum" />
-
-
         </menu>
 
     </item>

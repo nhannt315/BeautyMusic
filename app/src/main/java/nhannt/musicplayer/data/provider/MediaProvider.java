@@ -1,4 +1,4 @@
-package nhannt.musicplayer.data;
+package nhannt.musicplayer.data.provider;
 
 import android.content.Context;
 import android.database.Cursor;

@@ -15,6 +15,9 @@ public class Common {
     public static final String ALBUM_SORT_MODE="album_sort_mode";
     public static final String ARTIST_SORT_MODE="artist_sort_mode";
 
+    public static final String LIST_SONG = "list_songs";
+    public static final String CURRENT_PLAY = "current_play";
+
     /**
      * @return true when the caller API version is at least lollipop 21
      */

@@ -1,6 +1,7 @@
 package nhannt.musicplayer.ui.itemlist.artistlist;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -44,9 +45,9 @@ public class FragmentArtistList extends BaseFragment implements ItemListMvpView<
     @BindView(R.id.rv_artist_list_main)
     protected RecyclerView mRvArtistList;
 
-    ArtistListPresenter artistPresenter;
-    ArtistAdapter mAdapter;
-    ArrayList<Artist> mData;
+    private ArtistListPresenter artistPresenter;
+    private ArtistAdapter mAdapter;
+    private ArrayList<Artist> mData;
 
     public FragmentArtistList() {
         // Required empty public constructor
@@ -202,4 +203,5 @@ public class FragmentArtistList extends BaseFragment implements ItemListMvpView<
     public void onItemClickListener(int position) {
         artistPresenter.onItemSelected(position);
     }
+
 }

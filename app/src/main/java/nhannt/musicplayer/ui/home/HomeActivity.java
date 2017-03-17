@@ -18,12 +18,13 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.ui.base.BaseActivity;
-import nhannt.musicplayer.utils.AppController;
+import nhannt.musicplayer.ui.drawer.DrawerPresenterImpl;
 import nhannt.musicplayer.utils.Common;
 import nhannt.musicplayer.ui.itemlist.FragmentMain;
 
@@ -69,17 +70,17 @@ public class HomeActivity extends BaseActivity implements DrawerPresenterImpl.Dr
         if (Common.isMarshMallow()) {
             if (!checkPermission()) {
                 requestPermission();
-            }else{
+            } else {
                 doMainWork();
             }
         } else {
             doMainWork();
         }
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.search_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -91,24 +92,34 @@ public class HomeActivity extends BaseActivity implements DrawerPresenterImpl.Dr
     }
 
     private void requestPermission() {
-
         ActivityCompat.requestPermissions(this, new String[]{WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
-
     }
 
 
     private void doMainWork() {
+        navigationView.getMenu().getItem(0).setChecked(true);
         showFragment(FragmentMain.newInstance(), FragmentMain.TAG);
     }
 
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
+        drawerPresenter.navigationItemSelected(item, drawerLayout);
+        switch (item.getItemId()){
+            case R.id.btn_lib_nav:
+                break;
+            case R.id.btn_playlist_nav:
+                break;
+            case R.id.btn_play_queue_nav:
+                break;
             case R.id.btn_now_playing_nav:
                 break;
+            case R.id.btn_about_nav:
+                break;
+            case R.id.btn_license_nav:
+                break;
+            case R.id.btn_feedback_nav:
+                break;
         }
-        drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
