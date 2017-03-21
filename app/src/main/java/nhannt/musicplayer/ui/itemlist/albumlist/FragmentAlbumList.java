@@ -1,6 +1,7 @@
 package nhannt.musicplayer.ui.itemlist.albumlist;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -214,4 +215,8 @@ public class FragmentAlbumList extends BaseFragment implements ItemListMvpView<A
         albumPresenter.onItemSelected(position);
     }
 
+    @Override
+    public Activity getViewActivity() {
+        return getActivity();
+    }
 }

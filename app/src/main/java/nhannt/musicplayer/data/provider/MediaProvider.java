@@ -4,9 +4,19 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import nhannt.musicplayer.data.network.VolleyConnection;
 import nhannt.musicplayer.model.Album;
 import nhannt.musicplayer.model.Artist;
 import nhannt.musicplayer.model.Song;
@@ -19,8 +29,11 @@ import nhannt.musicplayer.utils.AppController;
 public class MediaProvider {
     private static MediaProvider mInstance = null;
     private Context mContext = AppController.getInstance().getContext();
+    private static final String LAST_FM_API_KEY = "761226e2f2b94da7de6a61d73f50e33c";
+    private static final String URL_1 = "http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=";
+    private static final String URL_2 = "&api_key=" + LAST_FM_API_KEY + "&format=json";
 
-    public static synchronized MediaProvider getInstance() {
+    public static MediaProvider getInstance() {
         if (mInstance == null) {
             mInstance = new MediaProvider();
         }
@@ -107,8 +120,42 @@ public class MediaProvider {
             } while (cursor.moveToNext());
             cursor.close();
         }
-
+        for (Artist artist : lstArtist) {
+            getArtistPhoto(artist);
+        }
         return lstArtist;
+    }
+
+    private void getArtistPhoto(final Artist mArtist) {
+        String requestLink = URL_1 + mArtist.getName() + URL_2;
+        Log.d(mArtist.getName() + " request link", requestLink);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
+                requestLink, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        JSONObject result = response.optJSONObject("results");
+                        JSONObject artistMatches = result.optJSONObject("artistmatches");
+                        JSONArray listArtist = artistMatches.optJSONArray("artist");
+                        if (listArtist != null) {
+                            JSONObject artist = listArtist.optJSONObject(0);
+                            if (artist != null) {
+                                JSONArray photoList = artist.optJSONArray("image");
+                                JSONObject photo = photoList.optJSONObject(2);
+                                String url = photo.optString("#text");
+                                Log.d(mArtist.getName() + " link day nhe", url);
+                                mArtist.setImageUrl(url);
+
+                            }
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        VolleyConnection.getInstance(mContext).addRequestToQueue(jsonObjectRequest);
     }
 
     public ArrayList<Song> getListSongOfAlbum(int albumId) {

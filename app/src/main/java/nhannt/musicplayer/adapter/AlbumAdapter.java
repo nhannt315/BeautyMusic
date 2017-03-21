@@ -69,11 +69,18 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
         Album item = mData.get(position);
         holder.tvAlbumTitle.setText(item.getTitle());
         holder.tvArtistName.setText(item.getArtist());
-        Glide.with(mContext).load(item.getCoverPath())
-                .placeholder(R.drawable.music_background)
-                .centerCrop()
-                .dontAnimate()
-                .into(holder.albumCover);
+        if(layoutType == LAYOUT_ITEM_LIST) {
+            Glide.with(mContext).load(item.getCoverPath())
+                    .placeholder(R.drawable.music_background)
+                    .centerCrop()
+                    .dontAnimate()
+                    .into(holder.albumCover);
+        }else{
+            Glide.with(mContext).load(item.getCoverPath())
+                    .placeholder(R.drawable.music_background)
+                    .centerCrop()
+                    .into(holder.albumCover);
+        }
 
     }
 

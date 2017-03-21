@@ -57,6 +57,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
                 .centerCrop()
                 .dontAnimate()
                 .into(holder.ivAlbumCover);
+        holder.position = position;
     }
 
     @Override
@@ -65,6 +66,8 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
     }
 
     public class SongViewHolder extends RecyclerView.ViewHolder{
+
+        int position;
         @BindView(R.id.iv_cover_item_song)
         protected ImageView ivAlbumCover;
         @BindView(R.id.tv_song_title_item)
@@ -77,6 +80,12 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
         public SongViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    recyclerItemClickListener.onItemClickListener(position);
+                }
+            });
         }
     }
 }

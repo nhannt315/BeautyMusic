@@ -1,7 +1,11 @@
 package nhannt.musicplayer.service;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,16 +17,20 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
+import android.widget.RemoteViews;
 
 import java.util.ArrayList;
 
+import nhannt.musicplayer.R;
 import nhannt.musicplayer.model.Song;
 import nhannt.musicplayer.receiver.RemoteReceiver;
+import nhannt.musicplayer.ui.playback.PlayBackActivity;
 import nhannt.musicplayer.utils.Common;
 
 /**
@@ -39,7 +47,8 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         Preparing,
         Stop,
         Playing,
-        Pause
+        Pause,
+        Buffering
     }
 
 
@@ -53,21 +62,22 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     private AudioManager audioManager;
     private int audioManagerResult;
 
-    public static final String ACTION_PLAY = "nhannt.app.musicplayer.ACTION_PLAY";
-    public static final String ACTION_TOGGLE_PLAY_PAUSE = "nhannt.app.musicplayer.ACTION_TOGGLE_PLAY_PAUSE";
-    public static final String ACTION_PAUSE = "nhannt.app.musicplayer.ACTION_PAUSE";
-    public static final String ACTION_NEXT = "nhannt.app.musicplayer.ACTION_NEXT";
-    public static final String ACTION_PREVIOUS = "nhannt.app.musicplayer.ACTION_PREVIOUS";
-    public static final String ACTION_EXIT = "nhannt.app.musicplayer.ACTION_EXIT";
+    public static final String ACTION_PLAY = "nhannt.musicplayer.ACTION_PLAY";
+    public static final String ACTION_TOGGLE_PLAY_PAUSE = "nhannt.musicplayer.ACTION_TOGGLE_PLAY_PAUSE";
+    public static final String ACTION_PAUSE = "nhannt.musicplayer.ACTION_PAUSE";
+    public static final String ACTION_NEXT = "nhannt.musicplayer.ACTION_NEXT";
+    public static final String ACTION_PREVIOUS = "nhannt.musicplayer.ACTION_PREVIOUS";
+    public static final String ACTION_EXIT = "nhannt.musicplayer.ACTION_EXIT";
 
-    public static final String META_CHANGE = "nhannt.app.musicplayer.META_CHANGE";
-    public static final String PLAY_STATE_CHANGE = "nhannt.app.musicplayer.STATE_CHANGE";
-    public static final String EXIT = "nhannt.app.musicplayer.EXIT";
+    public static final String META_CHANGE = "nhannt.musicplayer.META_CHANGE";
+    public static final String PLAY_STATE_CHANGE = "nhannt.musicplayer.STATE_CHANGE";
+    public static final String EXIT = "nhannt.musicplayer.EXIT";
 
     @Override
     public void onCreate() {
         super.onCreate();
         initMusicPlayer();
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         audioManagerResult = audioManager.requestAudioFocus(afChangeListener,
                 AudioManager.STREAM_MUSIC,
                 AudioManager.AUDIOFOCUS_GAIN);
@@ -132,6 +142,61 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         }
     };
 
+    private void updateNotification(){
+        boolean isClearable = false;
+        if(getState() == MusicState.Playing){
+            isClearable = false;
+        }else if(getState() == MusicState.Pause || getState() == MusicState.Stop){
+            isClearable = true;
+        }
+        Notification notify = createNotification(getCurrentSong(),isClearable);
+        if(isClearable){
+            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager.notify(NOTIFY_ID, notify);
+        }else{
+            startForeground(NOTIFY_ID, notify);
+        }
+    }
+
+    private Notification createNotification(Song song,boolean isClearable) {
+        Intent notificationIntent = new Intent(this, PlayBackActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        builder.setSmallIcon(R.mipmap.ic_launcher);
+        builder.setContentIntent(contentIntent);
+
+
+        RemoteViews notificationView = new RemoteViews(getPackageName(), R.layout.notification_layout);
+
+        if (getState() == MusicState.Playing) {
+            notificationView.setImageViewResource(R.id.bt_play_pause_notification, R.drawable.ic_pause_black_24dp);
+        } else {
+            notificationView.setImageViewResource(R.id.bt_play_pause_notification, R.drawable.ic_play_arrow_black_24dp);
+        }
+
+        if (song.getCoverPath() != null) {
+            Bitmap bitmap = BitmapFactory.decodeFile(song.getCoverPath());
+            notificationView.setImageViewBitmap(R.id.img_album_art_notification, bitmap);
+        } else {
+            notificationView.setImageViewResource(R.id.img_album_art_notification, R.drawable.music_background);
+        }
+
+        PendingIntent piPlayPause = PendingIntent.getService(this, 0, new Intent(ACTION_TOGGLE_PLAY_PAUSE),
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent piSkipNext = PendingIntent.getService(this, 0, new Intent(ACTION_NEXT),
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent piSkipPrev = PendingIntent.getService(this, 0, new Intent(ACTION_PREVIOUS),
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        notificationView.setOnClickPendingIntent(R.id.bt_play_pause_notification, piPlayPause);
+        notificationView.setOnClickPendingIntent(R.id.bt_next_notification, piSkipNext);
+        notificationView.setOnClickPendingIntent(R.id.bt_prev_notification, piSkipPrev);
+
+        builder.setContent(notificationView);
+        Notification notification = builder.build();
+        return notification;
+    }
+
     public void showLockScreen() {
         Song currentSong = lstSong.get(songPos);
         ComponentName receiver = new ComponentName(getPackageName(), RemoteReceiver.class.getName());
@@ -163,6 +228,9 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
             mediaPlayer.prepareAsync();
             notifyClients(PLAY_STATE_CHANGE);
             setState(MusicState.Preparing);
+            if(audioManagerResult == AudioManager.AUDIOFOCUS_REQUEST_GRANTED){
+                mediaPlayer.start();
+            }
         } catch (Exception ex) {
             Log.e("Error", ex.getMessage());
         }
@@ -176,13 +244,20 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         }
     }
 
+    public Song getCurrentSong() {
+        if (lstSong == null) return null;
+        if (songPos < 0) songPos = 0;
+        if (songPos >= lstSong.size()) return null;
+        return lstSong.get(songPos);
+    }
+
     public void pauseSong() {
         if (mediaPlayer != null) {
             if (mediaPlayer.isPlaying() && getState() == MusicState.Playing) {
                 mediaPlayer.pause();
                 setState(MusicState.Pause);
                 notifyClients(PLAY_STATE_CHANGE);
-//                updateNotification();
+                updateNotification();
             }
         }
     }
@@ -191,10 +266,10 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         if (mediaPlayer != null) {
             if (getState() == MusicState.Pause) {
                 mediaPlayer.start();
-//                startForeground(NOTIFY_ID, createNotification(getCurrentSong()));
                 setState(MusicState.Playing);
+                updateNotification();
                 notifyClients(PLAY_STATE_CHANGE);
-//                updateNotification();
+                updateNotification();
             }
         }
     }
@@ -257,6 +332,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         if (getCurrentPosition() == 0) return;
         if (mediaPlayer != null) {
             nextSong();
+
         }
     }
 
@@ -273,7 +349,8 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         setState(MusicState.Playing);
         notifyClients(PLAY_STATE_CHANGE);
         notifyClients(META_CHANGE);
-        //TODO intert into recent play database
+        updateNotification();
+        //TODO insert into recent play database
     }
 
     @Override
@@ -288,6 +365,14 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         if (bundle != null)
             intent.putExtras(bundle);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
+    public void seekTo(int mSec) {
+        if (mediaPlayer != null) {
+            mediaPlayer.seekTo(mSec);
+            setState(MusicState.Buffering);
+            notifyClients(PLAY_STATE_CHANGE);
+        }
     }
 
     private void notifyClients(String what) {
@@ -322,5 +407,20 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         public MusicService getService() {
             return MusicService.this;
         }
+    }
+
+    public boolean isShuffle(){
+        return this.isShuffle;
+    }
+    public boolean isRepeat(){
+        return this.isRepeat;
+    }
+
+    public void setShuffle(boolean isShuffle){
+        this.isShuffle = isShuffle;
+    }
+
+    public void setRepeat(boolean isRepeat){
+        this.isRepeat = isRepeat;
     }
 }

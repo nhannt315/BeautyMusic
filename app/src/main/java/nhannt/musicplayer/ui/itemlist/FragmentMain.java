@@ -1,6 +1,7 @@
 package nhannt.musicplayer.ui.itemlist;
 
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -57,5 +58,10 @@ public class FragmentMain extends BaseFragment {
     @Override
     protected int getLayout() {
         return R.layout.fragment_main;
+    }
+
+    @Override
+    public Activity getViewActivity() {
+        return getActivity();
     }
 }

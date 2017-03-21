@@ -1,6 +1,7 @@
 package nhannt.musicplayer.ui.itemlist.artistlist;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -75,6 +76,7 @@ public class FragmentArtistList extends BaseFragment implements ItemListMvpView<
         artistPresenter = new ArtistListPresenter();
         artistPresenter.attachedView(this);
         setUpRecyclerView();
+        artistPresenter.onResume();
     }
 
     private void refreshRecyclerView(){
@@ -97,7 +99,7 @@ public class FragmentArtistList extends BaseFragment implements ItemListMvpView<
     @Override
     public void onResume() {
         super.onResume();
-        artistPresenter.onResume();
+
     }
 
     @Override
@@ -204,4 +206,8 @@ public class FragmentArtistList extends BaseFragment implements ItemListMvpView<
         artistPresenter.onItemSelected(position);
     }
 
+    @Override
+    public Activity getViewActivity() {
+        return getActivity();
+    }
 }

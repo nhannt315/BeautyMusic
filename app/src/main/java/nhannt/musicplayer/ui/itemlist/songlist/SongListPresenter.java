@@ -1,9 +1,15 @@
 package nhannt.musicplayer.ui.itemlist.songlist;
 
+import android.content.Intent;
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import nhannt.musicplayer.interfaces.IMusicServiceConnection;
+import nhannt.musicplayer.service.MusicService;
+import nhannt.musicplayer.service.MusicServiceConnection;
 import nhannt.musicplayer.ui.itemlist.LoaderListener;
 import nhannt.musicplayer.model.Song;
 import nhannt.musicplayer.ui.itemlist.ItemListMvpView;
@@ -19,7 +25,7 @@ public class SongListPresenter implements ItemListPresenter<ItemListMvpView<Song
 
     private ItemListMvpView<Song> songMvpView;
     private SongListInteractor songListInteractor;
-
+    private MusicServiceConnection mMusicServiceConnection;
 
     @Override
     public void onFinished(ArrayList<Song> itemList) {
@@ -49,8 +55,20 @@ public class SongListPresenter implements ItemListPresenter<ItemListMvpView<Song
     }
 
     @Override
-    public void onItemSelected(int position) {
-
+    public void onItemSelected(final int position) {
+        mMusicServiceConnection = new MusicServiceConnection(songMvpView.getViewContext());
+        Intent iSelectSongPlay = new Intent(songMvpView.getViewContext(), MusicService.class);
+        iSelectSongPlay.setAction(MusicService.ACTION_PLAY);
+        Log.d("fadf","adsfda");
+        mMusicServiceConnection.connect(iSelectSongPlay, new IMusicServiceConnection() {
+            @Override
+            public void onConnected(MusicService service) {
+                service.setSongPos(position);
+                service.setLstSong(songMvpView.getListItem());
+                Log.d("vao day","here");
+                service.playSong();
+            }
+        });
     }
 
     @Override

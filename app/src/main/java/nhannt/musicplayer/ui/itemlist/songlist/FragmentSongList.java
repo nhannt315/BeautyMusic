@@ -1,6 +1,7 @@
 package nhannt.musicplayer.ui.itemlist.songlist;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -206,5 +207,10 @@ public class FragmentSongList extends BaseFragment implements ItemListMvpView<So
     public void onDestroy() {
         songPresenter.detachView();
         super.onDestroy();
+    }
+
+    @Override
+    public Activity getViewActivity() {
+        return getActivity();
     }
 }

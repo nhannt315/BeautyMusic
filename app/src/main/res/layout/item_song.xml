@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="55dp"
     android:layout_alignParentBottom="true"
-    android:background="?attr/selectableItemBackgroundBorderless"
+    android:background="?attr/selectableItemBackground"
 
     android:orientation="horizontal">
 
@@ -20,7 +20,7 @@
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:scaleType="centerCrop"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@drawable/music_background" />
     </LinearLayout>
 
     <LinearLayout
