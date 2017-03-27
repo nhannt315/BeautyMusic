@@ -17,16 +17,22 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+
+import com.bumptech.glide.Glide;
+
+import org.w3c.dom.Text;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.interfaces.IMusicServiceConnection;
+import nhannt.musicplayer.model.Song;
 import nhannt.musicplayer.service.MusicService;
 import nhannt.musicplayer.ui.base.BaseActivity;
 import nhannt.musicplayer.ui.custom.CustomSeekBar;
@@ -38,7 +44,7 @@ import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class HomeActivity extends BaseActivity implements DrawerPresenterImpl.DrawerView,
-        NavigationView.OnNavigationItemSelectedListener,IMusicServiceConnection,IHomeView {
+        NavigationView.OnNavigationItemSelectedListener, IMusicServiceConnection, IHomeView {
 
     private static final int PERMISSION_REQUEST_CODE = 200;
 
@@ -61,6 +67,10 @@ public class HomeActivity extends BaseActivity implements DrawerPresenterImpl.Dr
     private DrawerPresenterImpl drawerPresenter;
     private MusicService mService;
     private HomePresenter mPresenter;
+    private View header;
+    private TextView tvSongTitleHeader;
+    private TextView tvArtistHeader;
+    private ImageView albumCoverHeader;
 
 
     @Override
@@ -70,16 +80,8 @@ public class HomeActivity extends BaseActivity implements DrawerPresenterImpl.Dr
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
-        drawerPresenter = new DrawerPresenterImpl(this);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, getToolbar(),
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        navigationView.getMenu().performIdentifierAction(R.id.btn_lib_nav, 0);
-        seekBar.getThumb().mutate().setAlpha(0); //disable thumb icon on seek bar
-        toggle.syncState();
-        mPresenter = new HomePresenter();
-        mPresenter.attachedView(this);
-        addOnMusicServiceListener(this);
+        initSetting();
+
         if (Common.isMarshMallow()) {
             if (!checkPermission()) {
                 requestPermission();
@@ -89,6 +91,25 @@ public class HomeActivity extends BaseActivity implements DrawerPresenterImpl.Dr
         } else {
             doMainWork();
         }
+    }
+
+    private void initSetting() {
+        drawerPresenter = new DrawerPresenterImpl(this);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, getToolbar(),
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        navigationView.getMenu().performIdentifierAction(R.id.btn_lib_nav, 0);
+//        seekBar.getThumb().mutate().setAlpha(0); //disable thumb icon on seek bar
+
+        header = navigationView.getHeaderView(0);
+        tvSongTitleHeader = (TextView) header.findViewById(R.id.tv_song_name_nav_header);
+        tvArtistHeader = (TextView) header.findViewById(R.id.tv_artist_name_nav_header);
+        albumCoverHeader = (ImageView) header.findViewById(R.id.iv_nav_header_back_ground);
+
+        toggle.syncState();
+        mPresenter = new HomePresenter();
+        mPresenter.attachedView(this);
+        addOnMusicServiceListener(this);
     }
 
     @Override
@@ -112,12 +133,13 @@ public class HomeActivity extends BaseActivity implements DrawerPresenterImpl.Dr
     private void doMainWork() {
         navigationView.getMenu().getItem(0).setChecked(true);
         showFragment(FragmentMain.newInstance(), FragmentMain.TAG);
+        btnTogglePlay.setOnClickListener(mPresenter);
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         drawerPresenter.navigationItemSelected(item, drawerLayout);
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.btn_lib_nav:
                 break;
             case R.id.btn_playlist_nav:
@@ -183,13 +205,14 @@ public class HomeActivity extends BaseActivity implements DrawerPresenterImpl.Dr
     public void updateSeekBar(int currentTime, int totalTime) {
         seekBar.setMax(totalTime);
         seekBar.setProgress(currentTime);
+//        seekBar.setProgress(Common.percentSeekbar(currentTime, totalTime));
     }
 
     @Override
     public void updatePlayPauseState() {
-        if(mService.getState() == MusicService.MusicState.Playing){
+        if (mService.getState() == MusicService.MusicState.Playing) {
             btnTogglePlay.setImageResource(R.drawable.ic_pause_red_600_24dp);
-        }else{
+        } else {
             btnTogglePlay.setImageResource(R.drawable.ic_play_arrow_red_600_24dp);
         }
     }
@@ -201,10 +224,24 @@ public class HomeActivity extends BaseActivity implements DrawerPresenterImpl.Dr
 
     @Override
     public void updateSongInfo() {
-        if(mService != null) {
-            tvArtistCurrentBar.setText(mService.getCurrentSong().getArtist());
-            tvSongTitleCurrentBar.setText(mService.getCurrentSong().getTitle());
-        }
+        if (mService == null) return;
+        Song song = mService.getCurrentSong();
+        if(song == null) return;
+        //Current bar
+        tvArtistCurrentBar.setText(song.getArtist());
+        tvSongTitleCurrentBar.setText(song.getTitle());
+        Glide.with(this).load(song.getCoverPath())
+                .placeholder(R.drawable.music_background)
+                .centerCrop()
+                .dontAnimate()
+                .into(ivAlbumCurrentBar);
+        //Navigation header
+        tvArtistHeader.setText(song.getArtist());
+        tvSongTitleHeader.setText(song.getTitle());
+        Glide.with(this).load(song.getCoverPath())
+                .centerCrop()
+                .placeholder(R.drawable.music_background)
+                .into(albumCoverHeader);
     }
 
     @Override

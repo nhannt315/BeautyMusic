@@ -13,6 +13,10 @@
             android:layout_height="match_parent"
             android:src="@drawable/music_background"
             android:scaleType="centerCrop" />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/nav_header_background"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -26,12 +30,14 @@
                 android:textStyle="bold"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_big"
+                android:maxLines="1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
                 android:id="@+id/tv_artist_name_nav_header"
                 android:text="@string/artist"
                 android:textSize="@dimen/text_size_normal"
+                android:maxLines="1"
                 android:textColor="@color/white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />

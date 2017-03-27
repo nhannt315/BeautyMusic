@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 
 import nhannt.musicplayer.R;
@@ -43,10 +44,16 @@ public class HomePresenter implements IHomePresenter, View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        Intent intent = null;
         switch (v.getId()) {
             case R.id.btn_toggle_play_current_bar:
-                Intent intent = new Intent(mView.getViewContext(), PlayBackActivity.class);
-                mView.getViewActivity().startActivity(intent);
+                intent = new Intent(mView.getViewContext(), MusicService.class);
+                intent.setAction(MusicService.ACTION_TOGGLE_PLAY_PAUSE);
+                mView.getViewActivity().startService(intent);
+                break;
+            case R.id.current_play_bar:
+                intent = new Intent(mView.getViewContext(), PlayBackActivity.class);
+                mView.getViewContext().startActivity(intent);
                 mView.getViewActivity().overridePendingTransition(R.anim.slide_in_up, R.anim.no_change);
                 break;
         }
@@ -58,6 +65,8 @@ public class HomePresenter implements IHomePresenter, View.OnClickListener {
             String action = intent.getAction();
             if (action.equals(MusicService.PLAY_STATE_CHANGE)) {
                 updateTimePlay();
+                mView.updateSongInfo();
+                mView.updatePlayPauseState();
             }
         }
     };
@@ -71,9 +80,17 @@ public class HomePresenter implements IHomePresenter, View.OnClickListener {
     private Runnable mUpdateTimeTask = new Runnable() {
         @Override
         public void run() {
-            mView.updateSeekBar(mService.getCurrentPosition(), (int) mService.getCurrentSong().getDuration());
+            mService = mView.getMusicService();
+            if (mService != null) {
+                if (mService.getState() == MusicService.MusicState.Playing) {
+                    mView.updateSeekBar(mService.getCurrentPosition(), mService.getDuration());
+                    handler.postDelayed(mUpdateTimeTask, 200);
+                }
+            }
+
         }
     };
+
 
     @Override
     public BroadcastReceiver getReceiver() {
