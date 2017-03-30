@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import butterknife.BindView;
@@ -41,7 +42,7 @@ public class FragmentMain extends BaseFragment {
 
 
     private void settingViews() {
-        viewPager.setAdapter(new ViewPagerAdapter(getActivity().getSupportFragmentManager()));
+        viewPager.setAdapter(new ViewPagerAdapter(getChildFragmentManager()));
         viewPager.setOffscreenPageLimit(3);
         tabLayout.setupWithViewPager(viewPager);
     }
@@ -61,7 +62,7 @@ public class FragmentMain extends BaseFragment {
     }
 
     @Override
-    public Activity getViewActivity() {
-        return getActivity();
+    public AppCompatActivity getViewActivity() {
+        return (AppCompatActivity) getActivity();
     }
 }

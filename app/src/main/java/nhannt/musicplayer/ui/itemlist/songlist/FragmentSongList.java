@@ -1,11 +1,11 @@
 package nhannt.musicplayer.ui.itemlist.songlist;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,7 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -63,12 +62,6 @@ public class FragmentSongList extends BaseFragment implements ItemListMvpView<So
         return fragment;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        setHasOptionsMenu(true);
-        songPresenter.onResume();
-    }
 
 
     @Nullable
@@ -140,6 +133,7 @@ public class FragmentSongList extends BaseFragment implements ItemListMvpView<So
         setupRecyclerView();
         songPresenter = new SongListPresenter();
         songPresenter.attachedView(this);
+        songPresenter.onResume();
     }
 
     private void setupRecyclerView() {
@@ -147,7 +141,6 @@ public class FragmentSongList extends BaseFragment implements ItemListMvpView<So
         rvSongList.setLayoutManager(layoutManager);
         rvSongList.addItemDecoration(new DividerDecoration(getActivity()));
         rvSongList.setItemAnimator(new DefaultItemAnimator());
-
     }
 
     @Override
@@ -156,14 +149,19 @@ public class FragmentSongList extends BaseFragment implements ItemListMvpView<So
     }
 
     @Override
-    public void onItemClickListener(int position) {
-        songPresenter.onItemSelected(position);
+    public void onItemClickListener(View view, int position) {
+        songPresenter.onItemSelected(view, position);
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         this.mContext = context;
+    }
+
+    @Override
+    public Fragment getFragment() {
+        return this;
     }
 
     @Override
@@ -210,7 +208,7 @@ public class FragmentSongList extends BaseFragment implements ItemListMvpView<So
     }
 
     @Override
-    public Activity getViewActivity() {
-        return getActivity();
+    public AppCompatActivity getViewActivity() {
+        return (AppCompatActivity) getActivity();
     }
 }

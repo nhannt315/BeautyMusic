@@ -1,5 +1,6 @@
 package nhannt.musicplayer.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -38,13 +39,13 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ArtistView
 
 
 
-    private Context mContext;
+    private Activity mContext;
     private ArrayList<Artist> mData;
     private LayoutInflater mLayoutInflater;
     private RecyclerItemClickListener recyclerItemClickListener;
     private int layoutType;
 
-    public ArtistAdapter(Context mContext, ArrayList<Artist> mData) {
+    public ArtistAdapter(Activity mContext, ArrayList<Artist> mData) {
         this.mContext = mContext;
         this.mData = mData;
         mLayoutInflater = LayoutInflater.from(mContext);

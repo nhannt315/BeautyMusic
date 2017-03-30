@@ -76,6 +76,7 @@ public abstract class BaseFragment extends Fragment implements BaseView {
         return getActivity().getResources().getString(R.string.app_name);
     }
 
+
     protected void setActionBarName(String name) {
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {

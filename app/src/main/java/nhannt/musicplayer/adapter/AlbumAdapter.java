@@ -1,10 +1,13 @@
 package nhannt.musicplayer.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,6 +21,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.interfaces.RecyclerItemClickListener;
 import nhannt.musicplayer.model.Album;
+import nhannt.musicplayer.utils.Common;
 
 /**
  * Created by nhannt on 03/03/2017.
@@ -27,13 +31,13 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
     public static int LAYOUT_ITEM_LIST = 0;
     public static int LAYOUT_ITEM_GRID = 1;
 
-    private Context mContext;
+    private Activity mContext;
     private ArrayList<Album> mData;
     private int layoutType;
     private LayoutInflater mLayoutInflater;
     private RecyclerItemClickListener recyclerItemClickListener;
 
-    public AlbumAdapter(Context mContext, ArrayList<Album> mData) {
+    public AlbumAdapter(Activity mContext, ArrayList<Album> mData) {
         this.mContext = mContext;
         this.mData = mData;
         mLayoutInflater = LayoutInflater.from(mContext);
@@ -46,6 +50,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
     public void setRecyclerItemClickListener(RecyclerItemClickListener recyclerItemClickListener) {
         this.recyclerItemClickListener = recyclerItemClickListener;
     }
+
 
     public int getLayoutType() {
         return layoutType;
@@ -69,17 +74,22 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
         Album item = mData.get(position);
         holder.tvAlbumTitle.setText(item.getTitle());
         holder.tvArtistName.setText(item.getArtist());
-        if(layoutType == LAYOUT_ITEM_LIST) {
+        if (Common.isMarshMallow()) {
+            holder.albumCover.setTransitionName("transition_image" + position);
+        }
+        holder.position = position;
+        if (layoutType == LAYOUT_ITEM_LIST) {
             Glide.with(mContext).load(item.getCoverPath())
                     .placeholder(R.drawable.music_background)
                     .centerCrop()
                     .dontAnimate()
                     .into(holder.albumCover);
-        }else{
+        } else {
             Glide.with(mContext).load(item.getCoverPath())
                     .placeholder(R.drawable.music_background)
                     .centerCrop()
                     .into(holder.albumCover);
+
         }
 
     }
@@ -91,6 +101,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
 
     public class AlbumViewHolder extends RecyclerView.ViewHolder {
 
+        int position;
         @BindView(R.id.iv_cover_item_album)
         protected ImageView albumCover;
         @BindView(R.id.tv_album_title_item)
@@ -101,6 +112,13 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
         public AlbumViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    recyclerItemClickListener.onItemClickListener(v, position);
+                }
+            });
         }
+
     }
 }

@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -36,10 +37,10 @@ import nhannt.musicplayer.utils.Setting;
  * Use the {@link FragmentArtistList#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentArtistList extends BaseFragment implements ItemListMvpView<Artist>,RecyclerItemClickListener {
+public class FragmentArtistList extends BaseFragment implements ItemListMvpView<Artist>, RecyclerItemClickListener {
 
     public static final String TAG = FragmentArtistList.class.getName();
-    public static final String TITLE="Artist";
+    public static final String TITLE = "Artist";
 
     @BindView(R.id.progress_bar_artist)
     protected ProgressBar mProgressBar;
@@ -79,7 +80,7 @@ public class FragmentArtistList extends BaseFragment implements ItemListMvpView<
         artistPresenter.onResume();
     }
 
-    private void refreshRecyclerView(){
+    private void refreshRecyclerView() {
         RecyclerView.LayoutManager layoutManager;
         if (mAdapter.getLayoutType() == ArtistAdapter.LAYOUT_ITEM_LIST) {
             layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
@@ -96,11 +97,6 @@ public class FragmentArtistList extends BaseFragment implements ItemListMvpView<
         mRvArtistList.setItemAnimator(new DefaultItemAnimator());
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-    }
 
     @Override
     protected int getLayout() {
@@ -126,7 +122,7 @@ public class FragmentArtistList extends BaseFragment implements ItemListMvpView<
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.bt_view_as_list:
                 mAdapter.setLayoutType(ArtistAdapter.LAYOUT_ITEM_LIST);
                 Setting.getInstance().put(Common.ARTIST_VIEW_MODE, ArtistAdapter.LAYOUT_ITEM_LIST);
@@ -167,7 +163,6 @@ public class FragmentArtistList extends BaseFragment implements ItemListMvpView<
     }
 
 
-
     @Override
     public void showProgress() {
         mProgressBar.setVisibility(View.VISIBLE);
@@ -202,12 +197,17 @@ public class FragmentArtistList extends BaseFragment implements ItemListMvpView<
     }
 
     @Override
-    public void onItemClickListener(int position) {
-        artistPresenter.onItemSelected(position);
+    public Fragment getFragment() {
+        return this;
     }
 
     @Override
-    public Activity getViewActivity() {
-        return getActivity();
+    public void onItemClickListener(View view, int position) {
+        artistPresenter.onItemSelected(view, position);
+    }
+
+    @Override
+    public AppCompatActivity getViewActivity() {
+        return (AppCompatActivity) getActivity();
     }
 }

@@ -2,6 +2,7 @@ package nhannt.musicplayer.ui.base;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
 
 /**
  * Created by nhannt on 17/03/2017.
@@ -10,5 +11,5 @@ import android.content.Context;
 public interface BaseView {
     Context getViewContext();
 
-    Activity getViewActivity();
+    AppCompatActivity getViewActivity();
 }

@@ -80,6 +80,7 @@ public class HomePresenter implements IHomePresenter, View.OnClickListener {
     private Runnable mUpdateTimeTask = new Runnable() {
         @Override
         public void run() {
+            if(mView == null) return;
             mService = mView.getMusicService();
             if (mService != null) {
                 if (mService.getState() == MusicService.MusicState.Playing) {

@@ -1,5 +1,7 @@
 package nhannt.musicplayer.ui.itemlist.artistlist;
 
+import android.view.View;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -48,7 +50,7 @@ public class ArtistListPresenter implements ItemListPresenter<ItemListMvpView<Ar
     }
 
     @Override
-    public void onItemSelected(int position) {
+    public void onItemSelected(View view, int position) {
 
     }
 

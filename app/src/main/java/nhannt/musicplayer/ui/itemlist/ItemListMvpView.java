@@ -1,6 +1,7 @@
 package nhannt.musicplayer.ui.itemlist;
 
 import android.content.Context;
+import android.support.v4.app.Fragment;
 
 import java.util.ArrayList;
 
@@ -21,6 +22,8 @@ public interface ItemListMvpView<T> extends BaseView {
     void showMessage(String message);
 
     void notifyDataSetChanged();
+
+    Fragment getFragment();
 
     ArrayList<T> getListItem();
 }

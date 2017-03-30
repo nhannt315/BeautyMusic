@@ -65,7 +65,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
         return mData.size();
     }
 
-    public class SongViewHolder extends RecyclerView.ViewHolder{
+    public class SongViewHolder extends RecyclerView.ViewHolder {
 
         int position;
         @BindView(R.id.iv_cover_item_song)
@@ -83,7 +83,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    recyclerItemClickListener.onItemClickListener(position);
+                    recyclerItemClickListener.onItemClickListener(v, position);
                 }
             });
         }

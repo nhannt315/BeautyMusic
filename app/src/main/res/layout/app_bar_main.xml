@@ -14,27 +14,23 @@
         android:theme="@style/AppTheme.AppBarOverlay"
         app:elevation="0dp">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <include layout="@layout/toolbar" />
-        </FrameLayout>
-
-
+        <include
+            layout="@layout/toolbar"
+            app:layout_scrollFlags="scroll|enterAlways"/>
     </android.support.design.widget.AppBarLayout>
+
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:layout_above="@+id/current_play_bar"></FrameLayout>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"></FrameLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <include layout="@layout/current_bar"/>
     </RelativeLayout>
-
 
 
 </android.support.design.widget.CoordinatorLayout>

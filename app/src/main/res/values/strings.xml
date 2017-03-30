@@ -29,6 +29,7 @@
     <string name="number_of_ablum">Number of albums</string>
     <string name="song_low_case">songs</string>
     <string name="album_low_case">albums</string>
+    <string name="fragments_image_trans">fragment_image_trans</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

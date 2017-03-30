@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ProgressBar;
 
 import java.util.ArrayList;
@@ -55,7 +57,6 @@ public class FragmentAlbumList extends BaseFragment implements ItemListMvpView<A
     }
 
 
-
     public static FragmentAlbumList newInstance() {
         FragmentAlbumList fragment = new FragmentAlbumList();
         Bundle args = new Bundle();
@@ -77,6 +78,7 @@ public class FragmentAlbumList extends BaseFragment implements ItemListMvpView<A
         albumPresenter = new AlbumListPresenter();
         albumPresenter.attachedView(this);
         setUpRecyclerView();
+        albumPresenter.onResume();
     }
 
 
@@ -108,11 +110,6 @@ public class FragmentAlbumList extends BaseFragment implements ItemListMvpView<A
         super.onAttach(context);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        albumPresenter.onResume();
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -164,7 +161,7 @@ public class FragmentAlbumList extends BaseFragment implements ItemListMvpView<A
         albumPresenter.sortAs(Setting.getInstance().get(Common.ALBUM_SORT_MODE, ItemListPresenter.SORT_AS_A_Z));
     }
 
-    private void refreshRecyclerView(){
+    private void refreshRecyclerView() {
         RecyclerView.LayoutManager layoutManager;
         if (mAlbumAdapter.getLayoutType() == mAlbumAdapter.LAYOUT_ITEM_LIST) {
             layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
@@ -211,12 +208,18 @@ public class FragmentAlbumList extends BaseFragment implements ItemListMvpView<A
     }
 
     @Override
-    public void onItemClickListener(int position) {
-        albumPresenter.onItemSelected(position);
+    public void onItemClickListener(View view, int position) {
+        albumPresenter.onItemSelected(view, position);
     }
 
     @Override
-    public Activity getViewActivity() {
-        return getActivity();
+    public Fragment getFragment() {
+        return this;
     }
+
+    @Override
+    public AppCompatActivity getViewActivity() {
+        return (AppCompatActivity) getActivity();
+    }
+
 }

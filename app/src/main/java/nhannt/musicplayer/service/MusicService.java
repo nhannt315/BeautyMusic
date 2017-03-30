@@ -15,7 +15,6 @@ import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.PowerManager;
-import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -117,7 +116,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
                     pauseSong();
                 } else if (action.equals(ACTION_NEXT)) {
                     nextSong();
-                    Log.d("next","song");
+                    Log.d("next", "song");
                 } else if (action.equals(ACTION_PREVIOUS)) {
                     previousSong();
                 } else if (action.equals(ACTION_EXIT)) {
@@ -156,24 +155,18 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     };
 
     private void updateNotification() {
-        boolean isClearAble = false;
-        if (getState() == MusicState.Playing) {
-            isClearAble = false;
-        } else if (getState() == MusicState.Pause || getState() == MusicState.Stop) {
-            isClearAble = true;
-        }
         Notification notify = createNotification(getCurrentSong());
-        if (isClearAble) {
+        if (getState() == MusicState.Playing) {
+            startForeground(NOTIFY_ID, notify);
+            Log.d("notification", "update startForeground");
+        } else if (getState() == MusicState.Pause || getState() == MusicState.Stop) {
+            stopForeground(true);
             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             mNotificationManager.notify(NOTIFY_ID, notify);
             Log.d("notification", "update manager");
-        } else {
-            startForeground(NOTIFY_ID, notify);
-            Log.d("notification", "update startForeground");
         }
-        Log.d("notification", "update");
         showLockScreen();
-        setStatePlayPause();
+        setStatePlayPauseLockScreen();
     }
 
     private Notification createNotification(Song song) {
@@ -225,7 +218,8 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
         mediaSession.setPlaybackState(new PlaybackStateCompat.Builder()
                 .setState(PlaybackStateCompat.STATE_PAUSED, 0, 1.0f)
-                .setActions(PlaybackStateCompat.ACTION_PLAY_PAUSE | PlaybackStateCompat.ACTION_SKIP_TO_NEXT | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS)
+                .setActions(PlaybackStateCompat.ACTION_PLAY_PAUSE
+                        | PlaybackStateCompat.ACTION_SKIP_TO_NEXT | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS)
                 .build());
         Bitmap cover = BitmapFactory.decodeFile(lstSong.get(songPos).getCoverPath());
         mediaSession.setMetadata(new MediaMetadataCompat.Builder()
@@ -238,11 +232,12 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         mediaSession.setActive(true);
     }
 
-    public void setStatePlayPause() {
+    public void setStatePlayPauseLockScreen() {
         if (mediaSession.getController().getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING) {
             mediaSession.setPlaybackState(new PlaybackStateCompat.Builder()
                     .setState(PlaybackStateCompat.STATE_PAUSED, 0, 1.0f)
-                    .setActions(PlaybackStateCompat.ACTION_PLAY_PAUSE | PlaybackStateCompat.ACTION_SKIP_TO_NEXT | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS)
+                    .setActions(PlaybackStateCompat.ACTION_PLAY_PAUSE
+                            | PlaybackStateCompat.ACTION_SKIP_TO_NEXT | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS)
                     .build());
         } else {
             mediaSession.setPlaybackState(new PlaybackStateCompat.Builder()

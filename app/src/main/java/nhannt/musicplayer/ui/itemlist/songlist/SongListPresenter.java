@@ -2,6 +2,7 @@ package nhannt.musicplayer.ui.itemlist.songlist;
 
 import android.content.Intent;
 import android.util.Log;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,7 +22,7 @@ import nhannt.musicplayer.utils.Setting;
  * Created by nhannt on 07/03/2017.
  */
 
-public class SongListPresenter implements ItemListPresenter<ItemListMvpView<Song>>,LoaderListener<Song> {
+public class SongListPresenter implements ItemListPresenter<ItemListMvpView<Song>>, LoaderListener<Song> {
 
     private ItemListMvpView<Song> songMvpView;
     private SongListInteractor songListInteractor;
@@ -35,7 +36,7 @@ public class SongListPresenter implements ItemListPresenter<ItemListMvpView<Song
 
     @Override
     public void attachedView(ItemListMvpView<Song> view) {
-        if(view == null){
+        if (view == null) {
             throw new IllegalArgumentException("You can't set a null view");
         }
         this.songMvpView = view;
@@ -55,17 +56,17 @@ public class SongListPresenter implements ItemListPresenter<ItemListMvpView<Song
     }
 
     @Override
-    public void onItemSelected(final int position) {
+    public void onItemSelected(View view, final int position) {
         mMusicServiceConnection = new MusicServiceConnection(songMvpView.getViewContext());
         Intent iSelectSongPlay = new Intent(songMvpView.getViewContext(), MusicService.class);
         iSelectSongPlay.setAction(MusicService.ACTION_PLAY);
-        Log.d("fadf","adsfda");
+        Log.d("fadf", "adsfda");
         mMusicServiceConnection.connect(iSelectSongPlay, new IMusicServiceConnection() {
             @Override
             public void onConnected(MusicService service) {
                 service.setSongPos(position);
                 service.setLstSong(songMvpView.getListItem());
-                Log.d("vao day","here");
+                Log.d("vao day", "here");
                 service.playSong();
             }
         });
@@ -79,7 +80,7 @@ public class SongListPresenter implements ItemListPresenter<ItemListMvpView<Song
     @Override
     public void sortAs(int sortType) {
         ArrayList<Song> mData = songMvpView.getListItem();
-        switch (sortType){
+        switch (sortType) {
             case ItemListPresenter.SORT_AS_A_Z:
                 Collections.sort(mData, new Comparator<Song>() {
                     @Override
@@ -108,11 +109,11 @@ public class SongListPresenter implements ItemListPresenter<ItemListMvpView<Song
                 Collections.sort(mData, new Comparator<Song>() {
                     @Override
                     public int compare(Song o1, Song o2) {
-                        if(o1.getYear() == o2.getYear()){
+                        if (o1.getYear() == o2.getYear()) {
                             return 0;
-                        }else if(o1.getYear()>o2.getYear()){
+                        } else if (o1.getYear() > o2.getYear()) {
                             return 1;
-                        }else{
+                        } else {
                             return -1;
                         }
                     }
@@ -130,11 +131,11 @@ public class SongListPresenter implements ItemListPresenter<ItemListMvpView<Song
                 Collections.sort(mData, new Comparator<Song>() {
                     @Override
                     public int compare(Song o1, Song o2) {
-                        if(o1.getDuration() == o2.getDuration()){
+                        if (o1.getDuration() == o2.getDuration()) {
                             return 0;
-                        }else if(o1.getDuration()>o2.getDuration()){
+                        } else if (o1.getDuration() > o2.getDuration()) {
                             return 1;
-                        }else{
+                        } else {
                             return -1;
                         }
                     }
