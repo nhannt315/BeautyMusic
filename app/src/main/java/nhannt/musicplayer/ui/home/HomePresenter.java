@@ -10,6 +10,8 @@ import android.view.View;
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.service.MusicService;
 import nhannt.musicplayer.ui.playback.PlayBackActivity;
+import nhannt.musicplayer.utils.AppController;
+import nhannt.musicplayer.utils.Navigator;
 
 /**
  * Created by nhannt on 17/03/2017.
@@ -49,12 +51,10 @@ public class HomePresenter implements IHomePresenter, View.OnClickListener {
             case R.id.btn_toggle_play_current_bar:
                 intent = new Intent(mView.getViewContext(), MusicService.class);
                 intent.setAction(MusicService.ACTION_TOGGLE_PLAY_PAUSE);
-                mView.getViewActivity().startService(intent);
+                AppController.getContext().startService(intent);
                 break;
             case R.id.current_play_bar:
-                intent = new Intent(mView.getViewContext(), PlayBackActivity.class);
-                mView.getViewContext().startActivity(intent);
-                mView.getViewActivity().overridePendingTransition(R.anim.slide_in_up, R.anim.no_change);
+                Navigator.navigateToPlayBackActivity(mView.getViewContext());
                 break;
         }
     }
@@ -92,6 +92,10 @@ public class HomePresenter implements IHomePresenter, View.OnClickListener {
         }
     };
 
+    @Override
+    public void onDestroy() {
+
+    }
 
     @Override
     public BroadcastReceiver getReceiver() {

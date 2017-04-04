@@ -50,6 +50,11 @@ public class ArtistListPresenter implements ItemListPresenter<ItemListMvpView<Ar
     }
 
     @Override
+    public void onDestroy() {
+
+    }
+
+    @Override
     public void onItemSelected(View view, int position) {
 
     }

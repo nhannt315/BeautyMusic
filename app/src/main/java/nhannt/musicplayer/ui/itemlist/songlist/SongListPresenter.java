@@ -15,8 +15,10 @@ import nhannt.musicplayer.ui.itemlist.LoaderListener;
 import nhannt.musicplayer.model.Song;
 import nhannt.musicplayer.ui.itemlist.ItemListMvpView;
 import nhannt.musicplayer.ui.itemlist.ItemListPresenter;
+import nhannt.musicplayer.utils.AppController;
 import nhannt.musicplayer.utils.Common;
 import nhannt.musicplayer.utils.Setting;
+import nhannt.musicplayer.R;
 
 /**
  * Created by nhannt on 07/03/2017.
@@ -57,19 +59,23 @@ public class SongListPresenter implements ItemListPresenter<ItemListMvpView<Song
 
     @Override
     public void onItemSelected(View view, final int position) {
-        mMusicServiceConnection = new MusicServiceConnection(songMvpView.getViewContext());
-        Intent iSelectSongPlay = new Intent(songMvpView.getViewContext(), MusicService.class);
-        iSelectSongPlay.setAction(MusicService.ACTION_PLAY);
-        Log.d("fadf", "adsfda");
-        mMusicServiceConnection.connect(iSelectSongPlay, new IMusicServiceConnection() {
-            @Override
-            public void onConnected(MusicService service) {
-                service.setSongPos(position);
-                service.setLstSong(songMvpView.getListItem());
-                Log.d("vao day", "here");
-                service.playSong();
-            }
-        });
+        switch (view.getId()){
+            case R.id.item_song:
+                mMusicServiceConnection = new MusicServiceConnection(AppController.getContext());
+                Intent iSelectSongPlay = new Intent(AppController.getContext(), MusicService.class);
+                iSelectSongPlay.setAction(MusicService.ACTION_PLAY);
+                mMusicServiceConnection.connect(iSelectSongPlay, new IMusicServiceConnection() {
+                    @Override
+                    public void onConnected(MusicService service) {
+                        service.setSongPos(position);
+                        service.setLstSong(songMvpView.getListItem());
+                        service.playSong();
+                    }
+                });
+                break;
+            case R.id.btn_menu_song_item:
+                break;
+        }
     }
 
     @Override
@@ -144,5 +150,10 @@ public class SongListPresenter implements ItemListPresenter<ItemListMvpView<Song
         }
         Setting.getInstance().put(Common.SONG_SORT_MODE, sortType);
         songMvpView.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onDestroy() {
+
     }
 }

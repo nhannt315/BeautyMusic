@@ -207,8 +207,14 @@ public class FragmentSongList extends BaseFragment implements ItemListMvpView<So
         super.onDestroy();
     }
 
+
     @Override
-    public AppCompatActivity getViewActivity() {
-        return (AppCompatActivity) getActivity();
+    public void navigateToDetailFragment(Object object, @Nullable View transitionView) {
+
+    }
+
+    @Override
+    public void doBack() {
+//        getActivity().onBackPressed();
     }
 }

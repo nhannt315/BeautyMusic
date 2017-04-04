@@ -37,6 +37,12 @@
         </activity>
         <activity android:name=".ui.playback.PlayBackActivity">
         </activity>
+
+        <receiver android:name=".receiver.HeadSetReceiver">
+            <intent-filter>
+                <action android:name="android.media.AUDIO_BECOMING_NOISY"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

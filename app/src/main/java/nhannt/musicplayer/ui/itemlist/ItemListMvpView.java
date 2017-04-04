@@ -1,7 +1,10 @@
 package nhannt.musicplayer.ui.itemlist;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.Pair;
+import android.view.View;
 
 import java.util.ArrayList;
 
@@ -26,4 +29,6 @@ public interface ItemListMvpView<T> extends BaseView {
     Fragment getFragment();
 
     ArrayList<T> getListItem();
+
+    void navigateToDetailFragment(Object object, @Nullable View transitionView);
 }

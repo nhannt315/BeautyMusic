@@ -14,12 +14,13 @@ import android.view.ViewGroup;
 
 import butterknife.ButterKnife;
 import nhannt.musicplayer.R;
+import nhannt.musicplayer.interfaces.OnBackPressedListener;
 
 /**
  * Created by nhannt on 01/03/2017.
  */
 
-public abstract class BaseFragment extends Fragment implements BaseView {
+public abstract class BaseFragment extends Fragment implements BaseView, OnBackPressedListener {
 
     protected Toolbar toolbar;
     private Context mContext;
@@ -35,7 +36,18 @@ public abstract class BaseFragment extends Fragment implements BaseView {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
-        settingToolbar(view);
+//        settingToolbar(view);
+
+    }
+
+
+
+    protected void enableDoBack() {
+        ((BaseActivity) getActivity()).setOnBackPressedListener(this);
+    }
+
+    protected void disableDoBack() {
+        ((BaseActivity) getActivity()).setOnBackPressedListener(null);
     }
 
     @Override
@@ -47,7 +59,7 @@ public abstract class BaseFragment extends Fragment implements BaseView {
     private void settingToolbar(View view) {
         toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         if (toolbar != null) {
-            Log.d("BaseFragment","have toolbar");
+            Log.d("BaseFragment", "have toolbar");
             ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
             ActionBar actionBar = getActionBar();
             if (actionBar != null) {
@@ -92,4 +104,9 @@ public abstract class BaseFragment extends Fragment implements BaseView {
         ((AppCompatActivity) getActivity()).getSupportFragmentManager().popBackStack();
     }
 
+    @Override
+    public void onDestroy() {
+        disableDoBack();
+        super.onDestroy();
+    }
 }

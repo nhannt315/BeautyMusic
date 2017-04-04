@@ -4,7 +4,6 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -22,6 +21,7 @@ import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.widget.RemoteViews;
 
 import java.util.ArrayList;
@@ -30,7 +30,6 @@ import java.util.Vector;
 
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.model.Song;
-import nhannt.musicplayer.receiver.RemoteReceiver;
 import nhannt.musicplayer.ui.playback.PlayBackActivity;
 import nhannt.musicplayer.utils.Common;
 
@@ -86,6 +85,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         audioManagerResult = audioManager.requestAudioFocus(afChangeListener,
                 AudioManager.STREAM_MUSIC,
                 AudioManager.AUDIOFOCUS_GAIN);
+
     }
 
     private void initOther() {
@@ -111,14 +111,14 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
                     if (getState() == MusicState.Playing)
                         pauseSong();
                     else
-                        playPauseSong();
+                        resumeSong();
                 } else if (action.equals(ACTION_PAUSE)) {
                     pauseSong();
                 } else if (action.equals(ACTION_NEXT)) {
-                    nextSong();
+                    skipToNextSong();
                     Log.d("next", "song");
                 } else if (action.equals(ACTION_PREVIOUS)) {
-                    previousSong();
+                    skipToPrevSong();
                 } else if (action.equals(ACTION_EXIT)) {
                     stopSelf();
                 } else if (action.equals(ACTION_PLAY)) {
@@ -137,6 +137,41 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         return START_NOT_STICKY;
     }
 
+    private final MediaSessionCompat.Callback mMediaSessionCallback = new MediaSessionCompat.Callback() {
+        @Override
+        public boolean onMediaButtonEvent(Intent mediaButtonEvent) {
+            final String intentAction = mediaButtonEvent.getAction();
+            if (Intent.ACTION_MEDIA_BUTTON.equals(intentAction)) {
+                final KeyEvent event = mediaButtonEvent.getParcelableExtra(
+                        Intent.EXTRA_KEY_EVENT);
+                if (event == null) {
+                    return super.onMediaButtonEvent(mediaButtonEvent);
+                }
+                final int keycode = event.getKeyCode();
+                final int action = event.getAction();
+                if (event.getRepeatCount() == 0 && action == KeyEvent.ACTION_DOWN) {
+
+                    switch (keycode) {
+                        // Do what you want in here
+                        case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
+                            if (getState() == MusicState.Playing)
+                                pauseSong();
+                            else
+                                resumeSong();
+                            break;
+                        case KeyEvent.KEYCODE_MEDIA_NEXT:
+                            skipToNextSong();
+                            break;
+                        case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
+                            skipToPrevSong();
+                            break;
+                    }
+                }
+            }
+            return super.onMediaButtonEvent(mediaButtonEvent);
+        }
+    };
+
     AudioManager.OnAudioFocusChangeListener afChangeListener = new AudioManager.OnAudioFocusChangeListener() {
         @Override
         public void onAudioFocusChange(int focusChange) {
@@ -145,7 +180,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
                     pauseSong();
                     break;
                 case AudioManager.AUDIOFOCUS_GAIN:
-                    playPauseSong();
+                    resumeSong();
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS:
                     pauseSong();
@@ -155,6 +190,8 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     };
 
     private void updateNotification() {
+        showLockScreen();
+        setStatePlayPauseLockScreen();
         Notification notify = createNotification(getCurrentSong());
         if (getState() == MusicState.Playing) {
             startForeground(NOTIFY_ID, notify);
@@ -163,10 +200,9 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
             stopForeground(true);
             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             mNotificationManager.notify(NOTIFY_ID, notify);
-            Log.d("notification", "update manager");
+            Log.d("notification", "update clearable notification");
         }
-        showLockScreen();
-        setStatePlayPauseLockScreen();
+
     }
 
     private Notification createNotification(Song song) {
@@ -213,9 +249,9 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 
     public void showLockScreen() {
         Song currentSong = lstSong.get(songPos);
-        ComponentName receiver = new ComponentName(getPackageName(), RemoteReceiver.class.getName());
-        mediaSession = new MediaSessionCompat(this, "MusicService", receiver, null);
+        mediaSession = new MediaSessionCompat(this, MusicService.class.getName());
         mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
+        mediaSession.setCallback(mMediaSessionCallback);
         mediaSession.setPlaybackState(new PlaybackStateCompat.Builder()
                 .setState(PlaybackStateCompat.STATE_PAUSED, 0, 1.0f)
                 .setActions(PlaybackStateCompat.ACTION_PLAY_PAUSE
@@ -292,19 +328,19 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         }
     }
 
-    public void playPauseSong() {
+    public void resumeSong() {
         if (mediaPlayer != null) {
             if (getState() == MusicState.Pause) {
                 mediaPlayer.start();
                 setState(MusicState.Playing);
                 updateNotification();
                 notifyClients(PLAY_STATE_CHANGE);
-                updateNotification();
             }
         }
+        updateNotification();
     }
 
-    public void previousSong() {
+    public void skipToPrevSong() {
         if ((getState() != MusicState.Pause) && (getState() != MusicState.Playing)) return;
         stopSong();
         songPos = getPrePosition();
@@ -332,7 +368,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         return newSongPosition;
     }
 
-    public void nextSong() {
+    public void skipToNextSong() {
         if ((getState() != MusicState.Pause) && (getState() != MusicState.Playing)) return;
         stopSong();
         songPos = getNextPosition();
@@ -404,7 +440,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     public void onCompletion(MediaPlayer mp) {
         if (getCurrentPosition() == 0) return;
         if (mediaPlayer != null) {
-            nextSong();
+            skipToNextSong();
 
         }
     }

@@ -1,14 +1,174 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:percent="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="nhannt.musicplayer.ui.playback.PlayBackActivity">
+
     <android.support.percent.PercentRelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_heightPercent="60%">
+
+            <ImageView
+                android:id="@+id/iv_cover_background_blur"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/music_background"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_song_title_playback"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="@string/song"
+                    android:maxLines="1"
+                    android:textSize="@dimen/text_size_big"/>
+
+                <TextView
+                    android:id="@+id/tv_album_playback"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="@string/album"
+                    android:maxLines="1"
+                    android:textSize="@dimen/text_size_normal"/>
+
+                <android.support.percent.PercentRelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/iv_album_cover_playback"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/song"
+                        app:layout_heightPercent="60%"
+                        app:layout_marginTopPercent="25%"
+                        app:layout_widthPercent="60%"/>
+
+                    <nhannt.musicplayer.ui.custom.CircularSeekBar
+                        android:id="@+id/seek_bar_playback"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        app:layout_heightPercent="80%"
+                        app:layout_marginTopPercent="25%"
+                        app:layout_widthPercent="80%"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        app:layout_marginBottomPercent="30%"
+                        app:layout_marginTopPercent="30%">
+
+                        <android.support.percent.PercentRelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <ImageView
+                                android:id="@+id/bt_skip_prev_playback"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                app:layout_heightPercent="60%"
+                                app:layout_widthPercent="60%"
+                                android:layout_centerInParent="true"
+                                android:src="@drawable/ic_skip_previous_white_36dp"/>
+                        </android.support.percent.PercentRelativeLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2"
+                            android:orientation="vertical">
+                            <TextView
+                                android:id="@+id/tv_time_play"
+                                android:text="TIME"
+                                android:textColor="@color/white"
+                                android:textSize="50sp"
+                                android:gravity="center_horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                            </TextView>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
+                                <android.support.percent.PercentRelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1">
+                                    <ImageView
+                                        android:id="@+id/bt_shuffle_playback"
+                                        app:layout_widthPercent="60%"
+                                        app:layout_heightPercent="60%"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="1"
+                                        android:layout_centerInParent="true"
+                                        android:src="@drawable/ic_shuffle_white_24dp"/>
+                                </android.support.percent.PercentRelativeLayout>
+                                <android.support.percent.PercentRelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1">
+                                    <ImageView
+                                        android:id="@+id/bt_repeat_playback"
+                                        app:layout_widthPercent="60%"
+                                        app:layout_heightPercent="60%"
+                                        android:layout_centerInParent="true"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="1"
+                                        android:src="@drawable/ic_repeat_white_24dp"/>
+                                </android.support.percent.PercentRelativeLayout>
+
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <android.support.percent.PercentRelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+                            <ImageView
+                                android:id="@+id/bt_skip_next_playback"
+                                app:layout_heightPercent="60%"
+                                app:layout_widthPercent="60%"
+                                android:layout_centerInParent="true"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_skip_next_white_36dp"/>
+                        </android.support.percent.PercentRelativeLayout>
+                    </LinearLayout>
+                </android.support.percent.PercentRelativeLayout>
+            </LinearLayout>
+        </FrameLayout>
     </android.support.percent.PercentRelativeLayout>
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_playback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#00FFFFFF"
+        android:minHeight="?attr/actionBarSize"/>
+
 </android.support.design.widget.CoordinatorLayout>

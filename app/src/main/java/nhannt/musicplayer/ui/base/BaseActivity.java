@@ -17,6 +17,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.interfaces.IMusicServiceConnection;
+import nhannt.musicplayer.interfaces.OnBackPressedListener;
 import nhannt.musicplayer.service.MusicService;
 
 /**
@@ -27,8 +28,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private IMusicServiceConnection iConnection = null;
     private MusicService mService;
-    @BindView(R.id.toolbar)
     protected Toolbar toolbar;
+    private OnBackPressedListener mOnBackPressedListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
@@ -48,6 +49,18 @@ public abstract class BaseActivity extends AppCompatActivity {
                 actionBar.setDisplayShowTitleEnabled(true);
             }
         }
+    }
+
+    public void setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
+        this.mOnBackPressedListener = onBackPressedListener;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mOnBackPressedListener == null)
+            super.onBackPressed();
+        else
+            mOnBackPressedListener.doBack();
     }
 
     protected Toolbar getToolbar() {
@@ -96,7 +109,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.addToBackStack("");
-        fragmentTransaction.add(R.id.container, fragment, tag);
+        fragmentTransaction.replace(R.id.container, fragment, tag);
         fragmentTransaction.commit();
     }
 

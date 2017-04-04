@@ -3,10 +3,12 @@ package nhannt.musicplayer.ui.itemlist.albumlist;
 import android.annotation.TargetApi;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.util.Pair;
 import android.transition.TransitionInflater;
 import android.view.View;
 import android.widget.ImageView;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -28,19 +30,18 @@ public class AlbumListPresenter implements ItemListPresenter<ItemListMvpView<Alb
 
     private ItemListMvpView<Album> albumMvpView;
     private AlbumListInteractor albumInteractor;
+    private ArrayList<Album> mData;
 
     @Override
     public void onFinished(ArrayList<Album> itemList) {
         albumMvpView.hideProgress();
         albumMvpView.setItems(itemList);
+        mData = itemList;
     }
 
     @Override
     public void attachedView(ItemListMvpView<Album> view) {
-        if (view == null) {
-            throw new IllegalArgumentException("You can't set a null view");
-        }
-        this.albumMvpView = view;
+        albumMvpView = view;
         albumInteractor = new AlbumListInteractor();
     }
 
@@ -52,35 +53,16 @@ public class AlbumListPresenter implements ItemListPresenter<ItemListMvpView<Alb
     @Override
     public void onResume() {
         albumMvpView.showProgress();
-        albumInteractor.loadItems(this);
+        if (mData == null)
+            albumInteractor.loadItems(this);
+        else
+            albumMvpView.setItems(mData);
     }
 
     @Override
     public void onItemSelected(View view, int position) {
         ImageView staticImage = (ImageView) view.findViewById(R.id.iv_cover_item_album);
-        String transitionName = "";
-        FragmentManager fragmentManager = albumMvpView.getViewActivity().getSupportFragmentManager();
-        if (Common.isMarshMallow())
-            transitionName = staticImage.getTransitionName();
-        FragmentAlbumDetail desFragment = FragmentAlbumDetail.newInstance(albumMvpView.getListItem().get(position), true, transitionName);
-
-        if (Common.isMarshMallow()) {
-            albumMvpView.getFragment().setSharedElementEnterTransition(TransitionInflater.from(
-                    albumMvpView.getViewActivity()).inflateTransition(R.transition.image_tran));
-            albumMvpView.getFragment().setExitTransition(TransitionInflater.from(
-                    albumMvpView.getViewActivity()).inflateTransition(android.R.transition.explode));
-
-            desFragment.setSharedElementEnterTransition(TransitionInflater.from(
-                    albumMvpView.getViewActivity()).inflateTransition(R.transition.image_tran));
-            desFragment.setExitTransition(TransitionInflater.from(
-                    albumMvpView.getViewActivity()).inflateTransition(android.R.transition.explode));
-        }
-        fragmentManager.beginTransaction()
-                .hide(fragmentManager.findFragmentById(R.id.container))
-                .add(R.id.container, desFragment)
-                .addToBackStack(null)
-                .addSharedElement(staticImage, transitionName)
-                .commit();
+        albumMvpView.navigateToDetailFragment(mData.get(position),staticImage);
     }
 
     @Override
@@ -147,5 +129,10 @@ public class AlbumListPresenter implements ItemListPresenter<ItemListMvpView<Alb
         }
         Setting.getInstance().put(Common.ALBUM_SORT_MODE, sortType);
         albumMvpView.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onDestroy() {
+
     }
 }

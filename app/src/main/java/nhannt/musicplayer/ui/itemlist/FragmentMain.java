@@ -61,8 +61,9 @@ public class FragmentMain extends BaseFragment {
         return R.layout.fragment_main;
     }
 
+
     @Override
-    public AppCompatActivity getViewActivity() {
-        return (AppCompatActivity) getActivity();
+    public void doBack() {
+        getActivity().onBackPressed();
     }
 }

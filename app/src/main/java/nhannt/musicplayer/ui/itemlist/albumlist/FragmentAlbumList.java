@@ -1,23 +1,25 @@
 package nhannt.musicplayer.ui.itemlist.albumlist;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.TransitionInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ProgressBar;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,12 +27,14 @@ import nhannt.musicplayer.R;
 import nhannt.musicplayer.adapter.AlbumAdapter;
 import nhannt.musicplayer.interfaces.RecyclerItemClickListener;
 import nhannt.musicplayer.model.Album;
+import nhannt.musicplayer.ui.albumdetail.FragmentAlbumDetail;
 import nhannt.musicplayer.ui.base.BaseFragment;
 import nhannt.musicplayer.ui.custom.DividerDecoration;
 import nhannt.musicplayer.ui.custom.ItemOffsetDecoration;
 import nhannt.musicplayer.ui.itemlist.ItemListMvpView;
 import nhannt.musicplayer.ui.itemlist.ItemListPresenter;
 import nhannt.musicplayer.utils.Common;
+import nhannt.musicplayer.utils.Navigator;
 import nhannt.musicplayer.utils.Setting;
 
 /**
@@ -189,8 +193,8 @@ public class FragmentAlbumList extends BaseFragment implements ItemListMvpView<A
     public void onDestroy() {
         albumPresenter.detachView();
         super.onDestroy();
-
     }
+
 
     @Override
     public void showMessage(String message) {
@@ -217,9 +221,14 @@ public class FragmentAlbumList extends BaseFragment implements ItemListMvpView<A
         return this;
     }
 
+
     @Override
-    public AppCompatActivity getViewActivity() {
-        return (AppCompatActivity) getActivity();
+    public void navigateToDetailFragment(Object object, @Nullable View transitionView) {
+        Album album = (Album) object;
+        Navigator.navigateToAlbumDetail(getContext(),album,transitionView);
     }
 
+    @Override
+    public void doBack() {
+    }
 }

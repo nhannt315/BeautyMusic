@@ -198,11 +198,6 @@ public class HomeActivity extends BaseActivity implements DrawerPresenterImpl.Dr
     }
 
     @Override
-    public AppCompatActivity getViewActivity() {
-        return this;
-    }
-
-    @Override
     public void updateSeekBar(int currentTime, int totalTime) {
         seekBar.setMax(totalTime);
         seekBar.setProgress(currentTime);

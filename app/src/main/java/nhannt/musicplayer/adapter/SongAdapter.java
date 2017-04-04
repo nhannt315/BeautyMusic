@@ -65,7 +65,15 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
         return mData.size();
     }
 
+
     public class SongViewHolder extends RecyclerView.ViewHolder {
+
+        private class OnItemClicked implements View.OnClickListener{
+            @Override
+            public void onClick(View v) {
+                recyclerItemClickListener.onItemClickListener(v,position);
+            }
+        }
 
         int position;
         @BindView(R.id.iv_cover_item_song)
@@ -80,12 +88,9 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
         public SongViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    recyclerItemClickListener.onItemClickListener(v, position);
-                }
-            });
+            OnItemClicked onItemClicked = new OnItemClicked();
+            itemView.setOnClickListener(onItemClicked);
+            btnPopupMenu.setOnClickListener(onItemClicked);
         }
     }
 }

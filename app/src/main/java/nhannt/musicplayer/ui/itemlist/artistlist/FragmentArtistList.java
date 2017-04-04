@@ -4,6 +4,7 @@ package nhannt.musicplayer.ui.itemlist.artistlist;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -207,7 +208,12 @@ public class FragmentArtistList extends BaseFragment implements ItemListMvpView<
     }
 
     @Override
-    public AppCompatActivity getViewActivity() {
-        return (AppCompatActivity) getActivity();
+    public void navigateToDetailFragment(Object object, @Nullable View transitionView) {
+
+    }
+
+    @Override
+    public void doBack() {
+//        getActivity().onBackPressed();
     }
 }

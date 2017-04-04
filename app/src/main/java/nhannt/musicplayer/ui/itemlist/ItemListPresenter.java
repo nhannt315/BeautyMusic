@@ -28,4 +28,6 @@ public interface ItemListPresenter<V> extends BasePresenter<V> {
     void viewAs(int viewType);
 
     void sortAs(int sortType);
+
+
 }

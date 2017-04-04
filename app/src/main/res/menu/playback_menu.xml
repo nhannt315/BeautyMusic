@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/btn_shuffle_all_playback"
+        android:title="@string/shuffle_all"/>
+    <item
+        android:id="@+id/btn_equalizer_playback"
+        android:title="@string/equalizer"/>
+</menu>

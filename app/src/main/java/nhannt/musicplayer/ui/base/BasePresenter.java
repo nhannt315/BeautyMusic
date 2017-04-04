@@ -11,5 +11,6 @@ public interface BasePresenter<V> {
 
     void onResume();
 
+    void onDestroy();
 
 }
