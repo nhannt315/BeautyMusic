@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 
 import nhannt.musicplayer.service.MusicService;
@@ -20,6 +21,7 @@ public class PlayBackPresenter implements IPlayBackPresenter {
     private Handler mHandler;
     private boolean isSeeking;
 
+
     @Override
     public void attachedView(IPlayBackView view) {
         this.mView = view;
@@ -35,7 +37,10 @@ public class PlayBackPresenter implements IPlayBackPresenter {
 
     @Override
     public void onResume() {
-
+        mService = mView.getMusicService();
+        Log.d("playback presenter","onResume");
+        if (mService == null) return;
+        mView.setItems(mService.getLstSong());
     }
 
     @Override
@@ -47,7 +52,7 @@ public class PlayBackPresenter implements IPlayBackPresenter {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if(action.equals(MusicService.PLAY_STATE_CHANGE)){
+            if (action.equals(MusicService.PLAY_STATE_CHANGE)) {
                 updateTimePlay();
                 mView.updateSongInfo();
                 mView.updateButtonState();
@@ -73,14 +78,26 @@ public class PlayBackPresenter implements IPlayBackPresenter {
         return this.isSeeking;
     }
 
+    @Override
+    public void onItemClicked(View view, int position) {
+        mService = mView.getMusicService();
+        if (mService == null) return;
+        switch (view.getId()){
+            case R.id.item_song:
+                mService.setSongPos(position);
+                mService.playSong();
+                break;
+        }
+    }
+
     private Runnable mUpdateTimeTask = new Runnable() {
         @Override
         public void run() {
-            if(mView == null) return;
+            if (mView == null) return;
             mService = mView.getMusicService();
-            if(mService != null){
-                if(mService.getState() == MusicService.MusicState.Playing){
-                    mView.updateSeekBar(mService.getCurrentPosition(),mService.getDuration());
+            if (mService != null) {
+                if (mService.getState() == MusicService.MusicState.Playing) {
+                    mView.updateSeekBar(mService.getCurrentPosition(), mService.getDuration());
                     mView.updateTimeView(mService.getCurrentPosition());
                     mHandler.postDelayed(mUpdateTimeTask, 200);
                 }
@@ -100,9 +117,9 @@ public class PlayBackPresenter implements IPlayBackPresenter {
 
     @Override
     public void onStopTrackingTouch(CircularSeekBar seekBar) {
-        if(mService != null) {
+        if (mService != null) {
             mService.seekTo(seekBar.getProgress());
-            if(mService.getState() != MusicService.MusicState.Playing){
+            if (mService.getState() != MusicService.MusicState.Playing) {
                 mService.resumeSong();
                 mView.updateButtonState();
             }
@@ -114,8 +131,8 @@ public class PlayBackPresenter implements IPlayBackPresenter {
     @Override
     public void onClick(View v) {
         mService = mView.getMusicService();
-        if(mService == null) return;
-        switch (v.getId()){
+        if (mService == null) return;
+        switch (v.getId()) {
             case R.id.bt_skip_next_playback:
                 mService.skipToNextSong();
                 break;
@@ -124,9 +141,18 @@ public class PlayBackPresenter implements IPlayBackPresenter {
                 break;
             case R.id.bt_shuffle_playback:
                 mService.setShuffle(!mService.isShuffle());
+                mView.updateButtonState();
                 break;
             case R.id.bt_repeat_playback:
                 mService.setRepeat(!mService.isRepeat());
+                mView.updateButtonState();
+                break;
+            case R.id.fab_play_pause_playback:
+                if (mService.getState() == MusicService.MusicState.Playing)
+                    mService.pauseSong();
+                else if (mService.getState() == MusicService.MusicState.Pause)
+                    mService.resumeSong();
+                mView.updateButtonState();
                 break;
         }
     }

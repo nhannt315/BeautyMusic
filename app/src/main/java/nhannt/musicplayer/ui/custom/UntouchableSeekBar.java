@@ -9,16 +9,16 @@ import android.view.MotionEvent;
  * This seek bar can only show progress,user cant change by touching seek bar
  */
 
-public class CustomSeekBar extends android.support.v7.widget.AppCompatSeekBar {
-    public CustomSeekBar(Context context) {
+public class UntouchableSeekBar extends android.support.v7.widget.AppCompatSeekBar {
+    public UntouchableSeekBar(Context context) {
         super(context);
     }
 
-    public CustomSeekBar(Context context, AttributeSet attrs) {
+    public UntouchableSeekBar(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public CustomSeekBar(Context context, AttributeSet attrs, int defStyleAttr) {
+    public UntouchableSeekBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

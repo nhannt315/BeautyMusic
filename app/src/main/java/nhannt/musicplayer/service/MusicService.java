@@ -23,6 +23,7 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -106,7 +107,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
             String action = intent.getAction();
-            if (!action.isEmpty()) {
+            if (action != null && !action.isEmpty()) {
                 if (action.equals(ACTION_TOGGLE_PLAY_PAUSE)) {
                     if (getState() == MusicState.Playing)
                         pauseSong();
@@ -283,6 +284,29 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         }
     }
 
+    public void playNext(Song song) {
+        if (lstSong == null) {
+            lstSong = new ArrayList<>();
+            lstSong.add(song);
+            songPos = 0;
+            playSong();
+        } else {
+            lstSong.add(songPos + 1, song);
+        }
+    }
+
+    public void addToQueue(Song... song) {
+        if (lstSong == null) {
+            lstSong = new ArrayList<>();
+            lstSong.add(song[0]);
+            songPos = 0;
+            playSong();
+        } else {
+            lstSong.add(song[0]);
+        }
+        Toast.makeText(this, "1 " + getString(R.string.success_add_to_queue), Toast.LENGTH_SHORT).show();
+    }
+
     public void playSong() {
         if (mediaPlayer == null) return;
         if (lstSong == null || lstSong.size() == 0) return;
@@ -300,6 +324,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         } catch (Exception ex) {
             Log.e("Error", ex.getMessage());
         }
+
     }
 
     public void stopSong() {

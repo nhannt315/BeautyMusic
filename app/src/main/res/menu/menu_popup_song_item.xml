@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/bt_play_popup_song"
+        android:title="@string/play"/>
+    <item
+        android:id="@+id/bt_play_next_popup_song"
+        android:title="@string/play_next"/>
+    <item
+        android:id="@+id/bt_add_queue_popup_song"
+        android:title="@string/add_to_queue"/>
+    <item
+        android:id="@+id/bt_add_playlist_popup_song"
+        android:title="@string/add_to_playlist"/>
+    <item
+        android:id="@+id/bt_to_album_popup_song"
+        android:title="@string/go_to_album"/>
+    <item
+        android:id="@+id/bt_to_artist_popup_song"
+        android:title="@string/go_to_artist"/>
+</menu>

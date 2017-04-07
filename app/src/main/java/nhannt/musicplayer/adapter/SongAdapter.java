@@ -1,8 +1,13 @@
 package nhannt.musicplayer.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -15,8 +20,12 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import nhannt.musicplayer.R;
+import nhannt.musicplayer.interfaces.IMusicServiceConnection;
 import nhannt.musicplayer.model.Song;
 import nhannt.musicplayer.interfaces.RecyclerItemClickListener;
+import nhannt.musicplayer.service.MusicService;
+import nhannt.musicplayer.service.MusicServiceConnection;
+import nhannt.musicplayer.utils.AppController;
 
 /**
  * Created by nhannt on 03/03/2017.
@@ -28,6 +37,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
     private ArrayList<Song> mData;
     private LayoutInflater mLayoutInflater;
     private RecyclerItemClickListener recyclerItemClickListener;
+    private MusicServiceConnection mConnection;
 
     public SongAdapter(Context mContext, ArrayList<Song> mData) {
         this.mContext = mContext;
@@ -66,12 +76,14 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
     }
 
 
-    public class SongViewHolder extends RecyclerView.ViewHolder {
+    public class SongViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private class OnItemClicked implements View.OnClickListener{
+
+        private class OnItemClicked implements View.OnClickListener {
             @Override
             public void onClick(View v) {
-                recyclerItemClickListener.onItemClickListener(v,position);
+                if (recyclerItemClickListener != null)
+                    recyclerItemClickListener.onItemClickListener(v, position);
             }
         }
 
@@ -90,7 +102,56 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
             ButterKnife.bind(this, itemView);
             OnItemClicked onItemClicked = new OnItemClicked();
             itemView.setOnClickListener(onItemClicked);
-            btnPopupMenu.setOnClickListener(onItemClicked);
+            btnPopupMenu.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (v.getId() == R.id.btn_menu_song_item) {
+                PopupMenu popupMenu = new PopupMenu(mContext, v);
+                popupMenu.getMenuInflater().inflate(R.menu.menu_popup_song_item, popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        final int itemId = item.getItemId();
+                        if (itemId == R.id.bt_play_popup_song || itemId == R.id.bt_play_next_popup_song ||
+                                itemId == R.id.bt_add_queue_popup_song) {
+                            mConnection = new MusicServiceConnection(AppController.getContext());
+                            Intent iPlay = new Intent(AppController.getContext(), MusicService.class);
+                            mConnection.connect(iPlay, new IMusicServiceConnection() {
+                                @Override
+                                public void onConnected(MusicService service) {
+                                    switch (itemId){
+                                        case R.id.bt_play_popup_song:
+                                            service.setLstSong(mData);
+                                            service.setSongPos(position);
+                                            service.playSong();
+                                            break;
+                                        case R.id.bt_play_next_popup_song:
+                                            service.playNext(mData.get(position));
+                                            break;
+                                        case R.id.bt_add_queue_popup_song:
+                                            service.addToQueue(mData.get(position));
+                                            break;
+                                    }
+                                }
+                            });
+                        }
+                        switch (item.getItemId()) {
+                            case R.id.bt_add_playlist_popup_song:
+                                break;
+                            case R.id.bt_to_album_popup_song:
+                                break;
+                            case R.id.bt_to_artist_popup_song:
+                                break;
+                        }
+                        return false;
+                    }
+                });
+                popupMenu.show();
+            }
         }
     }
+
+
 }

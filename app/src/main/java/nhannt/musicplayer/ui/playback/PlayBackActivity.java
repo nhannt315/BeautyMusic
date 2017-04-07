@@ -5,11 +5,19 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,45 +26,57 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.blurry.Blurry;
 import nhannt.musicplayer.R;
+import nhannt.musicplayer.adapter.SongAdapter;
 import nhannt.musicplayer.interfaces.IMusicServiceConnection;
+import nhannt.musicplayer.interfaces.RecyclerItemClickListener;
 import nhannt.musicplayer.model.Song;
 import nhannt.musicplayer.service.MusicService;
 import nhannt.musicplayer.ui.base.BaseActivity;
 import nhannt.musicplayer.ui.custom.CircularSeekBar;
+import nhannt.musicplayer.ui.custom.DividerDecoration;
 import nhannt.musicplayer.utils.Common;
 
-public class PlayBackActivity extends BaseActivity implements IPlayBackView, IMusicServiceConnection {
+public class PlayBackActivity extends BaseActivity implements IPlayBackView, IMusicServiceConnection,RecyclerItemClickListener {
+
+    public static final String TAG = PlayBackActivity.class.getName();
 
     @BindView(R.id.tv_song_title_playback)
-    TextView tvSongTitle;
+    protected TextView tvSongTitle;
     @BindView(R.id.tv_album_playback)
-    TextView tvAlbumTitle;
+    protected TextView tvAlbumTitle;
     @BindView(R.id.tv_time_play)
-    TextView tvTimePlay;
+    protected TextView tvTimePlay;
     @BindView(R.id.bt_skip_prev_playback)
-    ImageView btSkipPrev;
+    protected ImageView btSkipPrev;
     @BindView(R.id.bt_skip_next_playback)
-    ImageView btSkipNext;
+    protected ImageView btSkipNext;
     @BindView(R.id.bt_shuffle_playback)
-    ImageView btShuffle;
+    protected ImageView btShuffle;
     @BindView(R.id.bt_repeat_playback)
-    ImageView btRepeat;
+    protected ImageView btRepeat;
     @BindView(R.id.iv_cover_background_blur)
-    ImageView ivBackGround;
+    protected ImageView ivBackGround;
     @BindView(R.id.iv_album_cover_playback)
-    CircleImageView ivAlbumCover;
+    protected CircleImageView ivAlbumCover;
     @BindView(R.id.seek_bar_playback)
-    CircularSeekBar seekBar;
+    protected CircularSeekBar seekBar;
     @BindView(R.id.toolbar_playback)
-    Toolbar mToolbar;
+    protected Toolbar mToolbar;
+    @BindView(R.id.rv_song_list_playback)
+    protected RecyclerView mRvSongList;
+    @BindView(R.id.fab_play_pause_playback)
+    protected FloatingActionButton fabPlayPause;
 
     private IPlayBackPresenter mPresenter;
     private MusicService mService;
+    private SongAdapter songAdapter;
 
 
     @Override
@@ -74,8 +94,19 @@ public class PlayBackActivity extends BaseActivity implements IPlayBackView, IMu
         mPresenter = new PlayBackPresenter();
         mPresenter.attachedView(this);
         addOnMusicServiceListener(this);
+        setupRecyclerView();
         updateAll();
         initEvents();
+
+    }
+
+    private void setupRecyclerView() {
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(PlayBackActivity.this,LinearLayoutManager.VERTICAL,false);
+        DividerDecoration dividerDecoration = new DividerDecoration(PlayBackActivity.this);
+        DefaultItemAnimator itemAnimator = new DefaultItemAnimator();
+        mRvSongList.setLayoutManager(layoutManager);
+        mRvSongList.addItemDecoration(dividerDecoration);
+        mRvSongList.setItemAnimator(itemAnimator);
     }
 
     @Override
@@ -98,15 +129,18 @@ public class PlayBackActivity extends BaseActivity implements IPlayBackView, IMu
         btShuffle.setOnClickListener(mPresenter);
         btSkipNext.setOnClickListener(mPresenter);
         btSkipPrev.setOnClickListener(mPresenter);
+        fabPlayPause.setOnClickListener(mPresenter);
     }
 
     private void setupToolbar() {
         setSupportActionBar(mToolbar);
+        mToolbar.setOverflowIcon(ContextCompat.getDrawable(this,R.drawable.ic_more_vert_white_24dp));
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
+
         }
     }
 
@@ -139,6 +173,7 @@ public class PlayBackActivity extends BaseActivity implements IPlayBackView, IMu
         updateSongInfo();
         mPresenter.updateTimePlay();
         updateButtonState();
+        mPresenter.onResume();
     }
 
     @Override
@@ -158,15 +193,33 @@ public class PlayBackActivity extends BaseActivity implements IPlayBackView, IMu
             btRepeat.setImageResource(R.drawable.ic_repeat_white_24dp);
         }
         if (mService.isShuffle()) {
-            btShuffle.setImageResource(R.drawable.ic_shuffle_white_24dp);
-        } else {
             btShuffle.setImageResource(R.drawable.ic_shuffle_pressed);
+        } else {
+            btShuffle.setImageResource(R.drawable.ic_shuffle_white_24dp);
+        }
+        if(mService.getState() == MusicService.MusicState.Playing){
+            fabPlayPause.setImageResource(R.drawable.ic_pause_black_24dp);
+        }else{
+            fabPlayPause.setImageResource(R.drawable.ic_play_arrow_black_24dp);
         }
     }
 
     @Override
     public void updateTimeView(long currentTime) {
         tvTimePlay.setText(Common.miliSecondToString(currentTime));
+    }
+
+    @Override
+    public void setItems(ArrayList<Song> lstItem) {
+        songAdapter = new SongAdapter(PlayBackActivity.this, lstItem);
+        Log.d("playback","set item");
+        songAdapter.setRecyclerItemClickListener(this);
+        mRvSongList.setAdapter(songAdapter);
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        this.songAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -181,17 +234,8 @@ public class PlayBackActivity extends BaseActivity implements IPlayBackView, IMu
         if (song == null) return;
         tvSongTitle.setText(song.getTitle());
         tvAlbumTitle.setText(song.getAlbum());
-        Glide.with(this).load(song.getCoverPath()).into(ivAlbumCover);
-//        Glide.with(this).load(song.getCoverPath()).into(ivBackGround);
         if (song.getCoverPath() != null) {
-            Bitmap bitmap = BitmapFactory.decodeFile(song.getCoverPath());
-            Blurry.with(PlayBackActivity.this)
-                    .radius(25)
-                    .sampling(1)
-                    .color(Color.argb(57, 54, 54, 0))
-                    .async()
-                    .from(bitmap)
-                    .into(ivBackGround);
+            new LoadAlbumCover().execute(song.getCoverPath());
         } else {
             Blurry.with(PlayBackActivity.this)
                     .radius(25)
@@ -200,7 +244,38 @@ public class PlayBackActivity extends BaseActivity implements IPlayBackView, IMu
                     .async()
                     .from(BitmapFactory.decodeResource(getResources(), R.drawable.music_background))
                     .into(ivBackGround);
+            ivAlbumCover.setImageResource(R.drawable.song);
         }
         mPresenter.updateTimePlay();
+    }
+
+    @Override
+    public void onItemClickListener(View view, int position) {
+        mPresenter.onItemClicked(view,position);
+    }
+
+    private class LoadAlbumCover extends AsyncTask<String,Void,Void>{
+        Bitmap bitmap;
+
+
+        @Override
+        protected Void doInBackground(String... params) {
+            bitmap = BitmapFactory.decodeFile(params[0]);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            Blurry.with(PlayBackActivity.this)
+                    .radius(25)
+                    .sampling(1)
+                    .color(Color.argb(57, 54, 54, 0))
+                    .async()
+                    .from(bitmap)
+                    .into(ivBackGround);
+            Bitmap bitmap1 = Common.changeBitmapContrastBrightness(bitmap, 1, -70);
+            ivAlbumCover.setImageBitmap(bitmap1);
+            super.onPostExecute(aVoid);
+        }
     }
 }

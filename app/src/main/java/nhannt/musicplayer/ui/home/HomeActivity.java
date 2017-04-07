@@ -1,20 +1,22 @@
 package nhannt.musicplayer.ui.home;
 
-import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,8 +28,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import org.w3c.dom.Text;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -36,16 +36,17 @@ import nhannt.musicplayer.interfaces.IMusicServiceConnection;
 import nhannt.musicplayer.model.Song;
 import nhannt.musicplayer.service.MusicService;
 import nhannt.musicplayer.ui.base.BaseActivity;
-import nhannt.musicplayer.ui.custom.CustomSeekBar;
+import nhannt.musicplayer.ui.custom.UntouchableSeekBar;
 import nhannt.musicplayer.ui.drawer.DrawerPresenterImpl;
+import nhannt.musicplayer.ui.playback.PlayBackActivity;
+import nhannt.musicplayer.ui.playingqueue.FragmentPlayingQueue;
 import nhannt.musicplayer.utils.Common;
 import nhannt.musicplayer.ui.itemlist.FragmentMain;
 
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
-public class HomeActivity extends BaseActivity implements DrawerPresenterImpl.DrawerView,
-        NavigationView.OnNavigationItemSelectedListener, IMusicServiceConnection, IHomeView {
+public class HomeActivity extends BaseActivity implements DrawerPresenterImpl.DrawerView,IMusicServiceConnection, IHomeView {
 
     private static final int PERMISSION_REQUEST_CODE = 200;
 
@@ -62,7 +63,7 @@ public class HomeActivity extends BaseActivity implements DrawerPresenterImpl.Dr
     @BindView(R.id.tv_song_title_current_bar)
     protected TextView tvSongTitleCurrentBar;
     @BindView(R.id.seek_bar_current_bar)
-    protected CustomSeekBar seekBar;
+    protected UntouchableSeekBar seekBar;
     @BindView(R.id.nav_view)
     protected NavigationView navigationView;
     private DrawerPresenterImpl drawerPresenter;
@@ -72,14 +73,22 @@ public class HomeActivity extends BaseActivity implements DrawerPresenterImpl.Dr
     private TextView tvSongTitleHeader;
     private TextView tvArtistHeader;
     private ImageView albumCoverHeader;
+    public static int navItemIndex = 0;
 
+    private static final String TAG_LIBRARY=FragmentMain.TAG;
+    private static final String TAG_PLAYLISTS="playlists";
+    private static final String TAG_PLAYING_QUEUE= FragmentPlayingQueue.TAG;
+    private static final String TAG_NOW_PLAYING= PlayBackActivity.TAG;
+
+    public static String CURRENT_TAG = TAG_LIBRARY;
+    private Handler mHandler;
+    private ActionBarDrawerToggle toggle = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayout());
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        initToolbar();
         ButterKnife.bind(this);
         initSetting();
 
@@ -94,11 +103,76 @@ public class HomeActivity extends BaseActivity implements DrawerPresenterImpl.Dr
         }
     }
 
+    private void initToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null){
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+            actionBar.setDisplayShowTitleEnabled(true);
+        }
+    }
+
+    private void loadHomeFragment() {
+        selectNavMenu();
+        if (getSupportFragmentManager().findFragmentByTag(CURRENT_TAG) != null) {
+            drawerLayout.closeDrawers();
+        }// Sometimes, when fragment has huge data, screen seems hanging
+        // when switching between navigation menus
+        // So using runnable, the fragment is loaded with cross fade effect
+        // This effect can be seen in GMail app
+        Runnable mPendingRunnable = new Runnable() {
+            @Override
+            public void run() {
+                // update the main content by replacing fragments
+                Fragment fragment = getHomeFragment();
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                        android.R.anim.fade_out);
+                fragmentTransaction.replace(R.id.container, fragment, CURRENT_TAG);
+                fragmentTransaction.commit();
+            }
+        };
+
+        if (mPendingRunnable != null) {
+            mHandler.post(mPendingRunnable);
+        }
+
+        drawerLayout.closeDrawers();
+
+        invalidateOptionsMenu();
+
+    }
+
+    private Fragment getHomeFragment() {
+        switch (navItemIndex) {
+            case 0:
+                // library
+                FragmentMain homeFragment = FragmentMain.newInstance();
+                return homeFragment;
+            case 1:
+                // playlist
+//                PhotosFragment photosFragment = new PhotosFragment();
+//                return photosFragment;
+            case 2:
+                // playing queue
+                FragmentPlayingQueue fragment = FragmentPlayingQueue.newInstance();
+                return fragment;
+            default:
+                return FragmentMain.newInstance();
+        }
+
+    }
+
+    private void selectNavMenu(){
+        navigationView.getMenu().getItem(navItemIndex).setChecked(true);
+    }
+
     private void initSetting() {
+        mHandler = new Handler();
         drawerPresenter = new DrawerPresenterImpl(this);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, getToolbar(),
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
+
         navigationView.getMenu().performIdentifierAction(R.id.btn_lib_nav, 0);
 //        seekBar.getThumb().mutate().setAlpha(0); //disable thumb icon on seek bar
 
@@ -107,7 +181,7 @@ public class HomeActivity extends BaseActivity implements DrawerPresenterImpl.Dr
         tvArtistHeader = (TextView) header.findViewById(R.id.tv_artist_name_nav_header);
         albumCoverHeader = (ImageView) header.findViewById(R.id.iv_nav_header_back_ground);
 
-        toggle.syncState();
+        setupNavigationView();
         mPresenter = new HomePresenter();
         mPresenter.attachedView(this);
         addOnMusicServiceListener(this);
@@ -117,6 +191,70 @@ public class HomeActivity extends BaseActivity implements DrawerPresenterImpl.Dr
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.search_menu, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(toggle.onOptionsItemSelected(item)){
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void setupNavigationView(){
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                drawerPresenter.navigationItemSelected(item, drawerLayout);
+                switch (item.getItemId()) {
+                    case R.id.btn_lib_nav:
+                        navItemIndex = 0;
+                        CURRENT_TAG = TAG_LIBRARY;
+                        break;
+                    case R.id.btn_playlist_nav:
+                        CURRENT_TAG = TAG_PLAYLISTS;
+                        navItemIndex = 1;
+                        break;
+                    case R.id.btn_play_queue_nav:
+                        CURRENT_TAG = TAG_PLAYING_QUEUE;
+                        navItemIndex = 2;
+                        break;
+                    case R.id.btn_now_playing_nav:
+                        navItemIndex = 3;
+                        startActivity(new Intent(HomeActivity.this, PlayBackActivity.class));
+                        drawerLayout.closeDrawers();
+                        return true;
+                    case R.id.btn_about_nav:
+                        break;
+                    case R.id.btn_license_nav:
+                        break;
+                    case R.id.btn_feedback_nav:
+                        break;
+                    default:
+                        navItemIndex = 0;
+                }
+
+                if (item.isChecked()) {
+                    item.setChecked(false);
+                } else {
+                    item.setChecked(true);
+                }
+                item.setChecked(true);
+                loadHomeFragment();
+                return true;
+            }
+        });
+
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, getToolbar(),
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        drawerLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                toggle.syncState();
+            }
+        });
+
     }
 
     private boolean checkPermission() {
@@ -135,29 +273,10 @@ public class HomeActivity extends BaseActivity implements DrawerPresenterImpl.Dr
         navigationView.getMenu().getItem(0).setChecked(true);
         showFragment(FragmentMain.newInstance(), FragmentMain.TAG);
         btnTogglePlay.setOnClickListener(mPresenter);
+        currentPlayBar.setOnClickListener(mPresenter);
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        drawerPresenter.navigationItemSelected(item, drawerLayout);
-        switch (item.getItemId()) {
-            case R.id.btn_lib_nav:
-                break;
-            case R.id.btn_playlist_nav:
-                break;
-            case R.id.btn_play_queue_nav:
-                break;
-            case R.id.btn_now_playing_nav:
-                break;
-            case R.id.btn_about_nav:
-                break;
-            case R.id.btn_license_nav:
-                break;
-            case R.id.btn_feedback_nav:
-                break;
-        }
-        return true;
-    }
+
 
     @Override
     protected void onResume() {
@@ -201,7 +320,6 @@ public class HomeActivity extends BaseActivity implements DrawerPresenterImpl.Dr
     public void updateSeekBar(int currentTime, int totalTime) {
         seekBar.setMax(totalTime);
         seekBar.setProgress(currentTime);
-//        seekBar.setProgress(Common.percentSeekbar(currentTime, totalTime));
     }
 
     @Override

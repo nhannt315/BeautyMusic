@@ -15,4 +15,5 @@ public interface IPlayBackPresenter extends BasePresenter<IPlayBackView>,Circula
     BroadcastReceiver getReceiver();
     void updateTimePlay();
     boolean isSeeking();
+    void onItemClicked(View view,int position);
 }

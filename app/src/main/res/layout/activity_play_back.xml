@@ -8,10 +8,12 @@
     tools:context="nhannt.musicplayer.ui.playback.PlayBackActivity">
 
     <android.support.percent.PercentRelativeLayout
+
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <FrameLayout
+            android:id="@+id/header_playback"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_heightPercent="60%">
@@ -36,6 +38,9 @@
                     android:gravity="center_horizontal"
                     android:text="@string/song"
                     android:maxLines="1"
+                    android:paddingStart="50dp"
+                    android:paddingEnd="50dp"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/text_size_big"/>
 
                 <TextView
@@ -44,7 +49,10 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:text="@string/album"
+                    android:paddingStart="50dp"
+                    android:paddingEnd="50dp"
                     android:maxLines="1"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/text_size_normal"/>
 
                 <android.support.percent.PercentRelativeLayout
@@ -57,9 +65,9 @@
                         android:layout_height="match_parent"
                         android:layout_centerInParent="true"
                         android:src="@drawable/song"
-                        app:layout_heightPercent="60%"
+                        app:layout_heightPercent="70%"
                         app:layout_marginTopPercent="25%"
-                        app:layout_widthPercent="60%"/>
+                        app:layout_widthPercent="70%"/>
 
                     <nhannt.musicplayer.ui.custom.CircularSeekBar
                         android:id="@+id/seek_bar_playback"
@@ -68,6 +76,7 @@
                         android:layout_centerInParent="true"
                         app:layout_heightPercent="80%"
                         app:layout_marginTopPercent="25%"
+                        app:pointer_radius="1dp"
                         app:layout_widthPercent="80%"/>
 
                     <LinearLayout
@@ -162,13 +171,30 @@
                 </android.support.percent.PercentRelativeLayout>
             </LinearLayout>
         </FrameLayout>
-    </android.support.percent.PercentRelativeLayout>
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_playback"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#00FFFFFF"
-        android:minHeight="?attr/actionBarSize"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_song_list_playback"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/header_playback"/>
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_playback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#00FFFFFF"
+            android:minHeight="?attr/actionBarSize"/>
+    </android.support.percent.PercentRelativeLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_play_pause_playback"
+        app:layout_anchor="@id/header_playback"
+        app:layout_anchorGravity="bottom|end"
+        android:src="@drawable/ic_play_arrow_black_24dp"
+        android:clickable="true"
+        android:layout_marginEnd="10dp"
+        app:fabSize="normal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
 
 </android.support.design.widget.CoordinatorLayout>
