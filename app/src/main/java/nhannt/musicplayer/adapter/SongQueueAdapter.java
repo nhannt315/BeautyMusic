@@ -32,7 +32,6 @@ import nhannt.musicplayer.recyclerhelper.OnStartDragListener;
 
 public class SongQueueAdapter extends RecyclerView.Adapter<SongQueueAdapter.SongQueueViewHolder>
         implements ItemTouchHelperAdapter {
-
     private Context mContext;
     private ArrayList<Song> mData = new ArrayList<>();
     private final OnStartDragListener mStartDragListener;
