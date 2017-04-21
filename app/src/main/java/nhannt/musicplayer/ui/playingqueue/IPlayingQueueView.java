@@ -2,7 +2,7 @@ package nhannt.musicplayer.ui.playingqueue;
 
 import java.util.ArrayList;
 
-import nhannt.musicplayer.model.Song;
+import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.ui.base.BaseView;
 
 /**

@@ -33,13 +33,14 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.interfaces.IMusicServiceConnection;
-import nhannt.musicplayer.model.Song;
+import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.service.MusicService;
 import nhannt.musicplayer.ui.base.BaseActivity;
 import nhannt.musicplayer.ui.custom.UntouchableSeekBar;
 import nhannt.musicplayer.ui.drawer.DrawerPresenterImpl;
 import nhannt.musicplayer.ui.playback.PlayBackActivity;
 import nhannt.musicplayer.ui.playingqueue.FragmentPlayingQueue;
+import nhannt.musicplayer.ui.playlist.FragmentPlaylist;
 import nhannt.musicplayer.utils.Common;
 import nhannt.musicplayer.ui.itemlist.FragmentMain;
 
@@ -76,7 +77,7 @@ public class HomeActivity extends BaseActivity implements DrawerPresenterImpl.Dr
     public static int navItemIndex = 0;
 
     private static final String TAG_LIBRARY=FragmentMain.TAG;
-    private static final String TAG_PLAYLISTS="playlists";
+    private static final String TAG_PLAYLISTS= FragmentPlaylist.TAG;
     private static final String TAG_PLAYING_QUEUE= FragmentPlayingQueue.TAG;
     private static final String TAG_NOW_PLAYING= PlayBackActivity.TAG;
 
@@ -153,8 +154,8 @@ public class HomeActivity extends BaseActivity implements DrawerPresenterImpl.Dr
                 return homeFragment;
             case 1:
                 // playlist
-//                PhotosFragment photosFragment = new PhotosFragment();
-//                return photosFragment;
+                FragmentPlaylist fragmentPlaylist = FragmentPlaylist.newInstance();
+                return fragmentPlaylist;
             case 2:
                 // playing queue
                 FragmentPlayingQueue fragment = FragmentPlayingQueue.newInstance();

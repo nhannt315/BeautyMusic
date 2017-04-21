@@ -16,7 +16,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.adapter.SongQueueAdapter;
-import nhannt.musicplayer.model.Song;
+import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.recyclerhelper.OnStartDragListener;
 import nhannt.musicplayer.recyclerhelper.SimpleItemTouchHelperCallback;
 import nhannt.musicplayer.ui.base.BaseFragment;

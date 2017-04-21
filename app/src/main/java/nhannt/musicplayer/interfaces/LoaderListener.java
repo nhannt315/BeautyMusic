@@ -1,4 +1,4 @@
-package nhannt.musicplayer.ui.itemlist;
+package nhannt.musicplayer.interfaces;
 
 import java.util.ArrayList;
 

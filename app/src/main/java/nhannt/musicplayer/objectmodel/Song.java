@@ -1,4 +1,4 @@
-package nhannt.musicplayer.model;
+package nhannt.musicplayer.objectmodel;
 
 import java.io.Serializable;
 
@@ -16,6 +16,9 @@ public class Song implements Serializable {
     private long duration;
     private String songPath;
 
+    public Song(){
+
+    }
     public Song(String id, String title, String album, String artist, String coverPath, int year, long duration, String songPath) {
         this.id = id;
         this.title = title;

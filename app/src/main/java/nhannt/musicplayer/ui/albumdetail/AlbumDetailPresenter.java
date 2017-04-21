@@ -1,14 +1,12 @@
 package nhannt.musicplayer.ui.albumdetail;
 
-import android.os.AsyncTask;
 import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import nhannt.musicplayer.R;
-import nhannt.musicplayer.data.provider.MediaProvider;
-import nhannt.musicplayer.model.Song;
+import nhannt.musicplayer.objectmodel.Song;
 
 /**
  * Created by nhannt on 30/03/2017.
@@ -17,6 +15,11 @@ import nhannt.musicplayer.model.Song;
 public class AlbumDetailPresenter implements IAlbumDetailPresenter {
 
     private IAlbumDetailView mView;
+    private AlbumDetailInteractor mInteractor;
+
+    public AlbumDetailPresenter() {
+        mInteractor = new AlbumDetailInteractor();
+    }
 
     @Override
     public void attachedView(IAlbumDetailView view) {
@@ -30,7 +33,7 @@ public class AlbumDetailPresenter implements IAlbumDetailPresenter {
 
     @Override
     public void onResume() {
-        new LoadSongOfAlbum(mView.getAlbum().getId()).execute();
+        mInteractor.loadListSongOfAlbum(mView.getAlbum().getId(), this);
     }
 
     @Override
@@ -51,26 +54,9 @@ public class AlbumDetailPresenter implements IAlbumDetailPresenter {
     }
 
 
-    private class LoadSongOfAlbum extends AsyncTask<Void, Void, Void> {
-
-        private int albumID;
-        private ArrayList<Song> lstSong;
-
-        public LoadSongOfAlbum(int albumID) {
-            this.albumID = albumID;
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            lstSong = MediaProvider.getInstance().getListSongOfAlbum(albumID);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            if (mView != null)
-                mView.setListSong(lstSong);
-        }
+    @Override
+    public void onFinished(ArrayList<Song> itemList) {
+        if (mView != null)
+            mView.setListSong(itemList);
     }
 }

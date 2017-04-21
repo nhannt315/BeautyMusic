@@ -1,12 +1,9 @@
 package nhannt.musicplayer.ui.itemlist.artistlist;
 
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,7 +21,7 @@ import butterknife.ButterKnife;
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.adapter.ArtistAdapter;
 import nhannt.musicplayer.interfaces.RecyclerItemClickListener;
-import nhannt.musicplayer.model.Artist;
+import nhannt.musicplayer.objectmodel.Artist;
 import nhannt.musicplayer.ui.base.BaseFragment;
 import nhannt.musicplayer.ui.custom.DividerDecoration;
 import nhannt.musicplayer.ui.custom.ItemOffsetDecoration;

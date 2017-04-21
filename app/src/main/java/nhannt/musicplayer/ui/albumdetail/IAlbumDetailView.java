@@ -2,8 +2,8 @@ package nhannt.musicplayer.ui.albumdetail;
 
 import java.util.ArrayList;
 
-import nhannt.musicplayer.model.Album;
-import nhannt.musicplayer.model.Song;
+import nhannt.musicplayer.objectmodel.Album;
+import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.ui.base.BaseView;
 
 /**

@@ -39,6 +39,10 @@
     <string name="success_add_to_queue">1 song added to the queue</string>
     <string name="redo">Redo</string>
     <string name="deleted">deleted</string>
+    <string name="create_new_playlist">Create new playlist</string>
+    <string name="auto_playlist">Auto playlist</string>
+    <string name="recent_played">Recently Played</string>
+    <string name="last_added">Last Added</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

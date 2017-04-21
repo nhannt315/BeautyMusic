@@ -1,4 +1,4 @@
-package nhannt.musicplayer.model;
+package nhannt.musicplayer.objectmodel;
 
 import java.util.ArrayList;
 
@@ -9,12 +9,19 @@ import java.util.ArrayList;
 public class PlayList {
     private int id;
     private String title;
+    private int songNums;
     private ArrayList<Song> lstSong;
+    private boolean isAutoPlaylist = false;
 
-    public PlayList(int id, String title, ArrayList<Song> lstSong) {
+    public PlayList() {
+    }
+
+    public PlayList(int id, String title, int songNums, ArrayList<Song> lstSong, boolean isAutoPlaylist) {
         this.id = id;
         this.title = title;
+        this.songNums = songNums;
         this.lstSong = lstSong;
+        this.isAutoPlaylist = isAutoPlaylist;
     }
 
     public int getId() {
@@ -33,11 +40,27 @@ public class PlayList {
         this.title = title;
     }
 
+    public int getSongNums() {
+        return songNums;
+    }
+
+    public void setSongNums(int songNums) {
+        this.songNums = songNums;
+    }
+
     public ArrayList<Song> getLstSong() {
         return lstSong;
     }
 
     public void setLstSong(ArrayList<Song> lstSong) {
         this.lstSong = lstSong;
+    }
+
+    public boolean isAutoPlaylist() {
+        return isAutoPlaylist;
+    }
+
+    public void setAutoPlaylist(boolean autoPlaylist) {
+        isAutoPlaylist = autoPlaylist;
     }
 }

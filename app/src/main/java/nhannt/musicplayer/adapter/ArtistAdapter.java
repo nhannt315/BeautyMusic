@@ -1,32 +1,22 @@
 package nhannt.musicplayer.adapter;
 
 import android.app.Activity;
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import nhannt.musicplayer.R;
-import nhannt.musicplayer.data.network.VolleyConnection;
 import nhannt.musicplayer.interfaces.RecyclerItemClickListener;
-import nhannt.musicplayer.model.Artist;
+import nhannt.musicplayer.objectmodel.Artist;
 
 /**
  * Created by nhannt on 03/03/2017.

@@ -21,7 +21,7 @@ import java.util.Collections;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import nhannt.musicplayer.R;
-import nhannt.musicplayer.model.Song;
+import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.recyclerhelper.ItemTouchHelperAdapter;
 import nhannt.musicplayer.recyclerhelper.ItemTouchHelperViewHolder;
 import nhannt.musicplayer.recyclerhelper.OnStartDragListener;

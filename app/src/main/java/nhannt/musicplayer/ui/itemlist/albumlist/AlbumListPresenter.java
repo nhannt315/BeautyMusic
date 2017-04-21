@@ -1,22 +1,15 @@
 package nhannt.musicplayer.ui.itemlist.albumlist;
 
-import android.annotation.TargetApi;
-import android.graphics.drawable.BitmapDrawable;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.util.Pair;
-import android.transition.TransitionInflater;
 import android.view.View;
 import android.widget.ImageView;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
 import nhannt.musicplayer.R;
-import nhannt.musicplayer.ui.albumdetail.FragmentAlbumDetail;
-import nhannt.musicplayer.ui.itemlist.LoaderListener;
-import nhannt.musicplayer.model.Album;
+import nhannt.musicplayer.interfaces.LoaderListener;
+import nhannt.musicplayer.objectmodel.Album;
 import nhannt.musicplayer.ui.itemlist.ItemListMvpView;
 import nhannt.musicplayer.ui.itemlist.ItemListPresenter;
 import nhannt.musicplayer.utils.Common;

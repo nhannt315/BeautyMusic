@@ -1,7 +1,6 @@
 package nhannt.musicplayer.ui.itemlist.songlist;
 
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -11,8 +10,8 @@ import java.util.Comparator;
 import nhannt.musicplayer.interfaces.IMusicServiceConnection;
 import nhannt.musicplayer.service.MusicService;
 import nhannt.musicplayer.service.MusicServiceConnection;
-import nhannt.musicplayer.ui.itemlist.LoaderListener;
-import nhannt.musicplayer.model.Song;
+import nhannt.musicplayer.interfaces.LoaderListener;
+import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.ui.itemlist.ItemListMvpView;
 import nhannt.musicplayer.ui.itemlist.ItemListPresenter;
 import nhannt.musicplayer.utils.AppController;

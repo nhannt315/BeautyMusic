@@ -17,9 +17,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import nhannt.musicplayer.data.network.VolleyConnection;
-import nhannt.musicplayer.model.Album;
-import nhannt.musicplayer.model.Artist;
-import nhannt.musicplayer.model.Song;
+import nhannt.musicplayer.objectmodel.Album;
+import nhannt.musicplayer.objectmodel.Artist;
+import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.utils.AppController;
 
 /**
@@ -156,6 +156,31 @@ public class MediaProvider {
             }
         });
         VolleyConnection.getInstance(mContext).addRequestToQueue(jsonObjectRequest);
+    }
+
+    public Song getSongById(String songId) {
+        Song song = null;
+        Uri mediaContentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        String[] projection = new String[]{MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.ALBUM,
+                MediaStore.Audio.Media.ARTIST, MediaStore.Audio.Media._ID,
+                MediaStore.Audio.Media.DURATION, MediaStore.Audio.Media.DATA,
+                MediaStore.Audio.Media.ALBUM_ID,
+                MediaStore.Audio.Media.YEAR};
+        String selection = MediaStore.Audio.Media._ID + "=?";
+        String[] selectionArgs = new String[]{"" + songId};
+        Cursor cursor = mContext.getContentResolver().query(mediaContentUri, projection, selection, selectionArgs, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            String title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
+            String album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
+            String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
+            int duration = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
+            String path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
+            int year = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.YEAR));
+            int albumID = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
+            String albumPath = getCoverArtPath(albumID);
+            song = new Song(songId, title, album, artist, albumPath, year, duration, path);
+        }
+        return song;
     }
 
     public ArrayList<Song> getListSongOfAlbum(int albumId) {

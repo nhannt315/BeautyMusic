@@ -30,7 +30,8 @@ import java.util.Random;
 import java.util.Vector;
 
 import nhannt.musicplayer.R;
-import nhannt.musicplayer.model.Song;
+import nhannt.musicplayer.data.database.DBQuery;
+import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.ui.playback.PlayBackActivity;
 import nhannt.musicplayer.utils.Common;
 
@@ -484,7 +485,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         notifyClients(PLAY_STATE_CHANGE);
         notifyClients(META_CHANGE);
         updateNotification();
-        //TODO insert into recent play database
+        DBQuery.getInstance(getApplicationContext()).insertRecentPlay(lstSong.get(songPos));
     }
 
     @Override

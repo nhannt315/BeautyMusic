@@ -10,7 +10,7 @@ import android.transition.TransitionInflater;
 import android.view.View;
 
 import nhannt.musicplayer.R;
-import nhannt.musicplayer.model.Album;
+import nhannt.musicplayer.objectmodel.Album;
 import nhannt.musicplayer.ui.albumdetail.FragmentAlbumDetail;
 import nhannt.musicplayer.ui.playback.PlayBackActivity;
 

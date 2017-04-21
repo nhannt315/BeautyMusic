@@ -1,5 +1,6 @@
 package nhannt.musicplayer.ui.base;
 
+
 /**
  * Created by Jhordan on 13/10/15.
  */

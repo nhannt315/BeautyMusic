@@ -1,4 +1,4 @@
-package nhannt.musicplayer.model;
+package nhannt.musicplayer.objectmodel;
 
 import java.io.Serializable;
 
