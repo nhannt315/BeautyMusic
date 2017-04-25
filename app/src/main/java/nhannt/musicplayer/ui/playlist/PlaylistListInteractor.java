@@ -35,6 +35,9 @@ public class PlaylistListInteractor implements IPlaylistListInteractor {
             lstPlaylist = DBQuery.getInstance(AppController.getContext()).getAllPlayList();
             lstSongAdded = MediaProvider.getInstance().getListSong();
             lstSongRecent = DBQuery.getInstance(AppController.getContext()).getListSongRecentPlay();
+            for(PlayList playList : lstPlaylist){
+                playList.setLstSong(DBQuery.getInstance(AppController.getContext()).getListSongByPlaylist(playList.getId()));
+            }
             return null;
         }
 

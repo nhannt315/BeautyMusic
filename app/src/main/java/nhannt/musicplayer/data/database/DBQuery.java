@@ -73,7 +73,7 @@ public class DBQuery {
         db = getDatabase();
         String sql = "SELECT * FROM " + DBHelper.PLAYLIST_TABLE + " ORDER BY " + DBHelper.PLAYLIST_COLUMN_ID + " DESC";
         Cursor result = db.rawQuery(sql, null);
-        if(result!=null && result.moveToFirst()){
+        if (result != null && result.moveToFirst()) {
             playList = new PlayList();
             playList.setId(result.getInt(result.getColumnIndex(DBHelper.PLAYLIST_COLUMN_ID)));
             playList.setTitle(result.getString(result.getColumnIndex(DBHelper.PLAYLIST_COLUMN_TITLE)));
@@ -160,6 +160,7 @@ public class DBQuery {
         db = getDatabase();
         StringBuilder builder = new StringBuilder();
         builder.append("SELECT " + DBHelper.PLAYLIST_DETAIL_TABLE + ".*");
+        builder.append(" FROM " + DBHelper.PLAYLIST_DETAIL_TABLE);
         builder.append(" WHERE " + DBHelper.PLAYLIST_DETAIL_TABLE + "." + DBHelper.DETAIL_COLUMN_PLAYLIST_ID + " = " + pID);
         Cursor result = db.rawQuery(builder.toString(), null);
         if (result != null && result.moveToFirst()) {
@@ -190,10 +191,11 @@ public class DBQuery {
                 playList.setId(id);
                 playList.setTitle(title);
                 playList.setSongNums(songNums);
+
                 lstPlayList.add(playList);
             } while (result.moveToNext());
         }
-        Log.d("CheckPlaylist",lstPlayList.size()+"");
+        Log.d("CheckPlaylist", lstPlayList.size() + "");
         result.close();
         db.close();
         return lstPlayList;
@@ -216,7 +218,7 @@ public class DBQuery {
                 playList = new PlayList();
                 playList.setId(result.getInt(result.getColumnIndex(DBHelper.PLAYLIST_COLUMN_ID)));
                 playList.setTitle(result.getString(result.getColumnIndex(DBHelper.PLAYLIST_COLUMN_TITLE)));
-                playList.setSongNums(result.getInt(result.getColumnIndex(DBHelper.SONG_NUMS)));
+                playList.setSongNums(result.getInt(result.getColumnIndex(DBHelper.PLAYLIST_COLUMN_SONG_NUMS)));
             } while (result.moveToNext());
         }
         result.close();

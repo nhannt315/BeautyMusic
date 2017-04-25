@@ -2,7 +2,6 @@ package nhannt.musicplayer.ui.playlistdetail;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,15 +10,13 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.adapter.SongAdapter;
 import nhannt.musicplayer.interfaces.IMusicServiceConnection;
 import nhannt.musicplayer.objectmodel.PlayList;
-import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.service.MusicService;
 import nhannt.musicplayer.ui.base.BaseActivity;
 import nhannt.musicplayer.ui.custom.DividerDecoration;
@@ -102,7 +99,10 @@ public class PlaylistDetailActivity extends BaseActivity implements IMusicServic
     @Override
     public void setPlaylistDetail(PlayList playList) {
         mSongAdapter = new SongAdapter(this, playList.getLstSong());
-        mRvSongList.setAdapter(mSongAdapter);
+        mSongAdapter.setLayoutId(R.layout.item_song_playlist_detail);
+        ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(mSongAdapter);
+        scaleInAnimationAdapter.setFirstOnly(false);
+        mRvSongList.setAdapter(scaleInAnimationAdapter);
         mSongAdapter.notifyDataSetChanged();
         tvTitle.setText(playList.getTitle());
 

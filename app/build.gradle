@@ -36,6 +36,7 @@ dependencies {
     compile 'com.android.volley:volley:1.0.0'
     compile 'com.android.support:percent:25.2.0'
     compile 'jp.wasabeef:blurry:2.1.1'
+    compile 'jp.wasabeef:recyclerview-animators:2.2.5'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'

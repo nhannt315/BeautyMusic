@@ -2,7 +2,6 @@ package nhannt.musicplayer.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
@@ -22,10 +21,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import nhannt.musicplayer.R;
-import nhannt.musicplayer.data.database.DBQuery;
-import nhannt.musicplayer.data.provider.MediaProvider;
 import nhannt.musicplayer.objectmodel.PlayList;
-import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.ui.playlistdetail.PlaylistDetailActivity;
 import nhannt.musicplayer.utils.Common;
 
@@ -71,13 +67,15 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
             holder.tvPlaylistTitle.setTransitionName("transition_playList_title" + position);
             holder.ivBackGround.setTransitionName("transition_playlist_cover" + position);
         }
-        String backgroundPath = item.getLstSong()
-                .get(0).getCoverPath();
-        Log.d(item.getTitle(), item.getLstSong().size() + "");
-        Glide.with(mContext).load(backgroundPath)
-                .placeholder(R.drawable.music_background)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(holder.ivBackGround);
+        if(item.getLstSong() != null) {
+            String backgroundPath = item.getLstSong()
+                    .get(0).getCoverPath();
+            Log.d(item.getTitle(), item.getLstSong().size() + "");
+            Glide.with(mContext).load(backgroundPath)
+                    .placeholder(R.drawable.music_background)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(holder.ivBackGround);
+        }
     }
 
     @Override

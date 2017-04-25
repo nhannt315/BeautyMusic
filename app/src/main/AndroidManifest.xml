@@ -28,14 +28,16 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".ui.home.HomeActivity">
+        <activity android:name=".ui.home.HomeActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.playback.PlayBackActivity">
+        <activity android:name=".ui.playback.PlayBackActivity"
+                  android:screenOrientation="portrait">
         </activity>
 
         <receiver android:name=".receiver.HeadSetReceiver">
@@ -44,7 +46,8 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".ui.playlistdetail.PlaylistDetailActivity">
+        <activity android:name=".ui.playlistdetail.PlaylistDetailActivity"
+                  android:screenOrientation="portrait">
         </activity>
     </application>
 

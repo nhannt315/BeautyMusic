@@ -13,5 +13,6 @@
     <color name="current_play_bar_background">#99FFFFFF</color>
     <color name="nav_header_background">#80000000</color>
     <color name="transparent_50">#80000000</color>
+    <color name="transparent_40">#66000000</color>
 
 </resources>

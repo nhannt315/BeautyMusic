@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -16,7 +17,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,7 +24,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 
 import com.bumptech.glide.Glide;
 
@@ -38,11 +37,11 @@ import nhannt.musicplayer.service.MusicService;
 import nhannt.musicplayer.ui.base.BaseActivity;
 import nhannt.musicplayer.ui.custom.UntouchableSeekBar;
 import nhannt.musicplayer.ui.drawer.DrawerPresenterImpl;
+import nhannt.musicplayer.ui.itemlist.FragmentMain;
 import nhannt.musicplayer.ui.playback.PlayBackActivity;
 import nhannt.musicplayer.ui.playingqueue.FragmentPlayingQueue;
 import nhannt.musicplayer.ui.playlist.FragmentPlaylist;
 import nhannt.musicplayer.utils.Common;
-import nhannt.musicplayer.ui.itemlist.FragmentMain;
 
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;

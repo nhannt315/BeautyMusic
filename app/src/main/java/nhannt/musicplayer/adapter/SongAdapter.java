@@ -19,10 +19,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.interfaces.IMusicServiceConnection;
-import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.interfaces.RecyclerItemClickListener;
+import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.service.MusicService;
 import nhannt.musicplayer.service.MusicServiceConnection;
+import nhannt.musicplayer.ui.dialog.PlaylistDialog;
 import nhannt.musicplayer.utils.AppController;
 
 /**
@@ -36,6 +37,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
     private LayoutInflater mLayoutInflater;
     private RecyclerItemClickListener recyclerItemClickListener;
     private MusicServiceConnection mConnection;
+    private int layoutId = R.layout.item_song;
 
     public SongAdapter(Context mContext, ArrayList<Song> mData) {
         this.mContext = mContext;
@@ -47,9 +49,13 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
         this.recyclerItemClickListener = recyclerItemClickListener;
     }
 
+    public void setLayoutId(int layoutId) {
+        this.layoutId = layoutId;
+    }
+
     @Override
     public SongViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mLayoutInflater.inflate(R.layout.item_song, parent, false);
+        View view = mLayoutInflater.inflate(layoutId, parent, false);
         SongViewHolder holder = new SongViewHolder(view);
         return holder;
     }
@@ -139,6 +145,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
                         }
                         switch (item.getItemId()) {
                             case R.id.bt_add_playlist_popup_song:
+                                new PlaylistDialog(mContext,mData.get(position)).show();
                                 break;
                             case R.id.bt_to_album_popup_song:
                                 break;
@@ -152,6 +159,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
             }
         }
     }
+
 
 
 }

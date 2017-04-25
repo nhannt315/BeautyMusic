@@ -7,17 +7,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import nhannt.musicplayer.R;
 import nhannt.musicplayer.interfaces.IMusicServiceConnection;
-import nhannt.musicplayer.service.MusicService;
-import nhannt.musicplayer.service.MusicServiceConnection;
 import nhannt.musicplayer.interfaces.LoaderListener;
 import nhannt.musicplayer.objectmodel.Song;
+import nhannt.musicplayer.service.MusicService;
+import nhannt.musicplayer.service.MusicServiceConnection;
 import nhannt.musicplayer.ui.itemlist.ItemListMvpView;
 import nhannt.musicplayer.ui.itemlist.ItemListPresenter;
 import nhannt.musicplayer.utils.AppController;
 import nhannt.musicplayer.utils.Common;
 import nhannt.musicplayer.utils.Setting;
-import nhannt.musicplayer.R;
 
 /**
  * Created by nhannt on 07/03/2017.

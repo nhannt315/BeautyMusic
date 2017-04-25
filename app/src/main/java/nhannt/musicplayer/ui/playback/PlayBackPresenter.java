@@ -7,9 +7,9 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 
+import nhannt.musicplayer.R;
 import nhannt.musicplayer.service.MusicService;
 import nhannt.musicplayer.ui.custom.CircularSeekBar;
-import nhannt.musicplayer.R;
 
 /**
  * Created by nhannt on 04/04/2017.
@@ -93,8 +93,9 @@ public class PlayBackPresenter implements IPlayBackPresenter {
     private Runnable mUpdateTimeTask = new Runnable() {
         @Override
         public void run() {
-            if (mView == null) return;
+            if(mView == null) return;
             mService = mView.getMusicService();
+            if (mService == null || mService.getState() != MusicService.MusicState.Playing) return;
             if (mService != null) {
                 if (mService.getState() == MusicService.MusicState.Playing) {
                     mView.updateSeekBar(mService.getCurrentPosition(), mService.getDuration());
@@ -131,7 +132,7 @@ public class PlayBackPresenter implements IPlayBackPresenter {
     @Override
     public void onClick(View v) {
         mService = mView.getMusicService();
-        if (mService == null) return;
+        if (mService == null || !mService.isSongSetted()) return;
         switch (v.getId()) {
             case R.id.bt_skip_next_playback:
                 mService.skipToNextSong();

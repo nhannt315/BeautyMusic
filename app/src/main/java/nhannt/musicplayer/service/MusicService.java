@@ -56,7 +56,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 
     private MusicState musicState = MusicState.Stop;
     private ArrayList<Song> lstSong;
-    private int songPos;
+    private int songPos = -1;
     private boolean isShuffle = false;
     private boolean isRepeat = false;
     private static final int NOTIFY_ID = 1;
@@ -294,6 +294,13 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         } else {
             lstSong.add(songPos + 1, song);
         }
+    }
+
+    public boolean isSongSetted(){
+        if(lstSong == null || songPos == -1)
+            return false;
+        else
+            return true;
     }
 
     public void addToQueue(Song... song) {

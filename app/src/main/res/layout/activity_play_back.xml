@@ -24,6 +24,10 @@
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 android:src="@drawable/music_background"/>
+            <ImageView
+                android:background="@color/transparent_40"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
 
             <LinearLayout
                 android:layout_width="match_parent"

@@ -43,7 +43,13 @@
     <string name="auto_playlist">Auto playlist</string>
     <string name="recent_played">Recently Played</string>
     <string name="last_added">Last Added</string>
-
+    <string name="add_playlist">Add to playlist</string>
+    <string name="enter_playlist_name">Enter playlist name</string>
+    <string name="cancel">CANCEL</string>
+    <string name="create">CREATE</string>
+    <string name="song_added_to_playlist">songs added to playlist</string>
+    <string name="failed_insert_song">Failed to insert song to playlist</string>
+    <string name="failed_to_create_playlist">Failed to create playlist</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

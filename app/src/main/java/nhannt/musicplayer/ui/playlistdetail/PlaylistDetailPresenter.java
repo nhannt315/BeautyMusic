@@ -1,9 +1,6 @@
 package nhannt.musicplayer.ui.playlistdetail;
 
-import java.util.ArrayList;
-
 import nhannt.musicplayer.objectmodel.PlayList;
-import nhannt.musicplayer.objectmodel.Song;
 
 /**
  * Created by NhanNT on 04/21/2017.

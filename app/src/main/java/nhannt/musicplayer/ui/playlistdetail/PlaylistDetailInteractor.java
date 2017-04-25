@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.data.database.DBQuery;
 import nhannt.musicplayer.data.provider.MediaProvider;
-import nhannt.musicplayer.interfaces.LoaderListener;
 import nhannt.musicplayer.objectmodel.PlayList;
 import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.ui.playlist.FragmentPlaylist;

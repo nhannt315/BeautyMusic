@@ -2,8 +2,6 @@ package nhannt.musicplayer.ui.albumdetail;
 
 import android.view.View;
 
-import java.util.ArrayList;
-
 import nhannt.musicplayer.interfaces.LoaderListener;
 import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.ui.base.BasePresenter;

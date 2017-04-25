@@ -4,12 +4,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.service.MusicService;
-import nhannt.musicplayer.ui.playback.PlayBackActivity;
 import nhannt.musicplayer.utils.AppController;
 import nhannt.musicplayer.utils.Navigator;
 

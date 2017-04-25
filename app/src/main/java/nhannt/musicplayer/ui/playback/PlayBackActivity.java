@@ -192,7 +192,7 @@ public class PlayBackActivity extends BaseActivity implements IPlayBackView, IMu
 
     @Override
     public void updateButtonState() {
-        if (mService == null) return;
+        if (mService == null || !mService.isSongSetted()) return;
         if (mService.isRepeat()) {
             btRepeat.setImageResource(R.drawable.ic_repeat_pressed);
         } else {
