@@ -24,7 +24,7 @@ import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.service.MusicService;
 import nhannt.musicplayer.service.MusicServiceConnection;
 import nhannt.musicplayer.ui.dialog.PlaylistDialog;
-import nhannt.musicplayer.utils.AppController;
+import nhannt.musicplayer.utils.App;
 
 /**
  * Created by nhannt on 03/03/2017.
@@ -122,8 +122,8 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
                         final int itemId = item.getItemId();
                         if (itemId == R.id.bt_play_popup_song || itemId == R.id.bt_play_next_popup_song ||
                                 itemId == R.id.bt_add_queue_popup_song) {
-                            mConnection = new MusicServiceConnection(AppController.getContext());
-                            Intent iPlay = new Intent(AppController.getContext(), MusicService.class);
+                            mConnection = new MusicServiceConnection(App.getContext());
+                            Intent iPlay = new Intent(App.getContext(), MusicService.class);
                             mConnection.connect(iPlay, new IMusicServiceConnection() {
                                 @Override
                                 public void onConnected(MusicService service) {

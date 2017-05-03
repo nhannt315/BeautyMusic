@@ -20,7 +20,7 @@ import nhannt.musicplayer.data.network.VolleyConnection;
 import nhannt.musicplayer.objectmodel.Album;
 import nhannt.musicplayer.objectmodel.Artist;
 import nhannt.musicplayer.objectmodel.Song;
-import nhannt.musicplayer.utils.AppController;
+import nhannt.musicplayer.utils.App;
 
 /**
  * Created by nhannt on 01/03/2017.
@@ -28,7 +28,7 @@ import nhannt.musicplayer.utils.AppController;
 
 public class MediaProvider {
     private static MediaProvider mInstance = null;
-    private Context mContext = AppController.getInstance().getContext();
+    private Context mContext = App.getInstance().getContext();
     private static final String LAST_FM_API_KEY = "761226e2f2b94da7de6a61d73f50e33c";
     private static final String URL_1 = "http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=";
     private static final String URL_2 = "&api_key=" + LAST_FM_API_KEY + "&format=json";
@@ -143,7 +143,7 @@ public class MediaProvider {
                                 JSONArray photoList = artist.optJSONArray("image");
                                 JSONObject photo = photoList.optJSONObject(2);
                                 String url = photo.optString("#text");
-                                Log.d(mArtist.getName() + " link day nhe", url);
+//                                Log.d(mArtist.getName() + " link day nhe", url);
                                 mArtist.setImageUrl(url);
 
                             }
@@ -233,6 +233,7 @@ public class MediaProvider {
                 int albumID = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
                 String albumPath = getCoverArtPath(albumID);
                 Song item = new Song(songId, title, album, artist, albumPath, year, duration, path);
+                item.setAlbumId(albumID);
                 lstSong.add(item);
 
             } while (cursor.moveToNext());
@@ -241,12 +242,35 @@ public class MediaProvider {
         return lstSong;
     }
 
+    public Album getAlbumById(int albumId) {
+        Album album = null;
+        Cursor cursor = mContext.getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
+                new String[]{MediaStore.Audio.Albums.ALBUM, MediaStore.Audio.Albums.ALBUM_ART, MediaStore.Audio.Albums._ID,
+                        MediaStore.Audio.Albums.ARTIST, MediaStore.Audio.Albums.NUMBER_OF_SONGS,
+                        MediaStore.Audio.Albums.FIRST_YEAR}
+                , MediaStore.Audio.Albums._ID + "=?", new String[]{String.valueOf(albumId)}, MediaStore.Audio.Albums.ALBUM + " ASC");
+        if (cursor != null && cursor.moveToFirst()) {
+            String title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM));
+            String pathArt = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
+            int id = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Albums._ID));
+            String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ARTIST));
+            int songCount = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Albums.NUMBER_OF_SONGS));
+            int year = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Albums.FIRST_YEAR));
+            album = new Album(id, title, artist, pathArt, year, songCount);
+        }
+        cursor.close();
+        return album;
+    }
+
+
     public ArrayList<Album> getListAlbumOfArtist(int artistId) {
+        ArrayList<Song> lstSong = getListSongOfArtist(artistId);
         ArrayList<Album> lstAlbum = new ArrayList<>();
-        Uri.Builder builder = MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI.buildUpon();
-        builder.appendPath(artistId + "");
-        builder.appendPath("albums");
-//        Cursor cursor =
+        for (Song song : lstSong) {
+            Album album = getAlbumById(song.getAlbumId());
+            lstAlbum.add(album);
+            Log.d("album",album.getTitle()+album.getCoverPath());
+        }
         return lstAlbum;
     }
 

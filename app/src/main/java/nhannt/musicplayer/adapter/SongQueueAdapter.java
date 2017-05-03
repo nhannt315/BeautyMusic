@@ -25,7 +25,7 @@ import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.recyclerhelper.ItemTouchHelperAdapter;
 import nhannt.musicplayer.recyclerhelper.ItemTouchHelperViewHolder;
 import nhannt.musicplayer.recyclerhelper.OnStartDragListener;
-import nhannt.musicplayer.utils.AppController;
+import nhannt.musicplayer.utils.App;
 
 /**
  * Created by nhannt on 07/04/2017.
@@ -85,18 +85,18 @@ public class SongQueueAdapter extends RecyclerView.Adapter<SongQueueAdapter.Song
     public boolean onItemMove(int fromPosition, int toPosition) {
         Collections.swap(mData, fromPosition, toPosition);
         notifyItemMoved(fromPosition, toPosition);
-        AppController.getInstance().updateListSong(mData);
+        App.getInstance().updateListSong(mData);
         return true;
     }
 
     @Override
     public void onItemDismiss(int position) {
-        if(mData.get(position).getId() != AppController.getInstance().getCurrentPlayingSong().getId()) {
+        if(mData.get(position).getId() != App.getInstance().getCurrentPlayingSong().getId()) {
             Song item = mData.get(position);
             mData.remove(position);
 
             Toast.makeText(mContext, item.getTitle() + " " + mContext.getString(R.string.deleted), Toast.LENGTH_SHORT).show();
-            AppController.getInstance().updateListSong(mData);
+            App.getInstance().updateListSong(mData);
         }
         notifyDataSetChanged();
     }

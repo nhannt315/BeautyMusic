@@ -17,6 +17,8 @@ import butterknife.ButterKnife;
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.interfaces.RecyclerItemClickListener;
 import nhannt.musicplayer.objectmodel.Artist;
+import nhannt.musicplayer.utils.Common;
+import nhannt.musicplayer.utils.Navigator;
 
 /**
  * Created by nhannt on 03/03/2017.
@@ -73,15 +75,18 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ArtistView
         holder.tvArtistName.setText(item.getName());
         holder.tvArtistInfo.setText(item.getNumberOfSong() + " " + mContext.getString(R.string.song_low_case) +
                 " | " + item.getNumberOfAlbum() + " " + mContext.getString(R.string.album_low_case));
-//        getArtistPhoto(position);
+        holder.position = position;
+        if(Common.isLollipop()){
+            holder.imageArtistCover.setTransitionName("transition_artist"+position);
+        }
         if(layoutType == LAYOUT_ITEM_LIST) {
             Glide.with(mContext).load(item.getImageUrl())
                     .centerCrop().placeholder(R.drawable.music_background)
-                    .dontAnimate().into(holder.artistArt);
+                    .dontAnimate().into(holder.imageArtistCover);
         }else{
             Glide.with(mContext).load(item.getImageUrl())
                     .centerCrop().placeholder(R.drawable.music_background)
-                    .into(holder.artistArt);
+                    .into(holder.imageArtistCover);
         }
     }
 
@@ -92,10 +97,12 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ArtistView
         return mData.size();
     }
 
-    public class ArtistViewHolder extends RecyclerView.ViewHolder {
+    public class ArtistViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        int position;
 
         @BindView(R.id.iv_cover_item_artist)
-        protected ImageView artistArt;
+        protected ImageView imageArtistCover;
         @BindView(R.id.tv_artist_title_item)
         protected TextView tvArtistName;
         @BindView(R.id.tv_album_song_artist_item)
@@ -103,7 +110,13 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ArtistView
 
         public ArtistViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(ArtistViewHolder.this);
             ButterKnife.bind(this, itemView);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Navigator.navigateToArtistDetail(mContext,mData.get(position), this.imageArtistCover);
         }
     }
 }

@@ -18,8 +18,8 @@ import nhannt.musicplayer.ui.itemlist.ItemListPresenter;
  * Created by nhannt on 07/03/2017.
  */
 
-public class AppController extends Application {
-    private static AppController mInstance;
+public class App extends Application {
+    private static App mInstance;
     private MusicService musicService;
 
 
@@ -27,7 +27,7 @@ public class AppController extends Application {
         return mInstance.getApplicationContext();
     }
 
-    public static AppController getInstance() {
+    public static App getInstance() {
         return mInstance;
     }
 
@@ -55,6 +55,17 @@ public class AppController extends Application {
     public Song getCurrentPlayingSong() {
         if (musicService == null || !musicService.isSongSetted()) return null;
         return musicService.getCurrentSong();
+    }
+
+    public void setSongPos(int songPsn){
+        if(musicService == null) return;
+        musicService.setSongPos(songPsn);
+        musicService.playSong();
+    }
+
+    public void setListSong(ArrayList<Song> lstSong){
+        if(musicService == null) return;
+        musicService.setLstSong(lstSong);
     }
 
     public void updateListSong(ArrayList<Song> lstSong) {

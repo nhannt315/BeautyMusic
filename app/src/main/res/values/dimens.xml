@@ -14,4 +14,5 @@
     <dimen name="column_width">250dp</dimen>
     <dimen name="playing_bar_height">55dp</dimen>
     <dimen name="notification_height">64dp</dimen>
+    <dimen name="item_album_artist_detail_spacing">2dp</dimen>
 </resources>

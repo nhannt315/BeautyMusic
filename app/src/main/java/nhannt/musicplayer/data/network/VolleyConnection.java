@@ -6,14 +6,14 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
-import nhannt.musicplayer.utils.AppController;
+import nhannt.musicplayer.utils.App;
 
 /**
  * Created by hienl_000 on 5/9/2016.
  */
 public class VolleyConnection {
     private static VolleyConnection mInstance;
-    private Context context = AppController.getInstance().getContext();
+    private Context context = App.getInstance().getContext();
     private RequestQueue mRequestQueue;
 //    private ImageLoader mImageLoader;
 //    public static final String LAST_FM_API_KEY="761226e2f2b94da7de6a61d73f50e33c";

@@ -31,6 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import nhannt.musicplayer.R;
+import nhannt.musicplayer.interfaces.DrawerLayoutContainer;
 import nhannt.musicplayer.interfaces.IMusicServiceConnection;
 import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.service.MusicService;
@@ -46,7 +47,7 @@ import nhannt.musicplayer.utils.Common;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
-public class HomeActivity extends BaseActivity implements DrawerPresenterImpl.DrawerView,IMusicServiceConnection, IHomeView {
+public class HomeActivity extends BaseActivity implements DrawerPresenterImpl.DrawerView,IMusicServiceConnection, IHomeView, DrawerLayoutContainer {
 
     private static final int PERMISSION_REQUEST_CODE = 200;
 
@@ -245,15 +246,7 @@ public class HomeActivity extends BaseActivity implements DrawerPresenterImpl.Dr
             }
         });
 
-        toggle = new ActionBarDrawerToggle(this, drawerLayout, getToolbar(),
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        drawerLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                toggle.syncState();
-            }
-        });
+
 
     }
 
@@ -370,5 +363,13 @@ public class HomeActivity extends BaseActivity implements DrawerPresenterImpl.Dr
     protected void onDestroy() {
         super.onDestroy();
         mPresenter.detachView();
+    }
+
+    @Override
+    public void setDrawerLayoutActionBarToggle(Toolbar toolbar) {
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
     }
 }

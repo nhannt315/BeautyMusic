@@ -15,7 +15,7 @@ import nhannt.musicplayer.service.MusicService;
 import nhannt.musicplayer.service.MusicServiceConnection;
 import nhannt.musicplayer.ui.itemlist.ItemListMvpView;
 import nhannt.musicplayer.ui.itemlist.ItemListPresenter;
-import nhannt.musicplayer.utils.AppController;
+import nhannt.musicplayer.utils.App;
 import nhannt.musicplayer.utils.Common;
 import nhannt.musicplayer.utils.Setting;
 
@@ -60,8 +60,8 @@ public class SongListPresenter implements ItemListPresenter<ItemListMvpView<Song
     public void onItemSelected(View view, final int position) {
         switch (view.getId()){
             case R.id.item_song:
-                mMusicServiceConnection = new MusicServiceConnection(AppController.getContext());
-                Intent iSelectSongPlay = new Intent(AppController.getContext(), MusicService.class);
+                mMusicServiceConnection = new MusicServiceConnection(App.getContext());
+                Intent iSelectSongPlay = new Intent(App.getContext(), MusicService.class);
                 iSelectSongPlay.setAction(MusicService.ACTION_PLAY);
                 mMusicServiceConnection.connect(iSelectSongPlay, new IMusicServiceConnection() {
                     @Override

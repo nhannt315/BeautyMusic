@@ -8,6 +8,7 @@ import java.io.Serializable;
 
 public class Song implements Serializable {
     private String id;
+    private int albumId;
     private String title;
     private String album;
     private String artist;
@@ -19,6 +20,15 @@ public class Song implements Serializable {
     public Song(){
 
     }
+
+    public int getAlbumId() {
+        return albumId;
+    }
+
+    public void setAlbumId(int albumId) {
+        this.albumId = albumId;
+    }
+
     public Song(String id, String title, String album, String artist, String coverPath, int year, long duration, String songPath) {
         this.id = id;
         this.title = title;

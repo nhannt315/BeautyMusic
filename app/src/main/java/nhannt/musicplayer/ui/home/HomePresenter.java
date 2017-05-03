@@ -8,7 +8,7 @@ import android.view.View;
 
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.service.MusicService;
-import nhannt.musicplayer.utils.AppController;
+import nhannt.musicplayer.utils.App;
 import nhannt.musicplayer.utils.Navigator;
 
 /**
@@ -49,7 +49,7 @@ public class HomePresenter implements IHomePresenter, View.OnClickListener {
             case R.id.btn_toggle_play_current_bar:
                 intent = new Intent(mView.getViewContext(), MusicService.class);
                 intent.setAction(MusicService.ACTION_TOGGLE_PLAY_PAUSE);
-                AppController.getContext().startService(intent);
+                App.getContext().startService(intent);
                 break;
             case R.id.current_play_bar:
                 Navigator.navigateToPlayBackActivity(mView.getViewContext());

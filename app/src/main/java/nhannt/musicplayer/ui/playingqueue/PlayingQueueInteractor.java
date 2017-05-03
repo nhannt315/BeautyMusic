@@ -8,7 +8,7 @@ import nhannt.musicplayer.interfaces.IMusicServiceConnection;
 import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.service.MusicService;
 import nhannt.musicplayer.service.MusicServiceConnection;
-import nhannt.musicplayer.utils.AppController;
+import nhannt.musicplayer.utils.App;
 
 /**
  * Created by NhanNT on 04/18/2017.
@@ -24,8 +24,8 @@ public class PlayingQueueInteractor implements IPlayingQueueInteractor {
     @Override
     public void loadListSongPlaying() {
         MusicServiceConnection mConnection;
-        mConnection = new MusicServiceConnection(AppController.getContext());
-        Intent intent = new Intent(AppController.getContext(), MusicService.class);
+        mConnection = new MusicServiceConnection(App.getContext());
+        Intent intent = new Intent(App.getContext(), MusicService.class);
         mConnection.connect(intent, new IMusicServiceConnection() {
             @Override
             public void onConnected(MusicService service) {

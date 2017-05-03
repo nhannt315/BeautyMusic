@@ -16,11 +16,15 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AbsListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -51,7 +55,6 @@ public class FragmentAlbumDetail extends BaseFragment implements IAlbumDetailVie
     private Album album;
     private boolean isTransition;
     private String transitionName = "";
-    private ActionBar activityActionBar = null;
     private SongAdapter mSongAdapter;
     private ArrayList<Song> lstSong;
     private IAlbumDetailPresenter mPresenter;
@@ -102,6 +105,7 @@ public class FragmentAlbumDetail extends BaseFragment implements IAlbumDetailVie
         ButterKnife.bind(this, view);
         appBarLayout.addOnOffsetChangedListener(this);
         setupCollaspingToolbar();
+        setHasOptionsMenu(true);
         return view;
     }
 
@@ -136,28 +140,18 @@ public class FragmentAlbumDetail extends BaseFragment implements IAlbumDetailVie
         mPresenter.onResume();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        disableDoBack();
+    }
+
     private void setupRecyclerView() {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         rvSongList.setLayoutManager(layoutManager);
         rvSongList.addItemDecoration(new DividerDecoration(getActivity()));
         rvSongList.setItemAnimator(new DefaultItemAnimator());
-        rvSongList.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            int scrollDy = 0;
 
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if ((scrollDy == 0) && (newState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE)) {
-                    appBarLayout.setExpanded(true);
-                }
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                scrollDy += dy;
-            }
-        });
     }
 
     private void setupToolbar() {
@@ -171,6 +165,23 @@ public class FragmentAlbumDetail extends BaseFragment implements IAlbumDetailVie
             actionBar.setTitle(album.getTitle());
             actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
         }
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popCurrentFragment();
+            }
+        });
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.main_menu,menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return true;
     }
 
     @Override

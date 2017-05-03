@@ -14,6 +14,9 @@ public class Album implements Serializable {
     private int year;
     private int songCount;
 
+    public Album() {
+    }
+
     public Album(int id, String title, String artist, String coverPath, int year, int songCount) {
         this.id = id;
         this.title = title;

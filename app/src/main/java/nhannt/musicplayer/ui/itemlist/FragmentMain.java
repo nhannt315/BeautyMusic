@@ -4,12 +4,15 @@ package nhannt.musicplayer.ui.itemlist;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.adapter.ViewPagerAdapter;
+import nhannt.musicplayer.interfaces.DrawerLayoutContainer;
 import nhannt.musicplayer.ui.base.BaseFragment;
 
 
@@ -21,6 +24,8 @@ public class FragmentMain extends BaseFragment {
     protected TabLayout tabLayout;
     @BindView(R.id.main_view_pager)
     protected ViewPager viewPager;
+    @BindView(R.id.toolbar)
+    protected Toolbar mToolbar;
 
     public static FragmentMain newInstance() {
         FragmentMain fragment = new FragmentMain();
@@ -43,8 +48,16 @@ public class FragmentMain extends BaseFragment {
         viewPager.setAdapter(new ViewPagerAdapter(getChildFragmentManager()));
         viewPager.setOffscreenPageLimit(2);
         tabLayout.setupWithViewPager(viewPager);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
+        DrawerLayoutContainer activity = (DrawerLayoutContainer) getActivity();
+        activity.setDrawerLayoutActionBarToggle(mToolbar);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        enableDoBack();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,6 +75,6 @@ public class FragmentMain extends BaseFragment {
 
     @Override
     public void doBack() {
-        getActivity().onBackPressed();
+        getActivity().finish();
     }
 }

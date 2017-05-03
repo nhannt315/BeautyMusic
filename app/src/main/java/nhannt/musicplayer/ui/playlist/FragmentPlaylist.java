@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.adapter.PlaylistAdapter;
+import nhannt.musicplayer.interfaces.DrawerLayoutContainer;
 import nhannt.musicplayer.objectmodel.PlayList;
 import nhannt.musicplayer.ui.base.BaseFragment;
 
@@ -30,8 +32,11 @@ public class FragmentPlaylist extends BaseFragment implements IPlaylistListView 
     public static final int RECENT_PLAYED_ID = -1;
     public static final int RECENT_ADDED_ID = -2;
 
+    @BindView(R.id.toolbar)
+    protected Toolbar mToolbar;
     @BindView(R.id.rv_playlist)
     protected RecyclerView rvPlaylistList;
+
     private PlaylistAdapter mPlaylistAdapter;
     private IPlaylistListPresenter mPresenter;
 
@@ -68,6 +73,14 @@ public class FragmentPlaylist extends BaseFragment implements IPlaylistListView 
         mPresenter = new PlaylistListPresenter();
         mPresenter.attachedView(this);
         mPresenter.onResume();
+        DrawerLayoutContainer container = (DrawerLayoutContainer) getActivity();
+        container.setDrawerLayoutActionBarToggle(mToolbar);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        enableDoBack();
     }
 
     private void setUpRecyclerView() {
@@ -83,7 +96,7 @@ public class FragmentPlaylist extends BaseFragment implements IPlaylistListView 
 
     @Override
     public void doBack() {
-
+        getActivity().finish();
     }
 
     @Override

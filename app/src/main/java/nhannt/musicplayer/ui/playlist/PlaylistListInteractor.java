@@ -10,7 +10,7 @@ import nhannt.musicplayer.data.provider.MediaProvider;
 import nhannt.musicplayer.interfaces.LoaderListener;
 import nhannt.musicplayer.objectmodel.PlayList;
 import nhannt.musicplayer.objectmodel.Song;
-import nhannt.musicplayer.utils.AppController;
+import nhannt.musicplayer.utils.App;
 
 /**
  * Created by NhanNT on 04/21/2017.
@@ -32,22 +32,22 @@ public class PlaylistListInteractor implements IPlaylistListInteractor {
 
         @Override
         protected Void doInBackground(Void... params) {
-            lstPlaylist = DBQuery.getInstance(AppController.getContext()).getAllPlayList();
+            lstPlaylist = DBQuery.getInstance(App.getContext()).getAllPlayList();
             lstSongAdded = MediaProvider.getInstance().getListSong();
-            lstSongRecent = DBQuery.getInstance(AppController.getContext()).getListSongRecentPlay();
+            lstSongRecent = DBQuery.getInstance(App.getContext()).getListSongRecentPlay();
             for(PlayList playList : lstPlaylist){
-                playList.setLstSong(DBQuery.getInstance(AppController.getContext()).getListSongByPlaylist(playList.getId()));
+                playList.setLstSong(DBQuery.getInstance(App.getContext()).getListSongByPlaylist(playList.getId()));
             }
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            PlayList playlistAdded = new PlayList(FragmentPlaylist.RECENT_ADDED_ID, AppController.getContext().getString(R.string.last_added), lstSongAdded.size(),
+            PlayList playlistAdded = new PlayList(FragmentPlaylist.RECENT_ADDED_ID, App.getContext().getString(R.string.last_added), lstSongAdded.size(),
                     lstSongAdded, true);
             lstPlaylist.add(0, playlistAdded);
             if (lstSongRecent.size() > 0) {
-                PlayList playlistRecent = new PlayList(FragmentPlaylist.RECENT_PLAYED_ID, AppController.getContext().getString(R.string.recent_played), lstSongAdded.size(),
+                PlayList playlistRecent = new PlayList(FragmentPlaylist.RECENT_PLAYED_ID, App.getContext().getString(R.string.recent_played), lstSongAdded.size(),
                         lstSongRecent, true);
                 lstPlaylist.add(1, playlistRecent);
             }

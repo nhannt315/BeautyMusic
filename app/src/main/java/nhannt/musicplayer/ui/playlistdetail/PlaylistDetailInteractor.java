@@ -10,7 +10,7 @@ import nhannt.musicplayer.data.provider.MediaProvider;
 import nhannt.musicplayer.objectmodel.PlayList;
 import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.ui.playlist.FragmentPlaylist;
-import nhannt.musicplayer.utils.AppController;
+import nhannt.musicplayer.utils.App;
 
 /**
  * Created by NhanNT on 04/21/2017.
@@ -36,19 +36,19 @@ public class PlaylistDetailInteractor implements IPlaylistDetailInteractor {
                 switch (pId){
                     case FragmentPlaylist.RECENT_ADDED_ID:
                         lstSong = MediaProvider.getInstance().getListSong();
-                        playList = new PlayList(FragmentPlaylist.RECENT_ADDED_ID, AppController.getContext().getString(R.string.last_added),
+                        playList = new PlayList(FragmentPlaylist.RECENT_ADDED_ID, App.getContext().getString(R.string.last_added),
                                 lstSong.size(),
                                 lstSong, true);
                         break;
                     case FragmentPlaylist.RECENT_PLAYED_ID:
-                        lstSong = DBQuery.getInstance(AppController.getContext()).getListSongRecentPlay();
+                        lstSong = DBQuery.getInstance(App.getContext()).getListSongRecentPlay();
                         playList = new PlayList(FragmentPlaylist.RECENT_PLAYED_ID,
-                                AppController.getContext().getString(R.string.recent_played), lstSong.size(),
+                                App.getContext().getString(R.string.recent_played), lstSong.size(),
                                 lstSong, true);
                         break;
                     default:
-                        lstSong = DBQuery.getInstance(AppController.getContext()).getListSongByPlaylist(params[0]);
-                        playList = DBQuery.getInstance(AppController.getContext()).getPlayListById(params[0]);
+                        lstSong = DBQuery.getInstance(App.getContext()).getListSongByPlaylist(params[0]);
+                        playList = DBQuery.getInstance(App.getContext()).getPlayListById(params[0]);
                         break;
                 }
 

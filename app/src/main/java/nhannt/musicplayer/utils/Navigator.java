@@ -11,7 +11,9 @@ import android.view.View;
 
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.objectmodel.Album;
+import nhannt.musicplayer.objectmodel.Artist;
 import nhannt.musicplayer.ui.albumdetail.FragmentAlbumDetail;
+import nhannt.musicplayer.ui.artistdetail.FragmentArtistDetail;
 import nhannt.musicplayer.ui.playback.PlayBackActivity;
 
 /**
@@ -38,7 +40,33 @@ public class Navigator {
         }
 
         fragmentTransaction.hide(activity.getSupportFragmentManager().findFragmentById(R.id.container))
-                .replace(R.id.container, desFragment)
+                .hide(((AppCompatActivity) context).getSupportFragmentManager().findFragmentById(R.id.container))
+                .add(R.id.container, desFragment)
+                .addToBackStack(FragmentAlbumDetail.TAG)
+                .commit();
+    }
+
+    public static void navigateToArtistDetail(Context context, Artist artist, @Nullable View transitionView){
+        Fragment desFragment;
+        AppCompatActivity activity = (AppCompatActivity) context;
+        FragmentTransaction fragmentTransaction = activity.getSupportFragmentManager().beginTransaction();
+        if (transitionView != null) {
+            if (Common.isLollipop()) {
+                String transitionName = transitionView.getTransitionName();
+                desFragment = FragmentArtistDetail.newInstance(artist, true, transitionName);
+                desFragment.setSharedElementEnterTransition(TransitionInflater.from(
+                        activity).inflateTransition(R.transition.image_tran));
+                fragmentTransaction.addSharedElement(transitionView, transitionName);
+            } else {
+                desFragment = FragmentArtistDetail.newInstance(artist, false, "");
+            }
+        } else {
+            desFragment = FragmentArtistDetail.newInstance(artist, false, "");
+        }
+
+        fragmentTransaction.hide(activity.getSupportFragmentManager().findFragmentById(R.id.container))
+                .hide(((AppCompatActivity) context).getSupportFragmentManager().findFragmentById(R.id.container))
+                .add(R.id.container, desFragment)
                 .addToBackStack(FragmentAlbumDetail.TAG)
                 .commit();
     }

@@ -1,6 +1,8 @@
 package nhannt.musicplayer.adapter;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,7 @@ import nhannt.musicplayer.R;
 import nhannt.musicplayer.interfaces.RecyclerItemClickListener;
 import nhannt.musicplayer.objectmodel.Album;
 import nhannt.musicplayer.utils.Common;
+import nhannt.musicplayer.utils.Navigator;
 
 /**
  * Created by nhannt on 03/03/2017.
@@ -27,20 +30,37 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
     public static int LAYOUT_ITEM_LIST = 0;
     public static int LAYOUT_ITEM_GRID = 1;
 
-    private Activity mContext;
+    private Context mContext;
     private ArrayList<Album> mData;
     private int layoutType;
     private LayoutInflater mLayoutInflater;
     private RecyclerItemClickListener recyclerItemClickListener;
+    private int layoutId = R.layout.item_album_list;
+    private boolean isAnimate = false;
 
-    public AlbumAdapter(Activity mContext, ArrayList<Album> mData) {
+    public AlbumAdapter(Context mContext, ArrayList<Album> mData) {
         this.mContext = mContext;
         this.mData = mData;
         mLayoutInflater = LayoutInflater.from(mContext);
     }
 
     public void setLayoutType(int layoutType) {
+        if (layoutType == LAYOUT_ITEM_LIST) {
+            this.layoutId = R.layout.item_album_list;
+            this.isAnimate = false;
+        } else {
+            this.layoutId = R.layout.item_album_grid;
+            this.isAnimate = true;
+        }
         this.layoutType = layoutType;
+    }
+
+    public void setLayoutId(int layoutId) {
+        this.layoutId = layoutId;
+    }
+
+    public void setAnimate(boolean animate) {
+        isAnimate = animate;
     }
 
     public void setRecyclerItemClickListener(RecyclerItemClickListener recyclerItemClickListener) {
@@ -55,12 +75,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
     @Override
     public AlbumViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         AlbumViewHolder holder;
-        View itemView;
-        if (layoutType == LAYOUT_ITEM_LIST) {
-            itemView = mLayoutInflater.inflate(R.layout.item_album_list, parent, false);
-        } else {
-            itemView = mLayoutInflater.inflate(R.layout.item_album_grid, parent, false);
-        }
+        View itemView = mLayoutInflater.inflate(layoutId, parent, false);
         holder = new AlbumViewHolder(itemView);
         return holder;
     }
@@ -68,10 +83,11 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
     @Override
     public void onBindViewHolder(AlbumViewHolder holder, int position) {
         Album item = mData.get(position);
+        if (item == null) return;
         holder.tvAlbumTitle.setText(item.getTitle());
         holder.tvArtistName.setText(item.getArtist());
         if (Common.isMarshMallow()) {
-            holder.albumCover.setTransitionName("transition_image" + position);
+            holder.albumCover.setTransitionName("from_" + mContext.getClass().getName() + "_transition" + position);
         }
         holder.position = position;
         if (layoutType == LAYOUT_ITEM_LIST) {
@@ -111,7 +127,10 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    recyclerItemClickListener.onItemClickListener(v, position);
+                    if (recyclerItemClickListener != null)
+                        recyclerItemClickListener.onItemClickListener(v, position);
+                    else {
+                    }
                 }
             });
         }

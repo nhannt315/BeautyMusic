@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.objectmodel.Song;
+import nhannt.musicplayer.utils.App;
 
 /**
  * Created by nhannt on 30/03/2017.
@@ -46,6 +47,8 @@ public class AlbumDetailPresenter implements IAlbumDetailPresenter {
         switch (view.getId()) {
             case R.id.item_song:
                 Toast.makeText(mView.getViewContext(), "Song clicked", Toast.LENGTH_SHORT).show();
+                App.getInstance().setListSong(mView.getListSong());
+                App.getInstance().setSongPos(position);
                 break;
             case R.id.btn_menu_song_item:
                 Toast.makeText(mView.getViewContext(), "Menu Clicked", Toast.LENGTH_SHORT).show();
