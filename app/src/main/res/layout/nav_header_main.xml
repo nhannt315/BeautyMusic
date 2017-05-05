@@ -1,48 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/nav_header_main"
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/nav_header_height"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark">
-    <RelativeLayout
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/nav_header_main"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/nav_header_height"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    <ImageView
+        android:id="@+id/iv_nav_header_back_ground"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <ImageView
-            android:id="@+id/iv_nav_header_back_ground"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/music_background"
-            android:scaleType="centerCrop" />
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/nav_header_background"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingBottom="@dimen/activity_vertical_margin"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:orientation="vertical"
-            android:gravity="bottom">
-            <TextView
-                android:id="@+id/tv_song_name_nav_header"
-                android:text="@string/song"
-                android:textStyle="bold"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_size_normal"
-                android:maxLines="1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:id="@+id/tv_artist_name_nav_header"
-                android:text="@string/artist"
-                android:textSize="18dp"
-                android:maxLines="1"
-                android:textColor="@color/white"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-    </RelativeLayout>
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/music_background_new"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/nav_header_background"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:paddingEnd="@dimen/activity_horizontal_margin">
+
+        <TextView
+            android:id="@+id/tv_song_name_nav_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:text="@string/song"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_normal"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tv_artist_name_nav_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:text="@string/artist"
+            android:textColor="@color/white"
+            android:textSize="18sp"/>
+    </LinearLayout>
 
 
-</LinearLayout>
+</RelativeLayout>

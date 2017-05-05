@@ -1,7 +1,9 @@
 package nhannt.musicplayer.ui.artistdetail;
 
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -32,14 +34,19 @@ import butterknife.ButterKnife;
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.adapter.AlbumAdapter;
 import nhannt.musicplayer.adapter.SongAdapter;
+import nhannt.musicplayer.data.network.ArtistPhoto;
 import nhannt.musicplayer.interfaces.DrawerLayoutContainer;
+import nhannt.musicplayer.interfaces.IMusicServiceConnection;
 import nhannt.musicplayer.interfaces.RecyclerItemClickListener;
 import nhannt.musicplayer.objectmodel.Album;
 import nhannt.musicplayer.objectmodel.Artist;
 import nhannt.musicplayer.objectmodel.Song;
+import nhannt.musicplayer.service.MusicService;
+import nhannt.musicplayer.service.MusicServiceConnection;
 import nhannt.musicplayer.ui.base.BaseFragment;
 import nhannt.musicplayer.ui.custom.DividerDecoration;
 import nhannt.musicplayer.ui.custom.ItemOffsetDecoration;
+import nhannt.musicplayer.utils.App;
 import nhannt.musicplayer.utils.Common;
 import nhannt.musicplayer.utils.Navigator;
 
@@ -134,13 +141,7 @@ public class FragmentArtistDetail extends BaseFragment implements IArtistDetailV
         if (Common.isLollipop() && isTransition) {
             imageArtistCover.setTransitionName(transitionName);
         }
-        Glide.with(getContext())
-                .load(mArtist.getImageUrl())
-                .placeholder(R.drawable.music_background)
-                .crossFade()
-                .centerCrop()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(imageArtistCover);
+        new ArtistPhoto(getContext(), mArtist.getName(), imageArtistCover, true).execute();
 
     }
 
@@ -199,6 +200,7 @@ public class FragmentArtistDetail extends BaseFragment implements IArtistDetailV
         this.lstSongs = lstSongs;
         songAdapter = new SongAdapter(getContext(), this.lstSongs);
         rvSongList.setAdapter(songAdapter);
+        songAdapter.setRecyclerItemClickListener(this);
         songAdapter.notifyDataSetChanged();
     }
 
@@ -221,6 +223,7 @@ public class FragmentArtistDetail extends BaseFragment implements IArtistDetailV
         });
     }
 
+    @TargetApi(21)
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
         //Initialize the size of the scroll
@@ -248,8 +251,27 @@ public class FragmentArtistDetail extends BaseFragment implements IArtistDetailV
     }
 
     @Override
-    public void onItemClickListener(View view, int position) {
-        ImageView albumCover = (ImageView) view.findViewById(R.id.iv_cover_item_album);
-        Navigator.navigateToAlbumDetail(getContext(), lstAlbum.get(position), albumCover);
+    public void onItemClickListener(View view, final int position) {
+        switch (view.getId()){
+            case R.id.item_album_artist:
+                ImageView albumCover = (ImageView) view.findViewById(R.id.iv_cover_item_album);
+                Navigator.navigateToAlbumDetail(getContext(), lstAlbum.get(position), albumCover);
+                break;
+            case R.id.item_song:
+                MusicServiceConnection mMusicServiceConnection = new MusicServiceConnection(App.getContext());
+                Intent iSelectSongPlay = new Intent(App.getContext(), MusicService.class);
+                iSelectSongPlay.setAction(MusicService.ACTION_PLAY);
+                mMusicServiceConnection.connect(iSelectSongPlay, new IMusicServiceConnection() {
+                    @Override
+                    public void onConnected(MusicService service) {
+                        service.setSongPos(position);
+                        service.setLstSong(lstSongs);
+                        service.playSong();
+                    }
+                });
+                Navigator.navigateToPlayBackActivity(getContext());
+                break;
+        }
+
     }
 }

@@ -44,7 +44,7 @@ public class HomePresenter implements IHomePresenter, View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        Intent intent = null;
+        Intent intent;
         switch (v.getId()) {
             case R.id.btn_toggle_play_current_bar:
                 intent = new Intent(mView.getViewContext(), MusicService.class);

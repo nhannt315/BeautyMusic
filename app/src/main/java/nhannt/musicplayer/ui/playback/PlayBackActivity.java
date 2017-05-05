@@ -22,6 +22,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -39,7 +42,7 @@ import nhannt.musicplayer.ui.custom.CircularSeekBar;
 import nhannt.musicplayer.ui.custom.DividerDecoration;
 import nhannt.musicplayer.utils.Common;
 
-public class PlayBackActivity extends BaseActivity implements IPlayBackView, IMusicServiceConnection,RecyclerItemClickListener {
+public class PlayBackActivity extends BaseActivity implements IPlayBackView, IMusicServiceConnection, RecyclerItemClickListener {
 
     public static final String TAG = PlayBackActivity.class.getName();
 
@@ -97,7 +100,7 @@ public class PlayBackActivity extends BaseActivity implements IPlayBackView, IMu
     }
 
     private void setupRecyclerView() {
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(PlayBackActivity.this,LinearLayoutManager.VERTICAL,false);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(PlayBackActivity.this, LinearLayoutManager.VERTICAL, false);
         DividerDecoration dividerDecoration = new DividerDecoration(PlayBackActivity.this);
         DefaultItemAnimator itemAnimator = new DefaultItemAnimator();
         mRvSongList.setLayoutManager(layoutManager);
@@ -130,7 +133,7 @@ public class PlayBackActivity extends BaseActivity implements IPlayBackView, IMu
 
     private void setupToolbar() {
         setSupportActionBar(mToolbar);
-        mToolbar.setOverflowIcon(ContextCompat.getDrawable(this,R.drawable.ic_more_vert_white_24dp));
+        mToolbar.setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.ic_more_vert_white_24dp));
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -174,7 +177,7 @@ public class PlayBackActivity extends BaseActivity implements IPlayBackView, IMu
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
                 break;
@@ -203,9 +206,9 @@ public class PlayBackActivity extends BaseActivity implements IPlayBackView, IMu
         } else {
             btShuffle.setImageResource(R.drawable.ic_shuffle_white_24dp);
         }
-        if(mService.getState() == MusicService.MusicState.Playing){
+        if (mService.getState() == MusicService.MusicState.Playing) {
             fabPlayPause.setImageResource(R.drawable.ic_pause_black_24dp);
-        }else{
+        } else {
             fabPlayPause.setImageResource(R.drawable.ic_play_arrow_black_24dp);
         }
     }
@@ -218,9 +221,11 @@ public class PlayBackActivity extends BaseActivity implements IPlayBackView, IMu
     @Override
     public void setItems(ArrayList<Song> lstItem) {
         songAdapter = new SongAdapter(PlayBackActivity.this, lstItem);
-        Log.d("playback","set item");
+        Log.d("playback", "set item");
         songAdapter.setRecyclerItemClickListener(this);
         mRvSongList.setAdapter(songAdapter);
+        if (mService != null && mService.isSongSetted())
+            songAdapter.updatePlayPosition(mService.getCurrentSong().getId());
     }
 
     @Override
@@ -250,17 +255,26 @@ public class PlayBackActivity extends BaseActivity implements IPlayBackView, IMu
                     .async()
                     .from(BitmapFactory.decodeResource(getResources(), R.drawable.music_background))
                     .into(ivBackGround);
+
             ivAlbumCover.setImageResource(R.drawable.song);
         }
+        Glide.with(this).load(song.getCoverPath())
+                .placeholder(R.drawable.google_play_music_logo)
+                .crossFade()
+                .dontAnimate()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(ivAlbumCover);
         mPresenter.updateTimePlay();
+        if (songAdapter != null)
+            songAdapter.updatePlayPosition(mService.getCurrentSong().getId());
     }
 
     @Override
     public void onItemClickListener(View view, int position) {
-        mPresenter.onItemClicked(view,position);
+        mPresenter.onItemClicked(view, position);
     }
 
-    private class LoadAlbumCover extends AsyncTask<String,Void,Void>{
+    private class LoadAlbumCover extends AsyncTask<String, Void, Void> {
         Bitmap bitmap;
 
 
@@ -279,8 +293,6 @@ public class PlayBackActivity extends BaseActivity implements IPlayBackView, IMu
                     .async()
                     .from(bitmap)
                     .into(ivBackGround);
-            Bitmap bitmap1 = Common.changeBitmapContrastBrightness(bitmap, 1, -70);
-            ivAlbumCover.setImageBitmap(bitmap1);
             super.onPostExecute(aVoid);
         }
     }

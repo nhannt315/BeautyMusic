@@ -40,8 +40,8 @@ public class Navigator {
         }
 
         fragmentTransaction.hide(activity.getSupportFragmentManager().findFragmentById(R.id.container))
-                .hide(((AppCompatActivity) context).getSupportFragmentManager().findFragmentById(R.id.container))
-                .add(R.id.container, desFragment)
+//                .hide(((AppCompatActivity) context).getSupportFragmentManager().findFragmentById(R.id.container))
+                .replace(R.id.container, desFragment)
                 .addToBackStack(FragmentAlbumDetail.TAG)
                 .commit();
     }
@@ -65,8 +65,8 @@ public class Navigator {
         }
 
         fragmentTransaction.hide(activity.getSupportFragmentManager().findFragmentById(R.id.container))
-                .hide(((AppCompatActivity) context).getSupportFragmentManager().findFragmentById(R.id.container))
-                .add(R.id.container, desFragment)
+//                .hide(((AppCompatActivity) context).getSupportFragmentManager().findFragmentById(R.id.container))
+                .replace(R.id.container, desFragment)
                 .addToBackStack(FragmentAlbumDetail.TAG)
                 .commit();
     }

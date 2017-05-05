@@ -1,10 +1,14 @@
 package nhannt.musicplayer.ui.itemlist.songlist;
 
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,10 +29,12 @@ import nhannt.musicplayer.R;
 import nhannt.musicplayer.adapter.SongAdapter;
 import nhannt.musicplayer.interfaces.RecyclerItemClickListener;
 import nhannt.musicplayer.objectmodel.Song;
+import nhannt.musicplayer.service.MusicService;
 import nhannt.musicplayer.ui.base.BaseFragment;
 import nhannt.musicplayer.ui.custom.DividerDecoration;
 import nhannt.musicplayer.ui.itemlist.ItemListMvpView;
 import nhannt.musicplayer.ui.itemlist.ItemListPresenter;
+import nhannt.musicplayer.utils.App;
 import nhannt.musicplayer.utils.Common;
 import nhannt.musicplayer.utils.Setting;
 
@@ -61,7 +67,28 @@ public class FragmentSongList extends BaseFragment implements ItemListMvpView<So
         return fragment;
     }
 
+    BroadcastReceiver playstateChange = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(MusicService.PLAY_STATE_CHANGE)) {
+                songAdapter.updatePlayPosition(App.getInstance().getCurrentPlayingSong().getId());
+            }
+        }
+    };
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(MusicService.PLAY_STATE_CHANGE);
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(playstateChange, filter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(playstateChange);
+    }
 
     @Nullable
     @Override
@@ -74,9 +101,8 @@ public class FragmentSongList extends BaseFragment implements ItemListMvpView<So
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
-        if (bundle != null) {
-        }
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -170,6 +196,9 @@ public class FragmentSongList extends BaseFragment implements ItemListMvpView<So
         rvSongList.setAdapter(songAdapter);
         mData = itemList;
         songPresenter.sortAs(Setting.getInstance().get(Common.SONG_SORT_MODE, ItemListPresenter.SORT_AS_A_Z));
+        Song currentSong = App.getInstance().getCurrentPlayingSong();
+        if (currentSong != null)
+            songAdapter.updatePlayPosition(currentSong.getId());
     }
 
 

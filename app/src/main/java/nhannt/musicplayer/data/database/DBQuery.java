@@ -18,7 +18,7 @@ import nhannt.musicplayer.objectmodel.Song;
 
 public class DBQuery {
     private static DBQuery mInstance;
-    private Context mContext;
+    private static Context mContext;
     private SQLiteDatabase db;
 
     private DBQuery(Context context) {
@@ -28,8 +28,8 @@ public class DBQuery {
     /**
      * Get instance of DBQuery
      *
-     * @param context
-     * @return
+     * @param context using this DbQuery
+     * @return instance
      */
     public static synchronized DBQuery getInstance(Context context) {
         if (mInstance == null) {
@@ -41,7 +41,7 @@ public class DBQuery {
     /**
      * Open song database
      *
-     * @return
+     * @return A opened database
      */
     private SQLiteDatabase getDatabase() {
         return getDatabase(true);
@@ -63,9 +63,8 @@ public class DBQuery {
         value.put(DBHelper.DETAIL_COLUMN_SONG_ID, songID);
         long id = db.insert(DBHelper.PLAYLIST_DETAIL_TABLE, null, value);
         db.close();
-        if (id != -1)
-            return true;
-        return false;
+
+        return (id != -1);
     }
 
     public PlayList getLastInsertedPlaylist() {
@@ -78,8 +77,9 @@ public class DBQuery {
             playList.setId(result.getInt(result.getColumnIndex(DBHelper.PLAYLIST_COLUMN_ID)));
             playList.setTitle(result.getString(result.getColumnIndex(DBHelper.PLAYLIST_COLUMN_TITLE)));
             playList.setSongNums(result.getInt(result.getColumnIndex(DBHelper.PLAYLIST_COLUMN_SONG_NUMS)));
+            result.close();
         }
-        result.close();
+
         db.close();
         return playList;
     }
@@ -150,7 +150,10 @@ public class DBQuery {
                 Song song = provider.getSongById(songId);
                 lstSong.add(song);
             } while (result.moveToNext());
+            result.close();
         }
+
+        db.close();
         return lstSong;
     }
 
@@ -169,8 +172,9 @@ public class DBQuery {
                 Song song = provider.getSongById(songId);
                 lstSong.add(song);
             } while (result.moveToNext());
+            result.close();
         }
-        result.close();
+
         db.close();
         return lstSong;
     }
@@ -220,8 +224,9 @@ public class DBQuery {
                 playList.setTitle(result.getString(result.getColumnIndex(DBHelper.PLAYLIST_COLUMN_TITLE)));
                 playList.setSongNums(result.getInt(result.getColumnIndex(DBHelper.PLAYLIST_COLUMN_SONG_NUMS)));
             } while (result.moveToNext());
+            result.close();
         }
-        result.close();
+
         db.close();
         return playList;
     }
@@ -248,7 +253,7 @@ public class DBQuery {
         return (num > 0);
     }
 
-    public boolean isSongExist(int playlistID, String songID) {
+    private boolean isSongExist(int playlistID, String songID) {
         boolean isExist = false;
         db = getDatabase();
         Cursor cursor = db.rawQuery("SELECT " + DBHelper.DETAIL_COLUMN_SONG_ID + " FROM " + DBHelper.PLAYLIST_DETAIL_TABLE
@@ -256,6 +261,7 @@ public class DBQuery {
                 + "' AND " + DBHelper.DETAIL_COLUMN_PLAYLIST_ID + " = " + playlistID, null);
         if (cursor.moveToFirst())
             isExist = true;
+        cursor.close();
         db.close();
         return isExist;
     }

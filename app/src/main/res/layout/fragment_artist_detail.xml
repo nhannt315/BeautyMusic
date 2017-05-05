@@ -25,7 +25,7 @@
                     android:layout_height="wrap_content"
                     android:scaleType="centerCrop"
                     android:fitsSystemWindows="true"
-                    android:src="@drawable/music_background"
+                    android:src="@drawable/google_play_music_logo"
                     app:layout_collapseMode="parallax"/>
                 <nhannt.musicplayer.ui.custom.SquareImageView
                     android:id="@+id/squareImageView"
@@ -55,14 +55,14 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_album_list_artist_detail"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="120dp"
             android:clipToPadding="false"/>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_song_list_artist_detail"
             android:layout_marginTop="5dp"
             android:layout_below="@id/rv_album_list_artist_detail"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+            android:layout_height="match_parent"/>
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

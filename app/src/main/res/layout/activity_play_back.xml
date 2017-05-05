@@ -23,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:src="@drawable/music_background"/>
+                android:src="@drawable/music_background_new"/>
             <ImageView
                 android:background="@color/transparent_40"
                 android:layout_width="match_parent"
@@ -68,7 +68,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_centerInParent="true"
-                        android:src="@drawable/song"
+                        android:src="@drawable/google_play_music_logo"
+                        app:layout_heightPercent="70%"
+                        app:layout_marginTopPercent="25%"
+                        app:layout_widthPercent="70%"/>
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:src="@color/transparent_50"
                         app:layout_heightPercent="70%"
                         app:layout_marginTopPercent="25%"
                         app:layout_widthPercent="70%"/>
@@ -87,6 +95,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal"
+                        android:baselineAligned="false"
                         app:layout_marginBottomPercent="30%"
                         app:layout_marginTopPercent="30%">
 
@@ -112,7 +121,7 @@
                             android:orientation="vertical">
                             <TextView
                                 android:id="@+id/tv_time_play"
-                                android:text="TIME"
+                                android:text="@string/time"
                                 android:textColor="@color/white"
                                 android:textSize="50sp"
                                 android:gravity="center_horizontal"
@@ -125,6 +134,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
                                 android:layout_weight="1"
+                                android:baselineAligned="false"
                                 android:orientation="horizontal">
                                 <android.support.percent.PercentRelativeLayout
                                     android:layout_width="match_parent"

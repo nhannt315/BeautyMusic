@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import nhannt.musicplayer.R;
+import nhannt.musicplayer.data.network.ArtistPhoto;
 import nhannt.musicplayer.interfaces.RecyclerItemClickListener;
 import nhannt.musicplayer.objectmodel.Artist;
 import nhannt.musicplayer.utils.Common;
@@ -80,13 +81,9 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ArtistView
             holder.imageArtistCover.setTransitionName("transition_artist"+position);
         }
         if(layoutType == LAYOUT_ITEM_LIST) {
-            Glide.with(mContext).load(item.getImageUrl())
-                    .centerCrop().placeholder(R.drawable.music_background)
-                    .dontAnimate().into(holder.imageArtistCover);
+            new ArtistPhoto(mContext, item.getName(), holder.imageArtistCover, false).execute();
         }else{
-            Glide.with(mContext).load(item.getImageUrl())
-                    .centerCrop().placeholder(R.drawable.music_background)
-                    .into(holder.imageArtistCover);
+            new ArtistPhoto(mContext, item.getName(), holder.imageArtistCover, true).execute();
         }
     }
 

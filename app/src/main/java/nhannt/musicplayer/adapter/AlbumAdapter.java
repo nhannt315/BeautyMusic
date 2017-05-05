@@ -1,7 +1,5 @@
 package nhannt.musicplayer.adapter;
 
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
 
@@ -20,7 +19,6 @@ import nhannt.musicplayer.R;
 import nhannt.musicplayer.interfaces.RecyclerItemClickListener;
 import nhannt.musicplayer.objectmodel.Album;
 import nhannt.musicplayer.utils.Common;
-import nhannt.musicplayer.utils.Navigator;
 
 /**
  * Created by nhannt on 03/03/2017.
@@ -49,7 +47,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
             this.layoutId = R.layout.item_album_list;
             this.isAnimate = false;
         } else {
-            this.layoutId = R.layout.item_album_grid;
+            this.layoutId = R.layout.item_album_grid_vertical;
             this.isAnimate = true;
         }
         this.layoutType = layoutType;
@@ -92,13 +90,15 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
         holder.position = position;
         if (layoutType == LAYOUT_ITEM_LIST) {
             Glide.with(mContext).load(item.getCoverPath())
-                    .placeholder(R.drawable.music_background)
+                    .placeholder(R.drawable.music_background_new)
                     .centerCrop()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .dontAnimate()
                     .into(holder.albumCover);
         } else {
             Glide.with(mContext).load(item.getCoverPath())
-                    .placeholder(R.drawable.music_background)
+                    .placeholder(R.drawable.music_background_new)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .centerCrop()
                     .into(holder.albumCover);
 
@@ -129,8 +129,6 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
                 public void onClick(View v) {
                     if (recyclerItemClickListener != null)
                         recyclerItemClickListener.onItemClickListener(v, position);
-                    else {
-                    }
                 }
             });
         }

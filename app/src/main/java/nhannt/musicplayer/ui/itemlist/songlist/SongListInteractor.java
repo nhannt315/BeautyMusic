@@ -1,9 +1,13 @@
 package nhannt.musicplayer.ui.itemlist.songlist;
 
+import android.os.AsyncTask;
 import android.os.Handler;
+
+import java.util.ArrayList;
 
 import nhannt.musicplayer.data.provider.MediaProvider;
 import nhannt.musicplayer.interfaces.LoaderListener;
+import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.ui.itemlist.ItemListInteractor;
 
 /**
@@ -17,11 +21,17 @@ public class SongListInteractor implements ItemListInteractor {
 
     @Override
     public void loadItems(final LoaderListener loaderListener) {
-        new Handler().post(new Runnable() {
+        new AsyncTask<Void, Void, ArrayList<Song>>() {
             @Override
-            public void run() {
-                loaderListener.onFinished(mediaProvider.getListSong());
+            protected ArrayList<Song> doInBackground(Void... params) {
+                return mediaProvider.getListSong();
             }
-        });
+
+            @Override
+            protected void onPostExecute(ArrayList<Song> songs) {
+                super.onPostExecute(songs);
+                loaderListener.onFinished(songs);
+            }
+        }.execute();
     }
 }

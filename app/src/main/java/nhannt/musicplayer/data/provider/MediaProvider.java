@@ -28,7 +28,7 @@ import nhannt.musicplayer.utils.App;
 
 public class MediaProvider {
     private static MediaProvider mInstance = null;
-    private Context mContext = App.getInstance().getContext();
+    private static Context mContext = App.getInstance().getApplicationContext();
     private static final String LAST_FM_API_KEY = "761226e2f2b94da7de6a61d73f50e33c";
     private static final String URL_1 = "http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=";
     private static final String URL_2 = "&api_key=" + LAST_FM_API_KEY + "&format=json";
@@ -120,9 +120,9 @@ public class MediaProvider {
             } while (cursor.moveToNext());
             cursor.close();
         }
-        for (Artist artist : lstArtist) {
-            getArtistPhoto(artist);
-        }
+//        for (Artist artist : lstArtist) {
+//            getArtistPhoto(artist);
+//        }
         return lstArtist;
     }
 
@@ -179,6 +179,8 @@ public class MediaProvider {
             int albumID = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
             String albumPath = getCoverArtPath(albumID);
             song = new Song(songId, title, album, artist, albumPath, year, duration, path);
+
+            cursor.close();
         }
         return song;
     }
@@ -242,7 +244,7 @@ public class MediaProvider {
         return lstSong;
     }
 
-    public Album getAlbumById(int albumId) {
+    private Album getAlbumById(int albumId) {
         Album album = null;
         Cursor cursor = mContext.getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
                 new String[]{MediaStore.Audio.Albums.ALBUM, MediaStore.Audio.Albums.ALBUM_ART, MediaStore.Audio.Albums._ID,
@@ -257,8 +259,10 @@ public class MediaProvider {
             int songCount = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Albums.NUMBER_OF_SONGS));
             int year = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Albums.FIRST_YEAR));
             album = new Album(id, title, artist, pathArt, year, songCount);
+
+            cursor.close();
         }
-        cursor.close();
+
         return album;
     }
 
@@ -269,12 +273,12 @@ public class MediaProvider {
         for (Song song : lstSong) {
             Album album = getAlbumById(song.getAlbumId());
             lstAlbum.add(album);
-            Log.d("album",album.getTitle()+album.getCoverPath());
+//            Log.d("album",album.getTitle()+album.getCoverPath());
         }
         return lstAlbum;
     }
 
-    public String getCoverArtPath(long albumId) {
+    private String getCoverArtPath(long albumId) {
         Cursor albumCursor = mContext.getContentResolver().query(
                 MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
                 new String[]{MediaStore.Audio.Albums.ALBUM_ART},
@@ -282,12 +286,15 @@ public class MediaProvider {
                 new String[]{Long.toString(albumId)},
                 null
         );
-        boolean queryResult = albumCursor.moveToFirst();
         String result = null;
-        if (queryResult) {
-            result = albumCursor.getString(0);
+        if (albumCursor != null) {
+            boolean queryResult = albumCursor.moveToFirst();
+
+            if (queryResult) {
+                result = albumCursor.getString(0);
+            }
+            albumCursor.close();
         }
-        albumCursor.close();
         return result;
     }
 

@@ -212,7 +212,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0,
                 notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
-        builder.setSmallIcon(R.mipmap.ic_launcher);
+        builder.setSmallIcon(R.drawable.google_play_music_logo);
         builder.setContentIntent(contentIntent);
 
         RemoteViews notificationView = new RemoteViews(getPackageName(), R.layout.notification_layout);
@@ -297,10 +297,12 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     }
 
     public boolean isSongSetted(){
-        if(lstSong == null || songPos == -1)
-            return false;
-        else
-            return true;
+//        if(lstSong == null || songPos == -1)
+//            return false;
+//        else
+//            return true;
+
+        return  !(lstSong == null || songPos == -1);
     }
 
     public void addToQueue(Song... song) {

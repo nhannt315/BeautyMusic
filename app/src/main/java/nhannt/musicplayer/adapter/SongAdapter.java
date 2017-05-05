@@ -2,6 +2,7 @@ package nhannt.musicplayer.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import nhannt.musicplayer.service.MusicService;
 import nhannt.musicplayer.service.MusicServiceConnection;
 import nhannt.musicplayer.ui.dialog.PlaylistDialog;
 import nhannt.musicplayer.utils.App;
+import nhannt.musicplayer.utils.Navigator;
 
 /**
  * Created by nhannt on 03/03/2017.
@@ -38,11 +40,17 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
     private RecyclerItemClickListener recyclerItemClickListener;
     private MusicServiceConnection mConnection;
     private int layoutId = R.layout.item_song;
+    private boolean[] playState;
 
     public SongAdapter(Context mContext, ArrayList<Song> mData) {
         this.mContext = mContext;
         this.mData = mData;
         mLayoutInflater = LayoutInflater.from(mContext);
+        if (mData != null)
+            playState = new boolean[mData.size()];
+//        for(boolean b : playState){
+//            b = false;
+//        }
     }
 
     public void setRecyclerItemClickListener(RecyclerItemClickListener recyclerItemClickListener) {
@@ -56,8 +64,21 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
     @Override
     public SongViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mLayoutInflater.inflate(layoutId, parent, false);
-        SongViewHolder holder = new SongViewHolder(view);
-        return holder;
+        return new SongViewHolder(view);
+    }
+
+    public void updatePlayPosition(String songId) {
+        if (songId == null || mData == null || songId.isEmpty()) return;
+        for (int i = 0; i < playState.length; i++) {
+            playState[i] = false;
+        }
+
+        for (int i = 0; i < mData.size(); i++) {
+            if (mData.get(i).getId().equals(songId)) {
+                playState[i] = true;
+            }
+        }
+        notifyDataSetChanged();
     }
 
 
@@ -66,6 +87,13 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
         Song item = mData.get(position);
         holder.tvSongTitle.setText(item.getTitle());
         holder.tvArtist.setText(item.getArtist());
+        if (playState[position]) {
+            holder.tvSongTitle.setTextColor(ContextCompat.getColor(mContext, R.color.colorRed));
+            holder.tvArtist.setTextColor(ContextCompat.getColor(mContext, R.color.colorRed));
+        } else {
+            holder.tvSongTitle.setTextColor(ContextCompat.getColor(mContext, R.color.blue));
+            holder.tvArtist.setTextColor(ContextCompat.getColor(mContext, R.color.blue));
+        }
         Glide.with(mContext).load(item.getCoverPath())
                 .placeholder(R.drawable.music_background)
                 .centerCrop()
@@ -76,7 +104,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
 
     @Override
     public int getItemCount() {
-        if(mData == null)
+        if (mData == null)
             return 0;
         return mData.size();
     }
@@ -127,7 +155,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
                             mConnection.connect(iPlay, new IMusicServiceConnection() {
                                 @Override
                                 public void onConnected(MusicService service) {
-                                    switch (itemId){
+                                    switch (itemId) {
                                         case R.id.bt_play_popup_song:
                                             service.setLstSong(mData);
                                             service.setSongPos(position);
@@ -145,7 +173,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
                         }
                         switch (item.getItemId()) {
                             case R.id.bt_add_playlist_popup_song:
-                                new PlaylistDialog(mContext,mData.get(position)).show();
+                                new PlaylistDialog(mContext, mData.get(position)).show();
                                 break;
                             case R.id.bt_to_album_popup_song:
                                 break;
@@ -159,7 +187,6 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
             }
         }
     }
-
 
 
 }
