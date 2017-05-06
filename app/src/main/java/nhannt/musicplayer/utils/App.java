@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 
+import com.squareup.leakcanary.LeakCanary;
+
 import java.util.ArrayList;
 
 import nhannt.musicplayer.adapter.AlbumAdapter;
@@ -38,6 +40,7 @@ public class App extends Application {
         Setting.getInstance().init(this);
         initSetting();
         connect();
+        LeakCanary.install(this);
     }
 
     public static void initSetting() {

@@ -211,27 +211,36 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         Intent notificationIntent = new Intent(this, PlayBackActivity.class);
         PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0,
                 notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
-        builder.setSmallIcon(R.drawable.google_play_music_logo);
+        builder.setSmallIcon(R.mipmap.ic_launcher);
         builder.setContentIntent(contentIntent);
 
         RemoteViews notificationView = new RemoteViews(getPackageName(), R.layout.notification_layout);
+        RemoteViews bigNotificationView = new RemoteViews(getPackageName(), R.layout.notification_layout_expanded);
 
         if (getState() == MusicState.Playing) {
             notificationView.setImageViewResource(R.id.bt_play_pause_notification, R.drawable.ic_pause_black_24dp);
+            bigNotificationView.setImageViewResource(R.id.bt_play_pause_notification, R.drawable.ic_pause_black_24dp);
         } else {
             notificationView.setImageViewResource(R.id.bt_play_pause_notification, R.drawable.ic_play_arrow_black_24dp);
+            bigNotificationView.setImageViewResource(R.id.bt_play_pause_notification, R.drawable.ic_play_arrow_black_24dp);
         }
 
         if (song.getCoverPath() != null && !song.getCoverPath().isEmpty()) {
             Bitmap bitmap = BitmapFactory.decodeFile(song.getCoverPath());
             notificationView.setImageViewBitmap(R.id.img_album_art_notification, bitmap);
+            bigNotificationView.setImageViewBitmap(R.id.img_album_art_notification, bitmap);
         } else {
             notificationView.setImageViewResource(R.id.img_album_art_notification, R.mipmap.ic_launcher);
+            bigNotificationView.setImageViewResource(R.id.img_album_art_notification, R.mipmap.ic_launcher);
         }
 
         notificationView.setTextViewText(R.id.tv_song_name_notification, getCurrentSong().getTitle());
         notificationView.setTextViewText(R.id.tv_song_info_notification, getCurrentSong().getArtist() + " - " + getCurrentSong().getAlbum());
+
+        bigNotificationView.setTextViewText(R.id.tv_song_name_notification, getCurrentSong().getTitle());
+        bigNotificationView.setTextViewText(R.id.tv_song_info_notification, getCurrentSong().getArtist() + " - " + getCurrentSong().getAlbum());
 
         PendingIntent piPlayPause = PendingIntent.getService(getApplicationContext(), 0, new Intent(ACTION_TOGGLE_PLAY_PAUSE),
                 PendingIntent.FLAG_UPDATE_CURRENT);
@@ -243,9 +252,15 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         notificationView.setOnClickPendingIntent(R.id.bt_play_pause_notification, piPlayPause);
         notificationView.setOnClickPendingIntent(R.id.bt_next_notification, piSkipNext);
         notificationView.setOnClickPendingIntent(R.id.bt_prev_notification, piSkipPrev);
+
+        bigNotificationView.setOnClickPendingIntent(R.id.bt_play_pause_notification, piPlayPause);
+        bigNotificationView.setOnClickPendingIntent(R.id.bt_next_notification, piSkipNext);
+        bigNotificationView.setOnClickPendingIntent(R.id.bt_prev_notification, piSkipPrev);
+
         builder.setContent(notificationView);
+        builder.setCustomBigContentView(bigNotificationView);
+
         Notification notification = builder.build();
-        Log.d("notification", "create");
         return notification;
     }
 

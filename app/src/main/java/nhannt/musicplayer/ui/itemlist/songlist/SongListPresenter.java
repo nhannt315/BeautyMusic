@@ -31,6 +31,7 @@ public class SongListPresenter implements ItemListPresenter<ItemListMvpView<Song
 
     @Override
     public void onFinished(ArrayList<Song> itemList) {
+        if (songMvpView == null) return;
         songMvpView.setItems(itemList);
         songMvpView.hideProgress();
     }
@@ -58,7 +59,7 @@ public class SongListPresenter implements ItemListPresenter<ItemListMvpView<Song
 
     @Override
     public void onItemSelected(View view, final int position) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.item_song:
                 mMusicServiceConnection = new MusicServiceConnection(App.getContext());
                 Intent iSelectSongPlay = new Intent(App.getContext(), MusicService.class);

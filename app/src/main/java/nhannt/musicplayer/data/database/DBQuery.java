@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import nhannt.musicplayer.data.provider.MediaProvider;
 import nhannt.musicplayer.objectmodel.PlayList;
 import nhannt.musicplayer.objectmodel.Song;
+import nhannt.musicplayer.utils.App;
 
 /**
  * Created by nhannt on 24/03/2017.
@@ -18,11 +19,11 @@ import nhannt.musicplayer.objectmodel.Song;
 
 public class DBQuery {
     private static DBQuery mInstance;
-    private static Context mContext;
+    private Context mContext;
     private SQLiteDatabase db;
 
     private DBQuery(Context context) {
-        this.mContext = context;
+        this.mContext = context.getApplicationContext();
     }
 
     /**

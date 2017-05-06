@@ -23,8 +23,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AbsListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -143,7 +141,6 @@ public class FragmentAlbumDetail extends BaseFragment implements IAlbumDetailVie
     @Override
     public void onResume() {
         super.onResume();
-        disableDoBack();
     }
 
     private void setupRecyclerView() {
@@ -176,7 +173,7 @@ public class FragmentAlbumDetail extends BaseFragment implements IAlbumDetailVie
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.main_menu,menu);
+        inflater.inflate(R.menu.main_menu, menu);
     }
 
     @Override
@@ -202,11 +199,6 @@ public class FragmentAlbumDetail extends BaseFragment implements IAlbumDetailVie
         return R.layout.fragment_ablum_detail;
     }
 
-
-    @Override
-    public void doBack() {
-
-    }
 
     @Override
     public ArrayList<Song> getListSong() {
@@ -237,6 +229,9 @@ public class FragmentAlbumDetail extends BaseFragment implements IAlbumDetailVie
         if (scrollRange == -1) {
             scrollRange = appBarLayout.getTotalScrollRange();
         }
+
+        Log.d("offset", verticalOffset + "");
+        Log.d("maxRange", appBarLayout.getTotalScrollRange() + "");
         Window window = getActivity().getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);

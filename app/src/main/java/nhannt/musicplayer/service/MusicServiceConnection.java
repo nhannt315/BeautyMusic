@@ -39,7 +39,7 @@ public class MusicServiceConnection {
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-
+            mService = null;
         }
     };
 }

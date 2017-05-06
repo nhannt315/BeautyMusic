@@ -37,7 +37,6 @@ import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.service.MusicService;
 import nhannt.musicplayer.ui.base.BaseActivity;
 import nhannt.musicplayer.ui.custom.UntouchableSeekBar;
-import nhannt.musicplayer.ui.drawer.DrawerPresenterImpl;
 import nhannt.musicplayer.ui.itemlist.FragmentMain;
 import nhannt.musicplayer.ui.playback.PlayBackActivity;
 import nhannt.musicplayer.ui.playingqueue.FragmentPlayingQueue;
@@ -47,7 +46,7 @@ import nhannt.musicplayer.utils.Common;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
-public class HomeActivity extends BaseActivity implements DrawerPresenterImpl.DrawerView,IMusicServiceConnection, IHomeView, DrawerLayoutContainer {
+public class HomeActivity extends BaseActivity implements IMusicServiceConnection, IHomeView, DrawerLayoutContainer {
 
     private static final int PERMISSION_REQUEST_CODE = 200;
 
@@ -67,7 +66,6 @@ public class HomeActivity extends BaseActivity implements DrawerPresenterImpl.Dr
     protected UntouchableSeekBar seekBar;
     @BindView(R.id.nav_view)
     protected NavigationView navigationView;
-    private DrawerPresenterImpl drawerPresenter;
     private MusicService mService;
     private HomePresenter mPresenter;
     private View header;
@@ -79,10 +77,10 @@ public class HomeActivity extends BaseActivity implements DrawerPresenterImpl.Dr
     private static final String TAG_LIBRARY=FragmentMain.TAG;
     private static final String TAG_PLAYLISTS= FragmentPlaylist.TAG;
     private static final String TAG_PLAYING_QUEUE= FragmentPlayingQueue.TAG;
-    private static final String TAG_NOW_PLAYING= PlayBackActivity.TAG;
+//    private static final String TAG_NOW_PLAYING= PlayBackActivity.TAG;
 
     public static String CURRENT_TAG = TAG_LIBRARY;
-    private Handler mHandler;
+    private static Handler mHandler;
     private ActionBarDrawerToggle toggle = null;
 
     @Override
@@ -172,7 +170,6 @@ public class HomeActivity extends BaseActivity implements DrawerPresenterImpl.Dr
 
     private void initSetting() {
         mHandler = new Handler();
-        drawerPresenter = new DrawerPresenterImpl(this);
 
         navigationView.getMenu().performIdentifierAction(R.id.btn_lib_nav, 0);
 //        seekBar.getThumb().mutate().setAlpha(0); //disable thumb icon on seek bar
@@ -206,7 +203,6 @@ public class HomeActivity extends BaseActivity implements DrawerPresenterImpl.Dr
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                drawerPresenter.navigationItemSelected(item, drawerLayout);
                 switch (item.getItemId()) {
                     case R.id.btn_lib_nav:
                         navItemIndex = 0;
@@ -299,10 +295,6 @@ public class HomeActivity extends BaseActivity implements DrawerPresenterImpl.Dr
         return R.layout.activity_home;
     }
 
-    @Override
-    public void navigateUsingTo(Fragment fragment) {
-        showFragment(fragment, "");
-    }
 
     @Override
     public Context getViewContext() {
@@ -363,6 +355,7 @@ public class HomeActivity extends BaseActivity implements DrawerPresenterImpl.Dr
     protected void onDestroy() {
         super.onDestroy();
         mPresenter.detachView();
+        mPresenter = null;
     }
 
     @Override

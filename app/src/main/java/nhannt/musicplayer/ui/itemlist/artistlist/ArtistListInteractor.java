@@ -1,7 +1,6 @@
 package nhannt.musicplayer.ui.itemlist.artistlist;
 
 import android.os.AsyncTask;
-import android.os.Handler;
 
 import java.util.ArrayList;
 

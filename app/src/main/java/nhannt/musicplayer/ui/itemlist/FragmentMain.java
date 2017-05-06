@@ -56,7 +56,6 @@ public class FragmentMain extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        enableDoBack();
     }
 
     @Override
@@ -72,9 +71,4 @@ public class FragmentMain extends BaseFragment {
         return R.layout.fragment_main;
     }
 
-
-    @Override
-    public void doBack() {
-        getActivity().finish();
-    }
 }

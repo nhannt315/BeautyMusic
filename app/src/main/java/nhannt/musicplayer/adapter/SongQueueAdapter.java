@@ -124,12 +124,12 @@ public class SongQueueAdapter extends RecyclerView.Adapter<SongQueueAdapter.Song
 
         @Override
         public void onItemSelected() {
-            itemView.setBackgroundColor(Color.LTGRAY);
+            itemView.setAlpha(0.6f);
         }
 
         @Override
         public void onItemClear() {
-            itemView.setBackgroundColor(0);
+            itemView.setAlpha(1);
         }
     }
 

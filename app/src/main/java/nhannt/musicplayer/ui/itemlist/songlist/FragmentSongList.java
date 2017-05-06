@@ -36,6 +36,7 @@ import nhannt.musicplayer.ui.itemlist.ItemListMvpView;
 import nhannt.musicplayer.ui.itemlist.ItemListPresenter;
 import nhannt.musicplayer.utils.App;
 import nhannt.musicplayer.utils.Common;
+import nhannt.musicplayer.utils.Navigator;
 import nhannt.musicplayer.utils.Setting;
 
 /**
@@ -53,7 +54,6 @@ public class FragmentSongList extends BaseFragment implements ItemListMvpView<So
 
     private SongListPresenter songPresenter;
     private SongAdapter songAdapter;
-    private Context mContext;
 
 
     public FragmentSongList() {
@@ -131,6 +131,9 @@ public class FragmentSongList extends BaseFragment implements ItemListMvpView<So
             case R.id.bt_sort_duration:
                 songPresenter.sortAs(ItemListPresenter.SORT_AS_DURATION);
                 break;
+            case R.id.bt_equalizer:
+                Navigator.navigateToEqualizer(getContext(), 125);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -176,12 +179,6 @@ public class FragmentSongList extends BaseFragment implements ItemListMvpView<So
     @Override
     public void onItemClickListener(View view, int position) {
         songPresenter.onItemSelected(view, position);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        this.mContext = context;
     }
 
     @Override
@@ -241,8 +238,4 @@ public class FragmentSongList extends BaseFragment implements ItemListMvpView<So
 
     }
 
-    @Override
-    public void doBack() {
-//        getActivity().onBackPressed();
-    }
 }

@@ -28,7 +28,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     private IMusicServiceConnection iConnection = null;
     private MusicService mService;
     protected Toolbar toolbar;
-    private OnBackPressedListener mOnBackPressedListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
@@ -50,17 +49,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    public void setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
-        this.mOnBackPressedListener = onBackPressedListener;
-    }
 
-    @Override
-    public void onBackPressed() {
-        if (mOnBackPressedListener == null)
-            super.onBackPressed();
-        else
-            mOnBackPressedListener.doBack();
-    }
 
     protected Toolbar getToolbar() {
         return this.toolbar;
@@ -99,7 +88,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         if (iConnection != null) {
-            Intent iMusicService = new Intent(this, MusicService.class);
             unbindService(connection);
         }
     }
@@ -107,10 +95,18 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void showFragment(Fragment fragment, String tag) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        fragmentTransaction.addToBackStack("");
+        fragmentTransaction.replace(R.id.container, fragment, tag);
+        fragmentTransaction.commit();
+    }
+    public void showFragmentAddToStack(Fragment fragment, String tag) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.addToBackStack("");
         fragmentTransaction.replace(R.id.container, fragment, tag);
         fragmentTransaction.commit();
     }
+
 
     public void popFragment(String tag) {
         FragmentManager fragmentManager = getSupportFragmentManager();

@@ -41,6 +41,7 @@ import nhannt.musicplayer.ui.base.BaseActivity;
 import nhannt.musicplayer.ui.custom.CircularSeekBar;
 import nhannt.musicplayer.ui.custom.DividerDecoration;
 import nhannt.musicplayer.utils.Common;
+import nhannt.musicplayer.utils.Navigator;
 
 public class PlayBackActivity extends BaseActivity implements IPlayBackView, IMusicServiceConnection, RecyclerItemClickListener {
 
@@ -162,8 +163,9 @@ public class PlayBackActivity extends BaseActivity implements IPlayBackView, IMu
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         mPresenter.detachView();
+        super.onDestroy();
+
     }
 
     @Override
@@ -180,6 +182,9 @@ public class PlayBackActivity extends BaseActivity implements IPlayBackView, IMu
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
+                break;
+            case R.id.btn_equalizer_playback:
+                Navigator.navigateToEqualizer(this, 126);
                 break;
         }
         return true;
@@ -253,10 +258,8 @@ public class PlayBackActivity extends BaseActivity implements IPlayBackView, IMu
                     .sampling(1)
                     .color(Color.argb(57, 54, 54, 0))
                     .async()
-                    .from(BitmapFactory.decodeResource(getResources(), R.drawable.music_background))
+                    .from(BitmapFactory.decodeResource(getResources(), R.drawable.music_background_new))
                     .into(ivBackGround);
-
-            ivAlbumCover.setImageResource(R.drawable.song);
         }
         Glide.with(this).load(song.getCoverPath())
                 .placeholder(R.drawable.google_play_music_logo)

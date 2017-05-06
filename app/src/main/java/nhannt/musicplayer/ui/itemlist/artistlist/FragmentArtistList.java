@@ -28,6 +28,7 @@ import nhannt.musicplayer.ui.custom.ItemOffsetDecoration;
 import nhannt.musicplayer.ui.itemlist.ItemListMvpView;
 import nhannt.musicplayer.ui.itemlist.ItemListPresenter;
 import nhannt.musicplayer.utils.Common;
+import nhannt.musicplayer.utils.Navigator;
 import nhannt.musicplayer.utils.Setting;
 
 /**
@@ -145,6 +146,9 @@ public class FragmentArtistList extends BaseFragment implements ItemListMvpView<
             case R.id.bt_sort_album_no:
                 artistPresenter.sortAs(ItemListPresenter.SORT_AS_NUMBER_OF_ALBUM);
                 break;
+            case R.id.bt_equalizer:
+                Navigator.navigateToEqualizer(getContext(), 124);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -190,8 +194,9 @@ public class FragmentArtistList extends BaseFragment implements ItemListMvpView<
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         artistPresenter.detachView();
+        super.onDestroy();
+
     }
 
     @Override
@@ -209,8 +214,4 @@ public class FragmentArtistList extends BaseFragment implements ItemListMvpView<
 
     }
 
-    @Override
-    public void doBack() {
-//        getActivity().onBackPressed();
-    }
 }

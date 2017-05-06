@@ -22,8 +22,8 @@ public class Setting {
 
     // Initialize the internal setting
     public void init(Context context) {
-        this.context = context;
-        this.preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        this.context = context.getApplicationContext();
+        this.preferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
     }
 
     /**

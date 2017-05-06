@@ -23,6 +23,7 @@ import nhannt.musicplayer.recyclerhelper.OnStartDragListener;
 import nhannt.musicplayer.recyclerhelper.SimpleItemTouchHelperCallback;
 import nhannt.musicplayer.ui.base.BaseFragment;
 import nhannt.musicplayer.ui.custom.DividerDecoration;
+import nhannt.musicplayer.ui.custom.ItemOffsetDecoration;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,7 +73,6 @@ public class FragmentPlayingQueue extends BaseFragment implements IPlayingQueueV
     @Override
     public void onResume() {
         super.onResume();
-        enableDoBack();
     }
 
     @Override
@@ -93,7 +93,8 @@ public class FragmentPlayingQueue extends BaseFragment implements IPlayingQueueV
         mRvLstSong.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false);
         mRvLstSong.setLayoutManager(layoutManager);
-        mRvLstSong.addItemDecoration(new DividerDecoration(getContext()));
+//        mRvLstSong.addItemDecoration(new DividerDecoration(getContext()));
+        mRvLstSong.addItemDecoration(new ItemOffsetDecoration(getContext(), R.dimen.item_album_artist_detail_spacing));
     }
 
     @Override
@@ -107,10 +108,6 @@ public class FragmentPlayingQueue extends BaseFragment implements IPlayingQueueV
         return R.layout.fragment_playing_queue;
     }
 
-    @Override
-    public void doBack() {
-        getActivity().finish();
-    }
 
     @Override
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {

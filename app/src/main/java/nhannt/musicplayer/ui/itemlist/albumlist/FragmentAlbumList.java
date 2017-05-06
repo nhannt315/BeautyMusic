@@ -140,6 +140,9 @@ public class FragmentAlbumList extends BaseFragment implements ItemListMvpView<A
             case R.id.bt_sort_song_no:
                 albumPresenter.sortAs(ItemListPresenter.SORT_AS_NUMBER_OF_SONG);
                 break;
+            case R.id.bt_equalizer:
+                Navigator.navigateToEqualizer(getContext(), 123);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -223,7 +226,4 @@ public class FragmentAlbumList extends BaseFragment implements ItemListMvpView<A
         Navigator.navigateToAlbumDetail(getContext(),album,transitionView);
     }
 
-    @Override
-    public void doBack() {
-    }
 }

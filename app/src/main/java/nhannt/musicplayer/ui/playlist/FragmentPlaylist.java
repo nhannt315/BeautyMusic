@@ -80,7 +80,6 @@ public class FragmentPlaylist extends BaseFragment implements IPlaylistListView 
     @Override
     public void onResume() {
         super.onResume();
-        enableDoBack();
     }
 
     private void setUpRecyclerView() {
@@ -92,11 +91,6 @@ public class FragmentPlaylist extends BaseFragment implements IPlaylistListView 
     @Override
     protected int getLayout() {
         return R.layout.fragment_playlist;
-    }
-
-    @Override
-    public void doBack() {
-        getActivity().finish();
     }
 
     @Override

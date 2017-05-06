@@ -26,7 +26,6 @@ import nhannt.musicplayer.service.MusicService;
 import nhannt.musicplayer.service.MusicServiceConnection;
 import nhannt.musicplayer.ui.dialog.PlaylistDialog;
 import nhannt.musicplayer.utils.App;
-import nhannt.musicplayer.utils.Navigator;
 
 /**
  * Created by nhannt on 03/03/2017.

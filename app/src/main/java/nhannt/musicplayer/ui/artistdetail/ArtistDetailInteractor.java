@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import java.util.ArrayList;
 
 import nhannt.musicplayer.data.provider.MediaProvider;
-import nhannt.musicplayer.interfaces.LoaderListener;
 import nhannt.musicplayer.objectmodel.Album;
 import nhannt.musicplayer.objectmodel.Song;
 

@@ -56,23 +56,13 @@ public class ArtistPhoto {
                                 JSONObject photo = photoList.optJSONObject(2);
                                 String url = photo.optString("#text");
                                 if (isAnimate)
-                                    Glide.with(context)
-                                            .load(url)
-                                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                            .placeholder(R.drawable.google_play_music_logo)
-                                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                            .crossFade()
-                                            .fitCenter()
-                                            .into(imgArtist);
+                                    Glide.with(context).load(url).diskCacheStrategy(DiskCacheStrategy.ALL)
+                                            .placeholder(R.drawable.google_play_music_logo).diskCacheStrategy(DiskCacheStrategy.ALL).crossFade()
+                                            .fitCenter().into(imgArtist);
                                 else
-                                    Glide.with(context)
-                                            .load(url)
-                                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                            .placeholder(R.drawable.google_play_music_logo)
-                                            .crossFade()
-                                            .fitCenter()
-                                            .dontAnimate()
-                                            .into(imgArtist);
+                                    Glide.with(context).load(url).diskCacheStrategy(DiskCacheStrategy.ALL)
+                                            .placeholder(R.drawable.google_play_music_logo).crossFade()
+                                            .fitCenter().dontAnimate().into(imgArtist);
                             }
                         }
                     }

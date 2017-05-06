@@ -24,9 +24,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -35,7 +32,6 @@ import nhannt.musicplayer.R;
 import nhannt.musicplayer.adapter.AlbumAdapter;
 import nhannt.musicplayer.adapter.SongAdapter;
 import nhannt.musicplayer.data.network.ArtistPhoto;
-import nhannt.musicplayer.interfaces.DrawerLayoutContainer;
 import nhannt.musicplayer.interfaces.IMusicServiceConnection;
 import nhannt.musicplayer.interfaces.RecyclerItemClickListener;
 import nhannt.musicplayer.objectmodel.Album;
@@ -176,7 +172,6 @@ public class FragmentArtistDetail extends BaseFragment implements IArtistDetailV
     @Override
     public void onResume() {
         super.onResume();
-        disableDoBack();
     }
 
     @Override
@@ -243,11 +238,6 @@ public class FragmentArtistDetail extends BaseFragment implements IArtistDetailV
             if (Common.isLollipop())
                 window.setStatusBarColor(0);
         }
-    }
-
-    @Override
-    public void doBack() {
-        popCurrentFragment();
     }
 
     @Override
