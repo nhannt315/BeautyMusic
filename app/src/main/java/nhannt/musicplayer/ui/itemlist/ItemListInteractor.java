@@ -8,4 +8,5 @@ import nhannt.musicplayer.interfaces.LoaderListener;
 public interface ItemListInteractor {
 
     void loadItems(LoaderListener loaderListener);
+    void cancel();
 }

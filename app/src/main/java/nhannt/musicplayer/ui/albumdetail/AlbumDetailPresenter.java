@@ -43,6 +43,11 @@ public class AlbumDetailPresenter implements IAlbumDetailPresenter {
     }
 
     @Override
+    public void cancelFetchingData() {
+
+    }
+
+    @Override
     public void onItemClick(View view, int position) {
         switch (view.getId()) {
             case R.id.item_song:

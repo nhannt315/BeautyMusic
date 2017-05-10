@@ -15,4 +15,8 @@
     <dimen name="playing_bar_height">55dp</dimen>
     <dimen name="notification_height">64dp</dimen>
     <dimen name="item_album_artist_detail_spacing">4dp</dimen>
+    <dimen name="item_search_spacing">4dp</dimen>
+
+    <dimen name="search_icon_padding">12dp</dimen>
+    <dimen name="search_view_text_padding">8dp</dimen>
 </resources>

@@ -44,6 +44,7 @@ public class FragmentMain extends BaseFragment {
     }
 
 
+
     private void settingViews() {
         viewPager.setAdapter(new ViewPagerAdapter(getChildFragmentManager()));
         viewPager.setOffscreenPageLimit(2);

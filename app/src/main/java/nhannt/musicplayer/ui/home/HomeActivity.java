@@ -17,43 +17,56 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import nhannt.musicplayer.R;
+import nhannt.musicplayer.adapter.SearchAdapter;
 import nhannt.musicplayer.interfaces.DrawerLayoutContainer;
 import nhannt.musicplayer.interfaces.IMusicServiceConnection;
+import nhannt.musicplayer.interfaces.RecyclerItemClickListener;
+import nhannt.musicplayer.objectmodel.Album;
+import nhannt.musicplayer.objectmodel.Artist;
 import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.service.MusicService;
 import nhannt.musicplayer.ui.base.BaseActivity;
-import nhannt.musicplayer.ui.custom.UntouchableSeekBar;
+import nhannt.musicplayer.ui.custom.MaterialSearchView;
 import nhannt.musicplayer.ui.itemlist.FragmentMain;
 import nhannt.musicplayer.ui.playback.PlayBackActivity;
 import nhannt.musicplayer.ui.playingqueue.FragmentPlayingQueue;
 import nhannt.musicplayer.ui.playlist.FragmentPlaylist;
 import nhannt.musicplayer.utils.Common;
+import nhannt.musicplayer.utils.Navigator;
 
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
-public class HomeActivity extends BaseActivity implements IMusicServiceConnection, IHomeView, DrawerLayoutContainer {
+public class HomeActivity extends BaseActivity implements IMusicServiceConnection, IHomeView, DrawerLayoutContainer, RecyclerItemClickListener {
 
     private static final int PERMISSION_REQUEST_CODE = 200;
+    public static final String ACTION_OPEN_ALBUM_DETAIL = "open_album_detail";
+    public static final String ACTION_OPEN_ARTIST_DETAIL = "open_artist_detail";
+
+    public static final String KEY_ALBUM_DETAIL = "album_detail";
+    public static final String KEY_ARTIST_DETAIL = "artist_detail";
 
     @BindView(R.id.drawer_main)
     protected DrawerLayout drawerLayout;
     @BindView(R.id.current_play_bar)
-    protected LinearLayout currentPlayBar;
+    protected CardView currentPlayBar;
     @BindView(R.id.btn_toggle_play_current_bar)
     protected ImageView btnTogglePlay;
     @BindView(R.id.iv_cover_current_playing_bar)
@@ -63,7 +76,7 @@ public class HomeActivity extends BaseActivity implements IMusicServiceConnectio
     @BindView(R.id.tv_song_title_current_bar)
     protected TextView tvSongTitleCurrentBar;
     @BindView(R.id.seek_bar_current_bar)
-    protected UntouchableSeekBar seekBar;
+    protected ProgressBar seekBar;
     @BindView(R.id.nav_view)
     protected NavigationView navigationView;
     private MusicService mService;
@@ -74,9 +87,9 @@ public class HomeActivity extends BaseActivity implements IMusicServiceConnectio
     private ImageView albumCoverHeader;
     public static int navItemIndex = 0;
 
-    private static final String TAG_LIBRARY=FragmentMain.TAG;
-    private static final String TAG_PLAYLISTS= FragmentPlaylist.TAG;
-    private static final String TAG_PLAYING_QUEUE= FragmentPlayingQueue.TAG;
+    private static final String TAG_LIBRARY = FragmentMain.TAG;
+    private static final String TAG_PLAYLISTS = FragmentPlaylist.TAG;
+    private static final String TAG_PLAYING_QUEUE = FragmentPlayingQueue.TAG;
 //    private static final String TAG_NOW_PLAYING= PlayBackActivity.TAG;
 
     public static String CURRENT_TAG = TAG_LIBRARY;
@@ -87,6 +100,7 @@ public class HomeActivity extends BaseActivity implements IMusicServiceConnectio
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayout());
+        searchView = (MaterialSearchView) findViewById(R.id.search_view);
         initToolbar();
         ButterKnife.bind(this);
         initSetting();
@@ -106,7 +120,7 @@ public class HomeActivity extends BaseActivity implements IMusicServiceConnectio
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null){
+        if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayShowTitleEnabled(true);
@@ -117,10 +131,7 @@ public class HomeActivity extends BaseActivity implements IMusicServiceConnectio
         selectNavMenu();
         if (getSupportFragmentManager().findFragmentByTag(CURRENT_TAG) != null) {
             drawerLayout.closeDrawers();
-        }// Sometimes, when fragment has huge data, screen seems hanging
-        // when switching between navigation menus
-        // So using runnable, the fragment is loaded with cross fade effect
-        // This effect can be seen in GMail app
+        }
         Runnable mPendingRunnable = new Runnable() {
             @Override
             public void run() {
@@ -164,7 +175,7 @@ public class HomeActivity extends BaseActivity implements IMusicServiceConnectio
 
     }
 
-    private void selectNavMenu(){
+    private void selectNavMenu() {
         navigationView.getMenu().getItem(navItemIndex).setChecked(true);
     }
 
@@ -172,7 +183,6 @@ public class HomeActivity extends BaseActivity implements IMusicServiceConnectio
         mHandler = new Handler();
 
         navigationView.getMenu().performIdentifierAction(R.id.btn_lib_nav, 0);
-//        seekBar.getThumb().mutate().setAlpha(0); //disable thumb icon on seek bar
 
         header = navigationView.getHeaderView(0);
         tvSongTitleHeader = (TextView) header.findViewById(R.id.tv_song_name_nav_header);
@@ -187,19 +197,25 @@ public class HomeActivity extends BaseActivity implements IMusicServiceConnectio
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.search_menu, menu);
+
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(toggle.onOptionsItemSelected(item)){
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.action_search:
+                return true;
+        }
+        if (toggle.onOptionsItemSelected(item)) {
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void setupNavigationView(){
+    private void setupNavigationView() {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -243,7 +259,6 @@ public class HomeActivity extends BaseActivity implements IMusicServiceConnectio
         });
 
 
-
     }
 
     private boolean checkPermission() {
@@ -263,8 +278,26 @@ public class HomeActivity extends BaseActivity implements IMusicServiceConnectio
         showFragment(FragmentMain.newInstance(), FragmentMain.TAG);
         btnTogglePlay.setOnClickListener(mPresenter);
         currentPlayBar.setOnClickListener(mPresenter);
+        setupSearchView();
+        Intent intent = getIntent();
+        switch (intent.getAction()) {
+            case ACTION_OPEN_ALBUM_DETAIL:
+                Album album = (Album) intent.getSerializableExtra(KEY_ALBUM_DETAIL);
+                Navigator.navigateToAlbumDetail(this, album, null);
+                break;
+            case ACTION_OPEN_ARTIST_DETAIL:
+                Artist artist = (Artist) intent.getSerializableExtra(KEY_ARTIST_DETAIL);
+                Navigator.navigateToArtistDetail(this, artist, null);
+                break;
+        }
     }
 
+    private void setupSearchView() {
+        searchAdapter = new SearchAdapter(this);
+        lstSearchResult = new ArrayList();
+        searchAdapter.setItemClickListener(this);
+        searchView.setOnQueryTextListener(this);
+    }
 
 
     @Override
@@ -283,8 +316,12 @@ public class HomeActivity extends BaseActivity implements IMusicServiceConnectio
 
     @Override
     public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
+
+        if (drawerLayout.isDrawerOpen(GravityCompat.START) || searchView.isSearchOpen()) {
+            if (searchView.isSearchOpen())
+                searchView.closeSearch();
+            if (drawerLayout.isDrawerOpen(GravityCompat.START))
+                drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
@@ -325,7 +362,7 @@ public class HomeActivity extends BaseActivity implements IMusicServiceConnectio
     public void updateSongInfo() {
         if (mService == null) return;
         Song song = mService.getCurrentSong();
-        if(song == null) return;
+        if (song == null) return;
         //Current bar
         tvArtistCurrentBar.setText(song.getArtist());
         tvSongTitleCurrentBar.setText(song.getTitle());
@@ -364,5 +401,11 @@ public class HomeActivity extends BaseActivity implements IMusicServiceConnectio
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+    }
+
+    @Override
+    public void onItemClickListener(View view, int position) {
+        if (searchView.isSearchOpen())
+            searchView.closeSearch();
     }
 }

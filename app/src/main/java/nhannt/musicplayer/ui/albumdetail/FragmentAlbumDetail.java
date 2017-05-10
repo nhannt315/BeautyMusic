@@ -4,12 +4,14 @@ package nhannt.musicplayer.ui.albumdetail;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -34,9 +36,9 @@ import nhannt.musicplayer.interfaces.RecyclerItemClickListener;
 import nhannt.musicplayer.objectmodel.Album;
 import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.ui.base.BaseFragment;
-import nhannt.musicplayer.ui.custom.DividerDecoration;
 import nhannt.musicplayer.ui.custom.SquareImageView;
 import nhannt.musicplayer.utils.Common;
+import nhannt.musicplayer.utils.DividerDecoration;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -57,6 +59,8 @@ public class FragmentAlbumDetail extends BaseFragment implements IAlbumDetailVie
     private ArrayList<Song> lstSong;
     private IAlbumDetailPresenter mPresenter;
     private int scrollRange = -1;
+    private int statusbarColor;
+    private int diffColor = 987670;
 
     @BindView(R.id.iv_album_cover_album_detail)
     protected SquareImageView albumCover;
@@ -68,6 +72,27 @@ public class FragmentAlbumDetail extends BaseFragment implements IAlbumDetailVie
     protected AppBarLayout appBarLayout;
     @BindView(R.id.collasping_toolbar_album_detail)
     protected CollapsingToolbarLayout collapsingToolbarLayout;
+    private int mainColor;
+
+    private static Handler handler;
+
+    private class LoadAlbumCoverAndToolbarColor implements Runnable {
+        Bitmap bitmap;
+
+        public LoadAlbumCoverAndToolbarColor(Bitmap bitmap) {
+            this.bitmap = bitmap;
+        }
+
+        @Override
+        public void run() {
+            Palette palette = Palette.from(bitmap).generate();
+            int color = palette.getDominantColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+            mainColor = color;
+            statusbarColor = mainColor - diffColor;
+            if (Common.isLollipop())
+                getActivity().getWindow().setStatusBarColor(statusbarColor);
+        }
+    }
 
     public FragmentAlbumDetail() {
         // Required empty public constructor
@@ -82,6 +107,14 @@ public class FragmentAlbumDetail extends BaseFragment implements IAlbumDetailVie
 
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onDestroyView() {
+        if (Common.isLollipop())
+            getActivity().getWindow().setStatusBarColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryDark));
+        super.onDestroyView();
+
     }
 
     @Override
@@ -104,6 +137,7 @@ public class FragmentAlbumDetail extends BaseFragment implements IAlbumDetailVie
         appBarLayout.addOnOffsetChangedListener(this);
         setupCollaspingToolbar();
         setHasOptionsMenu(true);
+        handler = new Handler();
         return view;
     }
 
@@ -119,7 +153,9 @@ public class FragmentAlbumDetail extends BaseFragment implements IAlbumDetailVie
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         init();
-
+        enableDoBack();
+        mainColor = ContextCompat.getColor(getContext(), R.color.colorPrimary);
+        statusbarColor = ContextCompat.getColor(getContext(), R.color.colorPrimaryDark);
     }
 
     private void init() {
@@ -130,12 +166,19 @@ public class FragmentAlbumDetail extends BaseFragment implements IAlbumDetailVie
             Bitmap bitmap = BitmapFactory.decodeFile(album.getCoverPath());
             bitmap = Common.changeBitmapContrastBrightness(bitmap, 1, -50);
             albumCover.setImageBitmap(bitmap);
+            handler.post(new LoadAlbumCoverAndToolbarColor(bitmap));
+
         }
         setupToolbar();
         setupRecyclerView();
         mPresenter = new AlbumDetailPresenter();
         mPresenter.attachedView(this);
         mPresenter.onResume();
+    }
+
+    @Override
+    public void doBack() {
+        mPresenter.cancelFetchingData();
     }
 
     @Override
@@ -213,7 +256,7 @@ public class FragmentAlbumDetail extends BaseFragment implements IAlbumDetailVie
     @Override
     public void setListSong(ArrayList<Song> lstSong) {
         this.lstSong = lstSong;
-        mSongAdapter = new SongAdapter(getActivity(), lstSong);
+        mSongAdapter = new SongAdapter(getActivity(), lstSong,R.layout.item_song);
         mSongAdapter.setRecyclerItemClickListener(this);
         rvSongList.setAdapter(mSongAdapter);
     }
@@ -237,13 +280,13 @@ public class FragmentAlbumDetail extends BaseFragment implements IAlbumDetailVie
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         //Check if the view is collapsed
         if (scrollRange + verticalOffset == 0) {
-            mToolbar.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+            mToolbar.setBackgroundColor(mainColor);
             if (Common.isLollipop())
-                window.setStatusBarColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryDark));
+                window.setStatusBarColor(statusbarColor);
         } else {
             mToolbar.setBackgroundColor(0);
             if (Common.isLollipop())
-                window.setStatusBarColor(0);
+                window.setStatusBarColor(statusbarColor);
         }
     }
 }

@@ -1,4 +1,4 @@
-package nhannt.musicplayer.ui.custom;
+package nhannt.musicplayer.utils;
 
 import android.content.Context;
 import android.graphics.Rect;

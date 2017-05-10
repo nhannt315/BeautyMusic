@@ -3,6 +3,7 @@ package nhannt.musicplayer.ui.playlistdetail;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
@@ -19,8 +20,8 @@ import nhannt.musicplayer.interfaces.IMusicServiceConnection;
 import nhannt.musicplayer.objectmodel.PlayList;
 import nhannt.musicplayer.service.MusicService;
 import nhannt.musicplayer.ui.base.BaseActivity;
-import nhannt.musicplayer.ui.custom.DividerDecoration;
 import nhannt.musicplayer.utils.Common;
+import nhannt.musicplayer.utils.DividerDecoration;
 
 public class PlaylistDetailActivity extends BaseActivity implements IMusicServiceConnection, IPlaylistDetailView {
 
@@ -98,8 +99,8 @@ public class PlaylistDetailActivity extends BaseActivity implements IMusicServic
 
     @Override
     public void setPlaylistDetail(PlayList playList) {
-        mSongAdapter = new SongAdapter(this, playList.getLstSong());
-        mSongAdapter.setLayoutId(R.layout.item_song_playlist_detail);
+        mSongAdapter = new SongAdapter(this, playList.getLstSong(),R.layout.item_song_playlist_detail);
+        mSongAdapter.setTextColor(ContextCompat.getColor(this, R.color.white));
         ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(mSongAdapter);
         scaleInAnimationAdapter.setFirstOnly(false);
         mRvSongList.setAdapter(scaleInAnimationAdapter);
@@ -107,5 +108,11 @@ public class PlaylistDetailActivity extends BaseActivity implements IMusicServic
         tvTitle.setText(playList.getTitle());
 
         this.mPlayList = playList;
+    }
+
+    @Override
+    public void onBackPressed() {
+        mPresenter.cancelFetchingData();
+        super.onBackPressed();
     }
 }

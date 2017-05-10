@@ -16,4 +16,6 @@ public interface BasePresenter<V> {
 
     void onDestroy();
 
+    void cancelFetchingData();
+
 }

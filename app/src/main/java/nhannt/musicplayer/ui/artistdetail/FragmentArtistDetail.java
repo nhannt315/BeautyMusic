@@ -31,7 +31,7 @@ import butterknife.ButterKnife;
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.adapter.AlbumAdapter;
 import nhannt.musicplayer.adapter.SongAdapter;
-import nhannt.musicplayer.data.network.ArtistPhoto;
+import nhannt.musicplayer.data.network.ArtistPhotoLastFmApi;
 import nhannt.musicplayer.interfaces.IMusicServiceConnection;
 import nhannt.musicplayer.interfaces.RecyclerItemClickListener;
 import nhannt.musicplayer.objectmodel.Album;
@@ -40,10 +40,10 @@ import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.service.MusicService;
 import nhannt.musicplayer.service.MusicServiceConnection;
 import nhannt.musicplayer.ui.base.BaseFragment;
-import nhannt.musicplayer.ui.custom.DividerDecoration;
-import nhannt.musicplayer.ui.custom.ItemOffsetDecoration;
 import nhannt.musicplayer.utils.App;
 import nhannt.musicplayer.utils.Common;
+import nhannt.musicplayer.utils.DividerDecoration;
+import nhannt.musicplayer.utils.ItemOffsetDecoration;
 import nhannt.musicplayer.utils.Navigator;
 
 /**
@@ -125,6 +125,7 @@ public class FragmentArtistDetail extends BaseFragment implements IArtistDetailV
         mPresenter = new ArtistDetailPresenter();
         mPresenter.attachedView(this);
         mPresenter.getListData(getArtistId());
+        enableDoBack();
     }
 
     private void initControls() {
@@ -137,7 +138,7 @@ public class FragmentArtistDetail extends BaseFragment implements IArtistDetailV
         if (Common.isLollipop() && isTransition) {
             imageArtistCover.setTransitionName(transitionName);
         }
-        new ArtistPhoto(getContext(), mArtist.getName(), imageArtistCover, true).execute();
+        new ArtistPhotoLastFmApi(getContext(), mArtist.getName(), imageArtistCover, true).execute();
 
     }
 
@@ -157,6 +158,11 @@ public class FragmentArtistDetail extends BaseFragment implements IArtistDetailV
         collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar);
         collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedAppBarPlus1);
         collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppBarPlus1);
+    }
+
+    @Override
+    public void doBack() {
+        mPresenter.cancelFetchingData();
     }
 
     @Override
@@ -193,7 +199,7 @@ public class FragmentArtistDetail extends BaseFragment implements IArtistDetailV
     @Override
     public void setListSong(ArrayList<Song> lstSongs) {
         this.lstSongs = lstSongs;
-        songAdapter = new SongAdapter(getContext(), this.lstSongs);
+        songAdapter = new SongAdapter(getContext(), this.lstSongs,R.layout.item_song);
         rvSongList.setAdapter(songAdapter);
         songAdapter.setRecyclerItemClickListener(this);
         songAdapter.notifyDataSetChanged();

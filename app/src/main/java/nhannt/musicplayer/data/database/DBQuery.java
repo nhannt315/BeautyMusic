@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import nhannt.musicplayer.data.provider.MediaProvider;
 import nhannt.musicplayer.objectmodel.PlayList;
 import nhannt.musicplayer.objectmodel.Song;
-import nhannt.musicplayer.utils.App;
 
 /**
  * Created by nhannt on 24/03/2017.
@@ -74,11 +73,15 @@ public class DBQuery {
         String sql = "SELECT * FROM " + DBHelper.PLAYLIST_TABLE + " ORDER BY " + DBHelper.PLAYLIST_COLUMN_ID + " DESC";
         Cursor result = db.rawQuery(sql, null);
         if (result != null && result.moveToFirst()) {
-            playList = new PlayList();
-            playList.setId(result.getInt(result.getColumnIndex(DBHelper.PLAYLIST_COLUMN_ID)));
-            playList.setTitle(result.getString(result.getColumnIndex(DBHelper.PLAYLIST_COLUMN_TITLE)));
-            playList.setSongNums(result.getInt(result.getColumnIndex(DBHelper.PLAYLIST_COLUMN_SONG_NUMS)));
-            result.close();
+            try {
+                playList = new PlayList();
+                playList.setId(result.getInt(result.getColumnIndex(DBHelper.PLAYLIST_COLUMN_ID)));
+                playList.setTitle(result.getString(result.getColumnIndex(DBHelper.PLAYLIST_COLUMN_TITLE)));
+                playList.setSongNums(result.getInt(result.getColumnIndex(DBHelper.PLAYLIST_COLUMN_SONG_NUMS)));
+            } finally {
+                result.close();
+            }
+
         }
 
         db.close();
@@ -146,12 +149,15 @@ public class DBQuery {
         builder.append(" FROM " + DBHelper.RECENT_TABLE);
         Cursor result = db.rawQuery(builder.toString(), null);
         if (result != null && result.moveToFirst()) {
-            do {
-                String songId = result.getString(result.getColumnIndex(DBHelper.RECENT_COLUMN_SONG_ID));
-                Song song = provider.getSongById(songId);
-                lstSong.add(song);
-            } while (result.moveToNext());
-            result.close();
+            try {
+                do {
+                    String songId = result.getString(result.getColumnIndex(DBHelper.RECENT_COLUMN_SONG_ID));
+                    Song song = provider.getSongById(songId);
+                    lstSong.add(song);
+                } while (result.moveToNext());
+            } finally {
+                result.close();
+            }
         }
 
         db.close();
@@ -168,12 +174,15 @@ public class DBQuery {
         builder.append(" WHERE " + DBHelper.PLAYLIST_DETAIL_TABLE + "." + DBHelper.DETAIL_COLUMN_PLAYLIST_ID + " = " + pID);
         Cursor result = db.rawQuery(builder.toString(), null);
         if (result != null && result.moveToFirst()) {
-            do {
-                String songId = result.getString(result.getColumnIndex(DBHelper.DETAIL_COLUMN_SONG_ID));
-                Song song = provider.getSongById(songId);
-                lstSong.add(song);
-            } while (result.moveToNext());
-            result.close();
+            try {
+                do {
+                    String songId = result.getString(result.getColumnIndex(DBHelper.DETAIL_COLUMN_SONG_ID));
+                    Song song = provider.getSongById(songId);
+                    lstSong.add(song);
+                } while (result.moveToNext());
+            } finally {
+                result.close();
+            }
         }
 
         db.close();
@@ -188,20 +197,23 @@ public class DBQuery {
         builder.append("SELECT * FROM " + DBHelper.PLAYLIST_TABLE);
         Cursor result = db.rawQuery(builder.toString(), null);
         if (result != null && result.moveToFirst()) {
-            do {
-                PlayList playList = new PlayList();
-                int id = result.getInt(result.getColumnIndex(DBHelper.PLAYLIST_COLUMN_ID));
-                String title = result.getString(result.getColumnIndex(DBHelper.PLAYLIST_COLUMN_TITLE));
-                int songNums = result.getInt(result.getColumnIndex(DBHelper.PLAYLIST_COLUMN_SONG_NUMS));
-                playList.setId(id);
-                playList.setTitle(title);
-                playList.setSongNums(songNums);
+            try {
+                do {
+                    PlayList playList = new PlayList();
+                    int id = result.getInt(result.getColumnIndex(DBHelper.PLAYLIST_COLUMN_ID));
+                    String title = result.getString(result.getColumnIndex(DBHelper.PLAYLIST_COLUMN_TITLE));
+                    int songNums = result.getInt(result.getColumnIndex(DBHelper.PLAYLIST_COLUMN_SONG_NUMS));
+                    playList.setId(id);
+                    playList.setTitle(title);
+                    playList.setSongNums(songNums);
 
-                lstPlayList.add(playList);
-            } while (result.moveToNext());
+                    lstPlayList.add(playList);
+                } while (result.moveToNext());
+            } finally {
+                result.close();
+            }
         }
         Log.d("CheckPlaylist", lstPlayList.size() + "");
-        result.close();
         db.close();
         return lstPlayList;
     }
@@ -219,13 +231,16 @@ public class DBQuery {
 
         Cursor result = db.rawQuery(builder.toString(), null);
         if (result != null && result.moveToFirst()) {
-            do {
-                playList = new PlayList();
-                playList.setId(result.getInt(result.getColumnIndex(DBHelper.PLAYLIST_COLUMN_ID)));
-                playList.setTitle(result.getString(result.getColumnIndex(DBHelper.PLAYLIST_COLUMN_TITLE)));
-                playList.setSongNums(result.getInt(result.getColumnIndex(DBHelper.PLAYLIST_COLUMN_SONG_NUMS)));
-            } while (result.moveToNext());
-            result.close();
+            try {
+                do {
+                    playList = new PlayList();
+                    playList.setId(result.getInt(result.getColumnIndex(DBHelper.PLAYLIST_COLUMN_ID)));
+                    playList.setTitle(result.getString(result.getColumnIndex(DBHelper.PLAYLIST_COLUMN_TITLE)));
+                    playList.setSongNums(result.getInt(result.getColumnIndex(DBHelper.PLAYLIST_COLUMN_SONG_NUMS)));
+                } while (result.moveToNext());
+            } finally {
+                result.close();
+            }
         }
 
         db.close();

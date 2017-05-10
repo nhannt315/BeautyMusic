@@ -9,7 +9,10 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        ></FrameLayout>
+
+        >
+
+    </FrameLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -17,6 +20,11 @@
 
         <include layout="@layout/current_bar"/>
     </RelativeLayout>
+
+    <nhannt.musicplayer.ui.custom.MaterialSearchView
+        android:id="@+id/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 
 </android.support.design.widget.CoordinatorLayout>

@@ -96,6 +96,11 @@ public class HomePresenter implements IHomePresenter, View.OnClickListener {
     }
 
     @Override
+    public void cancelFetchingData() {
+
+    }
+
+    @Override
     public BroadcastReceiver getReceiver() {
         return receiver;
     }

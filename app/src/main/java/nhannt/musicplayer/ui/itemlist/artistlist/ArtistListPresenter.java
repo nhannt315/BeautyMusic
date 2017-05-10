@@ -24,6 +24,7 @@ public class ArtistListPresenter implements ItemListPresenter<ItemListMvpView<Ar
 
     @Override
     public void onFinished(ArrayList<Artist> itemList) {
+        if(mArtistMvpView == null) return;
         mArtistMvpView.hideProgress();
         mArtistMvpView.setItems(itemList);
 
@@ -52,6 +53,11 @@ public class ArtistListPresenter implements ItemListPresenter<ItemListMvpView<Ar
     @Override
     public void onDestroy() {
 
+    }
+
+    @Override
+    public void cancelFetchingData() {
+        mArtistInteractor.cancel();
     }
 
     @Override

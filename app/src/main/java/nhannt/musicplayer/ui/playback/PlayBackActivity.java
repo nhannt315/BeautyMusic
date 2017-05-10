@@ -32,15 +32,18 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.blurry.Blurry;
 import nhannt.musicplayer.R;
+import nhannt.musicplayer.adapter.SearchAdapter;
 import nhannt.musicplayer.adapter.SongAdapter;
 import nhannt.musicplayer.interfaces.IMusicServiceConnection;
 import nhannt.musicplayer.interfaces.RecyclerItemClickListener;
 import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.service.MusicService;
 import nhannt.musicplayer.ui.base.BaseActivity;
+import nhannt.musicplayer.ui.custom.CenterLayoutManager;
 import nhannt.musicplayer.ui.custom.CircularSeekBar;
-import nhannt.musicplayer.ui.custom.DividerDecoration;
+import nhannt.musicplayer.ui.custom.MaterialSearchView;
 import nhannt.musicplayer.utils.Common;
+import nhannt.musicplayer.utils.DividerDecoration;
 import nhannt.musicplayer.utils.Navigator;
 
 public class PlayBackActivity extends BaseActivity implements IPlayBackView, IMusicServiceConnection, RecyclerItemClickListener {
@@ -77,6 +80,7 @@ public class PlayBackActivity extends BaseActivity implements IPlayBackView, IMu
     private IPlayBackPresenter mPresenter;
     private MusicService mService;
     private SongAdapter songAdapter;
+    private CenterLayoutManager layoutManager;
 
 
     @Override
@@ -90,6 +94,7 @@ public class PlayBackActivity extends BaseActivity implements IPlayBackView, IMu
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_back);
         ButterKnife.bind(this);
+        searchView = (MaterialSearchView) findViewById(R.id.search_view);
         setupToolbar();
         mPresenter = new PlayBackPresenter();
         mPresenter.attachedView(this);
@@ -97,11 +102,19 @@ public class PlayBackActivity extends BaseActivity implements IPlayBackView, IMu
         setupRecyclerView();
         updateAll();
         initEvents();
+        setUpSearchView();
+    }
 
+    private void setUpSearchView() {
+        searchAdapter = new SearchAdapter(this);
+        lstSearchResult = new ArrayList();
+        searchAdapter.setItemClickListener(this);
+        searchView.setOnQueryTextListener(this);
     }
 
     private void setupRecyclerView() {
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(PlayBackActivity.this, LinearLayoutManager.VERTICAL, false);
+//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(PlayBackActivity.this, LinearLayoutManager.VERTICAL, false);
+        layoutManager = new CenterLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         DividerDecoration dividerDecoration = new DividerDecoration(PlayBackActivity.this);
         DefaultItemAnimator itemAnimator = new DefaultItemAnimator();
         mRvSongList.setLayoutManager(layoutManager);
@@ -169,6 +182,13 @@ public class PlayBackActivity extends BaseActivity implements IPlayBackView, IMu
     }
 
     @Override
+    public void onBackPressed() {
+        if (searchView.isSearchOpen())
+            searchView.closeSearch();
+        super.onBackPressed();
+    }
+
+    @Override
     public void onConnected(MusicService service) {
         this.mService = service;
         updateSongInfo();
@@ -225,12 +245,14 @@ public class PlayBackActivity extends BaseActivity implements IPlayBackView, IMu
 
     @Override
     public void setItems(ArrayList<Song> lstItem) {
-        songAdapter = new SongAdapter(PlayBackActivity.this, lstItem);
+        songAdapter = new SongAdapter(PlayBackActivity.this, lstItem,R.layout.item_song);
         Log.d("playback", "set item");
         songAdapter.setRecyclerItemClickListener(this);
         mRvSongList.setAdapter(songAdapter);
         if (mService != null && mService.isSongSetted())
             songAdapter.updatePlayPosition(mService.getCurrentSong().getId());
+        if (mService != null && mService.isSongSetted())
+            layoutManager.smoothScrollToPosition(mRvSongList, null, mService.getSongPos());
     }
 
     @Override
@@ -270,10 +292,14 @@ public class PlayBackActivity extends BaseActivity implements IPlayBackView, IMu
         mPresenter.updateTimePlay();
         if (songAdapter != null)
             songAdapter.updatePlayPosition(mService.getCurrentSong().getId());
+        if (mService != null && mService.isSongSetted() && songAdapter != null)
+            layoutManager.smoothScrollToPosition(mRvSongList, null, mService.getSongPos());
     }
 
     @Override
     public void onItemClickListener(View view, int position) {
+        if (searchView.isSearchOpen())
+            searchView.closeSearch();
         mPresenter.onItemClicked(view, position);
     }
 

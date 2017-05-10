@@ -20,7 +20,7 @@ import nhannt.musicplayer.R;
  * Created by NhanNT on 05/05/2017.
  */
 
-public class ArtistPhoto {
+public class ArtistPhotoLastFmApi {
 
     private static final String LAST_FM_API_KEY = "761226e2f2b94da7de6a61d73f50e33c";
     private static final String URL_1 = "http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=";
@@ -31,7 +31,7 @@ public class ArtistPhoto {
     private Context context;
     private boolean isAnimate = false;
 
-    public ArtistPhoto(Context context, String artistName, ImageView imgArtist, boolean isAnimate) {
+    public ArtistPhotoLastFmApi(Context context, String artistName, ImageView imgArtist, boolean isAnimate) {
         this.imgArtist = imgArtist;
         this.artistName = artistName;
         this.context = context;

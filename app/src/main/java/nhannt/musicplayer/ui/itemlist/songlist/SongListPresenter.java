@@ -37,6 +37,11 @@ public class SongListPresenter implements ItemListPresenter<ItemListMvpView<Song
     }
 
     @Override
+    public void cancelFetchingData() {
+        songListInteractor.cancel();
+    }
+
+    @Override
     public void attachedView(ItemListMvpView<Song> view) {
         if (view == null) {
             throw new IllegalArgumentException("You can't set a null view");

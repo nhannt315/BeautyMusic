@@ -37,6 +37,11 @@ public class PlaylistDetailPresenter implements IPlaylistDetailPresenter {
     }
 
     @Override
+    public void cancelFetchingData() {
+
+    }
+
+    @Override
     public void setPlaylistDetail(PlayList playList) {
         mView.setPlaylistDetail(playList);
     }

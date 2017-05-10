@@ -41,6 +41,11 @@ public class PlayingQueuePresenter implements IPlayingQueuePresenter {
     }
 
     @Override
+    public void cancelFetchingData() {
+
+    }
+
+    @Override
     public void loadingFinished(ArrayList<Song> lstSong) {
         mView.setItems(lstSong);
     }

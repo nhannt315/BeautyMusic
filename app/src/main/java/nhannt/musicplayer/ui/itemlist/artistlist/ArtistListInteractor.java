@@ -16,10 +16,11 @@ import nhannt.musicplayer.ui.itemlist.ItemListInteractor;
 public class ArtistListInteractor implements ItemListInteractor {
 
     private MediaProvider mediaProvider = MediaProvider.getInstance();
+    private AsyncTask<Void, Void, ArrayList<Artist>> asyncLoadArtist;
 
     @Override
     public void loadItems(final LoaderListener loaderListener) {
-        new AsyncTask<Void, Void, ArrayList<Artist>>() {
+        asyncLoadArtist = new AsyncTask<Void, Void, ArrayList<Artist>>() {
             @Override
             protected ArrayList<Artist> doInBackground(Void... params) {
                 return mediaProvider.getListArtist();
@@ -30,6 +31,13 @@ public class ArtistListInteractor implements ItemListInteractor {
                 super.onPostExecute(artists);
                 loaderListener.onFinished(artists);
             }
-        }.execute();
+        };
+        asyncLoadArtist.execute();
+    }
+
+    @Override
+    public void cancel() {
+        if(asyncLoadArtist != null)
+            asyncLoadArtist.cancel(true);
     }
 }

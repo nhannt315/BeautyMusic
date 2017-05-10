@@ -21,6 +21,10 @@ public class PlayBackPresenter implements IPlayBackPresenter {
     private Handler mHandler;
     private boolean isSeeking;
 
+    @Override
+    public void cancelFetchingData() {
+
+    }
 
     @Override
     public void attachedView(IPlayBackView view) {

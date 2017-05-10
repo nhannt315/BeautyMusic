@@ -22,8 +22,7 @@ import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.recyclerhelper.OnStartDragListener;
 import nhannt.musicplayer.recyclerhelper.SimpleItemTouchHelperCallback;
 import nhannt.musicplayer.ui.base.BaseFragment;
-import nhannt.musicplayer.ui.custom.DividerDecoration;
-import nhannt.musicplayer.ui.custom.ItemOffsetDecoration;
+import nhannt.musicplayer.utils.ItemOffsetDecoration;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -85,7 +84,7 @@ public class FragmentPlayingQueue extends BaseFragment implements IPlayingQueueV
         mPresenter.onResume();
         DrawerLayoutContainer container = (DrawerLayoutContainer) getActivity();
         container.setDrawerLayoutActionBarToggle(mToolbar);
-
+        enableDoBack();
     }
 
     private void setupDragRecyclerView() {
@@ -101,6 +100,11 @@ public class FragmentPlayingQueue extends BaseFragment implements IPlayingQueueV
     public void onDestroy() {
         super.onDestroy();
         mPresenter.detachView();
+    }
+
+    @Override
+    public void doBack() {
+        mPresenter.cancelFetchingData();
     }
 
     @Override

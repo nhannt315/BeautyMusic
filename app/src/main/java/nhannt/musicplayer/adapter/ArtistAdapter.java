@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import nhannt.musicplayer.R;
-import nhannt.musicplayer.data.network.ArtistPhoto;
+import nhannt.musicplayer.data.network.ArtistPhotoLastFmApi;
 import nhannt.musicplayer.interfaces.RecyclerItemClickListener;
 import nhannt.musicplayer.objectmodel.Artist;
 import nhannt.musicplayer.utils.Common;
@@ -27,8 +27,6 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ArtistView
 
     public static int LAYOUT_ITEM_LIST = 0;
     public static int LAYOUT_ITEM_GRID = 1;
-
-
 
     private Activity mContext;
     private ArrayList<Artist> mData;
@@ -79,9 +77,9 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ArtistView
             holder.imageArtistCover.setTransitionName("transition_artist"+position);
         }
         if(layoutType == LAYOUT_ITEM_LIST) {
-            new ArtistPhoto(mContext, item.getName(), holder.imageArtistCover, false).execute();
+            new ArtistPhotoLastFmApi(mContext, item.getName(), holder.imageArtistCover, false).execute();
         }else{
-            new ArtistPhoto(mContext, item.getName(), holder.imageArtistCover, true).execute();
+            new ArtistPhotoLastFmApi(mContext, item.getName(), holder.imageArtistCover, true).execute();
         }
     }
 

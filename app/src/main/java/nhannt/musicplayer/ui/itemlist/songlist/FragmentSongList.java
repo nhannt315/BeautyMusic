@@ -31,11 +31,11 @@ import nhannt.musicplayer.interfaces.RecyclerItemClickListener;
 import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.service.MusicService;
 import nhannt.musicplayer.ui.base.BaseFragment;
-import nhannt.musicplayer.ui.custom.DividerDecoration;
 import nhannt.musicplayer.ui.itemlist.ItemListMvpView;
 import nhannt.musicplayer.ui.itemlist.ItemListPresenter;
 import nhannt.musicplayer.utils.App;
 import nhannt.musicplayer.utils.Common;
+import nhannt.musicplayer.utils.DividerDecoration;
 import nhannt.musicplayer.utils.Navigator;
 import nhannt.musicplayer.utils.Setting;
 
@@ -58,6 +58,17 @@ public class FragmentSongList extends BaseFragment implements ItemListMvpView<So
 
     public FragmentSongList() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ButterKnife.bind(this, view);
+        setupRecyclerView();
+        songPresenter = new SongListPresenter();
+        songPresenter.attachedView(this);
+        songPresenter.onResume();
+        enableDoBack();
     }
 
     public static FragmentSongList newInstance() {
@@ -88,6 +99,11 @@ public class FragmentSongList extends BaseFragment implements ItemListMvpView<So
     public void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(playstateChange);
+    }
+
+    @Override
+    public void doBack() {
+        songPresenter.cancelFetchingData();
     }
 
     @Nullable
@@ -154,15 +170,7 @@ public class FragmentSongList extends BaseFragment implements ItemListMvpView<So
         Log.d("Option", "here");
     }
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
-        setupRecyclerView();
-        songPresenter = new SongListPresenter();
-        songPresenter.attachedView(this);
-        songPresenter.onResume();
-    }
+
 
     private void setupRecyclerView() {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
@@ -188,7 +196,7 @@ public class FragmentSongList extends BaseFragment implements ItemListMvpView<So
 
     @Override
     public void setItems(ArrayList<Song> itemList) {
-        songAdapter = new SongAdapter(getActivity(), itemList);
+        songAdapter = new SongAdapter(getActivity(), itemList,R.layout.item_song);
         songAdapter.setRecyclerItemClickListener(this);
         rvSongList.setAdapter(songAdapter);
         mData = itemList;

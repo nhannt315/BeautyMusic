@@ -20,7 +20,7 @@ import nhannt.musicplayer.interfaces.OnBackPressedListener;
  * Created by nhannt on 01/03/2017.
  */
 
-public abstract class BaseFragment extends Fragment implements BaseView {
+public abstract class BaseFragment extends Fragment implements BaseView,OnBackPressedListener{
 
     protected Toolbar toolbar;
     private Context mContext;
@@ -64,6 +64,15 @@ public abstract class BaseFragment extends Fragment implements BaseView {
                 actionBar.setTitle(getActionbarName());
             }
         }
+    }
+
+    protected void enableDoBack(){
+
+    }
+
+    @Override
+    public void doBack() {
+
     }
 
     @Override

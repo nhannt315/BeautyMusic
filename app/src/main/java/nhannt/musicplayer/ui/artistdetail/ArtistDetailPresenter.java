@@ -39,6 +39,11 @@ public class ArtistDetailPresenter implements IArtistDetailPresenter {
     }
 
     @Override
+    public void cancelFetchingData() {
+
+    }
+
+    @Override
     public void getListData(int artistId) {
         mInteractor.loadListAlbumOfArtist(mView.getArtistId());
         mInteractor.loadListSongOfArtist(mView.getArtistId());

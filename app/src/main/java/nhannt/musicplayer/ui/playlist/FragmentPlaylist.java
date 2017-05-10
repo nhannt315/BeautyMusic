@@ -75,11 +75,17 @@ public class FragmentPlaylist extends BaseFragment implements IPlaylistListView 
         mPresenter.onResume();
         DrawerLayoutContainer container = (DrawerLayoutContainer) getActivity();
         container.setDrawerLayoutActionBarToggle(mToolbar);
+        enableDoBack();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public void doBack() {
+        mPresenter.cancelFetchingData();
     }
 
     private void setUpRecyclerView() {

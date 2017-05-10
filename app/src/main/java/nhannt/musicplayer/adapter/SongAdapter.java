@@ -26,6 +26,7 @@ import nhannt.musicplayer.service.MusicService;
 import nhannt.musicplayer.service.MusicServiceConnection;
 import nhannt.musicplayer.ui.dialog.PlaylistDialog;
 import nhannt.musicplayer.utils.App;
+import nhannt.musicplayer.utils.Navigator;
 
 /**
  * Created by nhannt on 03/03/2017.
@@ -39,17 +40,30 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
     private RecyclerItemClickListener recyclerItemClickListener;
     private MusicServiceConnection mConnection;
     private int layoutId = R.layout.item_song;
+    private int textColor;
     private boolean[] playState;
 
     public SongAdapter(Context mContext, ArrayList<Song> mData) {
         this.mContext = mContext;
         this.mData = mData;
         mLayoutInflater = LayoutInflater.from(mContext);
+        textColor = ContextCompat.getColor(mContext,R.color.blue);
         if (mData != null)
             playState = new boolean[mData.size()];
-//        for(boolean b : playState){
-//            b = false;
-//        }
+    }
+
+    public void setTextColor(int textColor) {
+        this.textColor = textColor;
+    }
+
+    public SongAdapter(Context mContext, ArrayList<Song> mData, int itemLayoutId) {
+        this.mContext = mContext;
+        this.mData = mData;
+        mLayoutInflater = LayoutInflater.from(mContext);
+        textColor = ContextCompat.getColor(mContext,R.color.blue);
+        this.layoutId = itemLayoutId;
+        if (mData != null)
+            playState = new boolean[mData.size()];
     }
 
     public void setRecyclerItemClickListener(RecyclerItemClickListener recyclerItemClickListener) {
@@ -90,8 +104,8 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
             holder.tvSongTitle.setTextColor(ContextCompat.getColor(mContext, R.color.colorRed));
             holder.tvArtist.setTextColor(ContextCompat.getColor(mContext, R.color.colorRed));
         } else {
-            holder.tvSongTitle.setTextColor(ContextCompat.getColor(mContext, R.color.blue));
-            holder.tvArtist.setTextColor(ContextCompat.getColor(mContext, R.color.blue));
+            holder.tvSongTitle.setTextColor(textColor);
+            holder.tvArtist.setTextColor(textColor);
         }
         Glide.with(mContext).load(item.getCoverPath())
                 .placeholder(R.drawable.music_background)

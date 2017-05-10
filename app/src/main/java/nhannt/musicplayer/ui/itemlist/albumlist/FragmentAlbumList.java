@@ -24,11 +24,11 @@ import nhannt.musicplayer.adapter.AlbumAdapter;
 import nhannt.musicplayer.interfaces.RecyclerItemClickListener;
 import nhannt.musicplayer.objectmodel.Album;
 import nhannt.musicplayer.ui.base.BaseFragment;
-import nhannt.musicplayer.ui.custom.DividerDecoration;
-import nhannt.musicplayer.ui.custom.ItemOffsetDecoration;
 import nhannt.musicplayer.ui.itemlist.ItemListMvpView;
 import nhannt.musicplayer.ui.itemlist.ItemListPresenter;
 import nhannt.musicplayer.utils.Common;
+import nhannt.musicplayer.utils.DividerDecoration;
+import nhannt.musicplayer.utils.ItemOffsetDecoration;
 import nhannt.musicplayer.utils.Navigator;
 import nhannt.musicplayer.utils.Setting;
 
@@ -78,6 +78,7 @@ public class FragmentAlbumList extends BaseFragment implements ItemListMvpView<A
         albumPresenter.attachedView(this);
         setUpRecyclerView();
         albumPresenter.onResume();
+        enableDoBack();
     }
 
 
@@ -87,6 +88,10 @@ public class FragmentAlbumList extends BaseFragment implements ItemListMvpView<A
         mRvAlbumList.setItemAnimator(new DefaultItemAnimator());
     }
 
+    @Override
+    public void doBack() {
+        albumPresenter.cancelFetchingData();
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

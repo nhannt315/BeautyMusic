@@ -26,7 +26,13 @@ public class AlbumListPresenter implements ItemListPresenter<ItemListMvpView<Alb
     private ArrayList<Album> mData;
 
     @Override
+    public void cancelFetchingData() {
+        albumInteractor.cancel();
+    }
+
+    @Override
     public void onFinished(ArrayList<Album> itemList) {
+        if(albumMvpView == null) return;
         albumMvpView.hideProgress();
         albumMvpView.setItems(itemList);
         mData = itemList;

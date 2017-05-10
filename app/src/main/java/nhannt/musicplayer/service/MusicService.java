@@ -265,6 +265,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     }
 
     public void showLockScreen() {
+        if(!isSongSetted()) return;
         Song currentSong = lstSong.get(songPos);
         mediaSession = new MediaSessionCompat(this, MusicService.class.getName());
         mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);

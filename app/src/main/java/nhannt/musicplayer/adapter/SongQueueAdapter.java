@@ -1,7 +1,6 @@
 package nhannt.musicplayer.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -55,8 +54,10 @@ public class SongQueueAdapter extends RecyclerView.Adapter<SongQueueAdapter.Song
     @Override
     public void onBindViewHolder(final SongQueueViewHolder holder, int position) {
         Song item = mData.get(position);
+
         holder.tvSongTitle.setText(item.getTitle());
         holder.tvArtist.setText(item.getArtist());
+
         Glide.with(mContext)
                 .load(item.getCoverPath())
                 .thumbnail(0.5f)

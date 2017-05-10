@@ -10,14 +10,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.transition.TransitionInflater;
 import android.view.View;
 
-import java.util.List;
-
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.objectmodel.Album;
 import nhannt.musicplayer.objectmodel.Artist;
 import nhannt.musicplayer.ui.albumdetail.FragmentAlbumDetail;
 import nhannt.musicplayer.ui.artistdetail.FragmentArtistDetail;
-import nhannt.musicplayer.ui.base.BaseFragment;
+import nhannt.musicplayer.ui.home.HomeActivity;
 import nhannt.musicplayer.ui.playback.PlayBackActivity;
 
 /**
@@ -41,6 +39,7 @@ public class Navigator {
             }
         } else {
             desFragment = FragmentAlbumDetail.newInstance(album, false, "");
+//            fragmentTransaction.setCustomAnimations(R.anim.slide_in_right,R.anim.no_change);
         }
 
 
@@ -51,7 +50,7 @@ public class Navigator {
                 .commit();
     }
 
-    public static void navigateToArtistDetail(Context context, Artist artist, @Nullable View transitionView){
+    public static void navigateToArtistDetail(Context context, Artist artist, @Nullable View transitionView) {
         Fragment desFragment;
         AppCompatActivity activity = (AppCompatActivity) context;
         FragmentTransaction fragmentTransaction = activity.getSupportFragmentManager().beginTransaction();
@@ -67,6 +66,8 @@ public class Navigator {
             }
         } else {
             desFragment = FragmentArtistDetail.newInstance(artist, false, "");
+//            fragmentTransaction.setCustomAnimations(R.anim.slide_in_right,R.anim.no_change);
+
         }
 
         fragmentTransaction
@@ -76,17 +77,31 @@ public class Navigator {
                 .commit();
     }
 
+    public static void gotoAlbumDetail(Context context, Album album) {
+        Intent intent = new Intent(context, HomeActivity.class);
+        intent.setAction(HomeActivity.ACTION_OPEN_ALBUM_DETAIL);
+        intent.putExtra(HomeActivity.KEY_ALBUM_DETAIL, album);
+        context.startActivity(intent);
+    }
+
+    public static void gotoArtistDetail(Context context, Artist artist) {
+        Intent intent = new Intent(context, HomeActivity.class);
+        intent.setAction(HomeActivity.ACTION_OPEN_ARTIST_DETAIL);
+        intent.putExtra(HomeActivity.KEY_ARTIST_DETAIL, artist);
+        context.startActivity(intent);
+    }
+
     public static void navigateToPlayBackActivity(Context context) {
         Intent intent = new Intent(context, PlayBackActivity.class);
         context.startActivity(intent);
     }
 
-    public static void navigateToEqualizer(Context context, int REQUEST_EQ){
+    public static void navigateToEqualizer(Context context, int REQUEST_EQ) {
         Intent intent = new Intent(AudioEffect
                 .ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL);
 
-        if((intent.resolveActivity(context.getPackageManager()) != null)) {
-            ((AppCompatActivity)context).startActivityForResult(intent, REQUEST_EQ);
+        if ((intent.resolveActivity(context.getPackageManager()) != null)) {
+            ((AppCompatActivity) context).startActivityForResult(intent, REQUEST_EQ);
         } else {
             // No equalizer found :(
         }

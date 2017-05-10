@@ -39,6 +39,11 @@ public class PlaylistListPresenter implements IPlaylistListPresenter  {
     }
 
     @Override
+    public void cancelFetchingData() {
+
+    }
+
+    @Override
     public void onFinished(ArrayList<PlayList> itemList) {
         mView.setPlaylist(itemList);
     }
