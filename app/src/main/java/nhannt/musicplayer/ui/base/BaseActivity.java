@@ -76,37 +76,40 @@ public abstract class BaseActivity extends AppCompatActivity implements Material
         }
         Log.d("searchKey", newText);
         lstSearchResult.clear();
-        MediaProvider mediaProvider = MediaProvider.getInstance();
-        ArrayList<Song> lstSong = mediaProvider.searchSongs(newText);
-        ArrayList<Album> lstAlbum = mediaProvider.searchAlbums(newText);
-        ArrayList<Artist> lstArtist = mediaProvider.searchArtists(newText);
-
-        if (!lstSong.isEmpty()) {
-            lstSearchResult.add(getString(R.string.song));
-            Log.d("searchSongSize",lstSong.size()+"");
-            if (lstSong.size() > 5)
-                lstSong = new ArrayList<>(lstSong.subList(0, 4));
-            lstSearchResult.addAll(lstSong);
-        }
-        if (!lstAlbum.isEmpty()) {
-            lstSearchResult.add(getString(R.string.album));
-            Log.d("searchAlbumSize",lstAlbum.size()+"");
-            if (lstAlbum.size() > 5)
-                lstAlbum = new ArrayList<>(lstAlbum.subList(0, 4));
-            lstSearchResult.addAll(lstAlbum);
-        }
-        if (!lstArtist.isEmpty()) {
-            lstSearchResult.add(getString(R.string.artist));
-            Log.d("searchArtistSize",lstArtist.size()+"");
-            if (lstArtist.size() > 5)
-                lstArtist = new ArrayList<>(lstArtist.subList(0, 4));
-            lstSearchResult.addAll(lstArtist);
-        }
+//        MediaProvider mediaProvider = MediaProvider.getInstance();
+//        ArrayList<Song> lstSong = mediaProvider.searchSongs(newText);
+//        ArrayList<Album> lstAlbum = mediaProvider.searchAlbums(newText);
+//        ArrayList<Artist> lstArtist = mediaProvider.searchArtists(newText);
+//
+//        if (!lstSong.isEmpty()) {
+//            lstSearchResult.add(getString(R.string.song));
+//            Log.d("searchSongSize",lstSong.size()+"");
+//            if (lstSong.size() > 5)
+//                lstSong = new ArrayList<>(lstSong.subList(0, 4));
+//            lstSearchResult.addAll(lstSong);
+//        }
+//        if (!lstAlbum.isEmpty()) {
+//            lstSearchResult.add(getString(R.string.album));
+//            Log.d("searchAlbumSize",lstAlbum.size()+"");
+//            if (lstAlbum.size() > 5)
+//                lstAlbum = new ArrayList<>(lstAlbum.subList(0, 4));
+//            lstSearchResult.addAll(lstAlbum);
+//        }
+//        if (!lstArtist.isEmpty()) {
+//            lstSearchResult.add(getString(R.string.artist));
+//            Log.d("searchArtistSize",lstArtist.size()+"");
+//            if (lstArtist.size() > 5)
+//                lstArtist = new ArrayList<>(lstArtist.subList(0, 4));
+//            lstSearchResult.addAll(lstArtist);
+//        }
+        lstSearchResult = getSearchResultList(newText);
         searchAdapter.updateSearchResult(lstSearchResult);
         searchView.setAdapter(searchAdapter);
         searchAdapter.notifyDataSetChanged();
         return false;
     }
+
+    protected abstract ArrayList getSearchResultList(String query);
 
     @Override
     public void onBackPressed() {

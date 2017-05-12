@@ -2,6 +2,8 @@ package nhannt.musicplayer.ui.home;
 
 import android.content.BroadcastReceiver;
 
+import java.util.ArrayList;
+
 import nhannt.musicplayer.ui.base.BasePresenter;
 
 /**
@@ -11,4 +13,7 @@ import nhannt.musicplayer.ui.base.BasePresenter;
 public interface IHomePresenter extends BasePresenter<IHomeView> {
 
     BroadcastReceiver getReceiver();
+    ArrayList searchArtistDetail(String query,int id);
+    ArrayList searchAlbumDetail(String query,int id);
+    ArrayList searchAll(String query);
 }

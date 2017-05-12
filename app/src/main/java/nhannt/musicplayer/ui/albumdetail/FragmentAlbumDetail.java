@@ -16,15 +16,12 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 
 import java.util.ArrayList;
 
@@ -45,7 +42,7 @@ import nhannt.musicplayer.utils.DividerDecoration;
  * Use the {@link FragmentAlbumDetail#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentAlbumDetail extends BaseFragment implements IAlbumDetailView, RecyclerItemClickListener, AppBarLayout.OnOffsetChangedListener {
+public class FragmentAlbumDetail extends BaseFragment implements IAlbumDetailView, RecyclerItemClickListener {
     public static final String TAG = FragmentAlbumDetail.class.getName();
 
     private static final String KEY_ALBUM = "key_album";
@@ -58,7 +55,6 @@ public class FragmentAlbumDetail extends BaseFragment implements IAlbumDetailVie
     private SongAdapter mSongAdapter;
     private ArrayList<Song> lstSong;
     private IAlbumDetailPresenter mPresenter;
-    private int scrollRange = -1;
     private int statusbarColor;
     private int diffColor = 987670;
 
@@ -76,19 +72,27 @@ public class FragmentAlbumDetail extends BaseFragment implements IAlbumDetailVie
 
     private static Handler handler;
 
-    private class LoadAlbumCoverAndToolbarColor implements Runnable {
+    private class GetMainColorForToolbar implements Runnable {
         Bitmap bitmap;
 
-        public LoadAlbumCoverAndToolbarColor(Bitmap bitmap) {
+        public GetMainColorForToolbar(Bitmap bitmap) {
             this.bitmap = bitmap;
         }
 
         @Override
         public void run() {
             Palette palette = Palette.from(bitmap).generate();
-            int color = palette.getDominantColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-            mainColor = color;
+            Palette.Swatch swatch = palette.getLightVibrantSwatch();
+            if (swatch != null)
+                mainColor = swatch.getRgb();
+            else {
+                swatch = palette.getLightMutedSwatch();
+                if (swatch != null) {
+                    mainColor = swatch.getRgb();
+                }
+            }
             statusbarColor = mainColor - diffColor;
+            collapsingToolbarLayout.setContentScrimColor(mainColor);
             if (Common.isLollipop())
                 getActivity().getWindow().setStatusBarColor(statusbarColor);
         }
@@ -134,7 +138,6 @@ public class FragmentAlbumDetail extends BaseFragment implements IAlbumDetailVie
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_ablum_detail, container, false);
         ButterKnife.bind(this, view);
-        appBarLayout.addOnOffsetChangedListener(this);
         setupCollaspingToolbar();
         setHasOptionsMenu(true);
         handler = new Handler();
@@ -147,6 +150,7 @@ public class FragmentAlbumDetail extends BaseFragment implements IAlbumDetailVie
         collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar);
         collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedAppBarPlus1);
         collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppBarPlus1);
+        collapsingToolbarLayout.setContentScrimColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
     }
 
     @Override
@@ -155,7 +159,6 @@ public class FragmentAlbumDetail extends BaseFragment implements IAlbumDetailVie
         init();
         enableDoBack();
         mainColor = ContextCompat.getColor(getContext(), R.color.colorPrimary);
-        statusbarColor = ContextCompat.getColor(getContext(), R.color.colorPrimaryDark);
     }
 
     private void init() {
@@ -166,7 +169,7 @@ public class FragmentAlbumDetail extends BaseFragment implements IAlbumDetailVie
             Bitmap bitmap = BitmapFactory.decodeFile(album.getCoverPath());
             bitmap = Common.changeBitmapContrastBrightness(bitmap, 1, -50);
             albumCover.setImageBitmap(bitmap);
-            handler.post(new LoadAlbumCoverAndToolbarColor(bitmap));
+            handler.post(new GetMainColorForToolbar(bitmap));
 
         }
         setupToolbar();
@@ -195,7 +198,6 @@ public class FragmentAlbumDetail extends BaseFragment implements IAlbumDetailVie
     }
 
     private void setupToolbar() {
-        if (mToolbar == null) Log.d("fragment album detail", "tool bar null");
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setSupportActionBar(mToolbar);
         ActionBar actionBar = activity.getSupportActionBar();
@@ -236,6 +238,12 @@ public class FragmentAlbumDetail extends BaseFragment implements IAlbumDetailVie
         super.onDestroy();
         mPresenter.detachView();
     }
+    @Override
+    public void onDetach() {
+        if(Common.isLollipop())
+            getActivity().getWindow().setStatusBarColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+        super.onDetach();
+    }
 
     @Override
     protected int getLayout() {
@@ -256,7 +264,7 @@ public class FragmentAlbumDetail extends BaseFragment implements IAlbumDetailVie
     @Override
     public void setListSong(ArrayList<Song> lstSong) {
         this.lstSong = lstSong;
-        mSongAdapter = new SongAdapter(getActivity(), lstSong,R.layout.item_song);
+        mSongAdapter = new SongAdapter(getActivity(), lstSong, R.layout.item_song);
         mSongAdapter.setRecyclerItemClickListener(this);
         rvSongList.setAdapter(mSongAdapter);
     }
@@ -266,27 +274,4 @@ public class FragmentAlbumDetail extends BaseFragment implements IAlbumDetailVie
         mPresenter.onItemClick(view, position);
     }
 
-    @Override
-    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-        //Initialize the size of the scroll
-        if (scrollRange == -1) {
-            scrollRange = appBarLayout.getTotalScrollRange();
-        }
-
-        Log.d("offset", verticalOffset + "");
-        Log.d("maxRange", appBarLayout.getTotalScrollRange() + "");
-        Window window = getActivity().getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        //Check if the view is collapsed
-        if (scrollRange + verticalOffset == 0) {
-            mToolbar.setBackgroundColor(mainColor);
-            if (Common.isLollipop())
-                window.setStatusBarColor(statusbarColor);
-        } else {
-            mToolbar.setBackgroundColor(0);
-            if (Common.isLollipop())
-                window.setStatusBarColor(statusbarColor);
-        }
-    }
 }

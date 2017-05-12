@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
@@ -108,6 +110,11 @@ public class PlaylistDetailActivity extends BaseActivity implements IMusicServic
         tvTitle.setText(playList.getTitle());
 
         this.mPlayList = playList;
+    }
+
+    @Override
+    protected ArrayList getSearchResultList(String query) {
+        return null;
     }
 
     @Override

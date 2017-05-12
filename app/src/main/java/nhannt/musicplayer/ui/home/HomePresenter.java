@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Handler;
 import android.view.View;
 
+import java.util.ArrayList;
+
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.service.MusicService;
 import nhannt.musicplayer.utils.App;
@@ -19,10 +21,12 @@ public class HomePresenter implements IHomePresenter, View.OnClickListener {
 
     private MusicService mService;
     private IHomeView mView;
-    private Handler handler;
+    private static Handler handler;
+    private IHomeInteractor mInteractor;
 
     public HomePresenter() {
         handler = new Handler();
+        mInteractor = new HomeInteractor();
     }
 
     @Override
@@ -78,7 +82,7 @@ public class HomePresenter implements IHomePresenter, View.OnClickListener {
     private Runnable mUpdateTimeTask = new Runnable() {
         @Override
         public void run() {
-            if(mView == null) return;
+            if (mView == null) return;
             mService = mView.getMusicService();
             if (mService != null) {
                 if (mService.getState() == MusicService.MusicState.Playing) {
@@ -103,5 +107,20 @@ public class HomePresenter implements IHomePresenter, View.OnClickListener {
     @Override
     public BroadcastReceiver getReceiver() {
         return receiver;
+    }
+
+    @Override
+    public ArrayList searchArtistDetail(String query, int id) {
+        return mInteractor.searchArtist(query, id);
+    }
+
+    @Override
+    public ArrayList searchAlbumDetail(String query, int id) {
+        return mInteractor.searchAlbum(query, id);
+    }
+
+    @Override
+    public ArrayList searchAll(String query) {
+        return mInteractor.searchAll(query);
     }
 }

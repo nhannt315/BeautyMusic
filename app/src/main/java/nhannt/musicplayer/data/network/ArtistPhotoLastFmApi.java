@@ -30,12 +30,19 @@ public class ArtistPhotoLastFmApi {
     private String artistName;
     private Context context;
     private boolean isAnimate = false;
+    private ArtistPhotoListener listener;
 
     public ArtistPhotoLastFmApi(Context context, String artistName, ImageView imgArtist, boolean isAnimate) {
         this.imgArtist = imgArtist;
         this.artistName = artistName;
         this.context = context;
         this.isAnimate = isAnimate;
+    }
+
+    public ArtistPhotoLastFmApi(Context context, String artistName, ArtistPhotoListener listener) {
+        this.artistName = artistName;
+        this.context = context;
+        this.listener = listener;
     }
 
     public void execute() {
@@ -55,21 +62,27 @@ public class ArtistPhotoLastFmApi {
                                 JSONArray photoList = artist.optJSONArray("image");
                                 JSONObject photo = photoList.optJSONObject(2);
                                 String url = photo.optString("#text");
-                                if (isAnimate)
+                                if (listener != null) {
+                                    listener.onSuccess(url);
+                                } else if (isAnimate) {
                                     Glide.with(context).load(url).diskCacheStrategy(DiskCacheStrategy.ALL)
                                             .placeholder(R.drawable.google_play_music_logo).diskCacheStrategy(DiskCacheStrategy.ALL).crossFade()
                                             .fitCenter().into(imgArtist);
-                                else
+                                } else {
                                     Glide.with(context).load(url).diskCacheStrategy(DiskCacheStrategy.ALL)
                                             .placeholder(R.drawable.google_play_music_logo).crossFade()
                                             .fitCenter().dontAnimate().into(imgArtist);
+                                }
+
+
                             }
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                if(listener!=null)
+                    listener.onError(context.getString(R.string.error_fetching_data));
             }
         });
         VolleyConnection.getInstance(context).addRequestToQueue(jsonObjectRequest);

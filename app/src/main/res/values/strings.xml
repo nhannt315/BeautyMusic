@@ -52,6 +52,7 @@
     <string name="failed_to_create_playlist">Failed to create playlist</string>
     <string name="time">TIME</string>
     <string name="search">Search</string>
+    <string name="error_fetching_data">Error fetching data</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

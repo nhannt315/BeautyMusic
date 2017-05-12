@@ -1,10 +1,11 @@
 package nhannt.musicplayer.ui.artistdetail;
 
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -12,17 +13,19 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 
 import java.util.ArrayList;
 
@@ -31,7 +34,6 @@ import butterknife.ButterKnife;
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.adapter.AlbumAdapter;
 import nhannt.musicplayer.adapter.SongAdapter;
-import nhannt.musicplayer.data.network.ArtistPhotoLastFmApi;
 import nhannt.musicplayer.interfaces.IMusicServiceConnection;
 import nhannt.musicplayer.interfaces.RecyclerItemClickListener;
 import nhannt.musicplayer.objectmodel.Album;
@@ -51,7 +53,8 @@ import nhannt.musicplayer.utils.Navigator;
  * Use the {@link FragmentArtistDetail#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentArtistDetail extends BaseFragment implements IArtistDetailView, AppBarLayout.OnOffsetChangedListener,RecyclerItemClickListener {
+public class FragmentArtistDetail extends BaseFragment implements IArtistDetailView, RecyclerItemClickListener {
+    public static final String TAG = FragmentArtistDetail.class.getName();
 
     private static final String KEY_ARTIST = "key_artist";
     private static final String KEY_IS_TRANSITION = "key_is_transition_artist";
@@ -67,20 +70,51 @@ public class FragmentArtistDetail extends BaseFragment implements IArtistDetailV
     protected CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.iv_artist_cover_artist_detail)
     protected ImageView imageArtistCover;
+    @BindView(R.id.img_trans_artist)
+    protected ImageView imgTransArtist;
     @BindView(R.id.rv_song_list_artist_detail)
     protected RecyclerView rvSongList;
 
     private Artist mArtist;
     private boolean isTransition = false;
     private String transitionName;
-    private int scrollRange = -1;
     private AlbumAdapter albumAdapter;
     private ArrayList<Album> lstAlbum;
 
     private SongAdapter songAdapter;
     private ArrayList<Song> lstSongs;
     private IArtistDetailPresenter mPresenter;
+    private int mainColor;
+    private int statusBarColor;
+    private int diffColor = 987670;
+    private static Handler handler;
 
+
+    private class GetMainColorForToolbar implements Runnable {
+        Bitmap bitmap;
+
+        public GetMainColorForToolbar(Bitmap bitmap) {
+            this.bitmap = bitmap;
+        }
+
+        @Override
+        public void run() {
+            Palette palette = Palette.from(bitmap).generate();
+            Palette.Swatch swatch = palette.getLightVibrantSwatch();
+            if (swatch != null)
+                mainColor = swatch.getRgb();
+            else {
+                swatch = palette.getLightMutedSwatch();
+                if (swatch != null) {
+                    mainColor = swatch.getRgb();
+                }
+            }
+            statusBarColor = mainColor - diffColor;
+            collapsingToolbarLayout.setContentScrimColor(mainColor);
+            if (Common.isLollipop())
+                getActivity().getWindow().setStatusBarColor(statusBarColor);
+        }
+    }
 
     public FragmentArtistDetail() {
         // Required empty public constructor
@@ -121,16 +155,17 @@ public class FragmentArtistDetail extends BaseFragment implements IArtistDetailV
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
-        initControls();
         mPresenter = new ArtistDetailPresenter();
         mPresenter.attachedView(this);
         mPresenter.getListData(getArtistId());
+        initControls();
         enableDoBack();
+        mainColor = ContextCompat.getColor(getContext(), R.color.colorPrimary);
+        handler = new Handler();
     }
 
     private void initControls() {
         setHasOptionsMenu(true);
-        mAppBar.addOnOffsetChangedListener(this);
         setupCollaspingToolbar();
         setupToolbar();
         setupRecyclerView();
@@ -138,7 +173,7 @@ public class FragmentArtistDetail extends BaseFragment implements IArtistDetailV
         if (Common.isLollipop() && isTransition) {
             imageArtistCover.setTransitionName(transitionName);
         }
-        new ArtistPhotoLastFmApi(getContext(), mArtist.getName(), imageArtistCover, true).execute();
+        mPresenter.getArtistPhoto(mArtist.getName());
 
     }
 
@@ -158,11 +193,20 @@ public class FragmentArtistDetail extends BaseFragment implements IArtistDetailV
         collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar);
         collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedAppBarPlus1);
         collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppBarPlus1);
+        collapsingToolbarLayout.setContentScrimColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+    }
+
+    @Override
+    public void onDetach() {
+        if(Common.isLollipop())
+            getActivity().getWindow().setStatusBarColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+        super.onDetach();
     }
 
     @Override
     public void doBack() {
         mPresenter.cancelFetchingData();
+
     }
 
     @Override
@@ -199,14 +243,36 @@ public class FragmentArtistDetail extends BaseFragment implements IArtistDetailV
     @Override
     public void setListSong(ArrayList<Song> lstSongs) {
         this.lstSongs = lstSongs;
-        songAdapter = new SongAdapter(getContext(), this.lstSongs,R.layout.item_song);
+        songAdapter = new SongAdapter(getContext(), this.lstSongs, R.layout.item_song);
         rvSongList.setAdapter(songAdapter);
         songAdapter.setRecyclerItemClickListener(this);
         songAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void artistPhotoSuccess(String url) {
+        Glide.with(getContext()).load(url).asBitmap().placeholder(R.drawable.google_play_music_logo)
+                .listener(new RequestListener<String, Bitmap>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<Bitmap> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Bitmap resource, String model, Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        handler.post(new GetMainColorForToolbar(resource));
+                        return false;
+                    }
+                })
+                .into(imageArtistCover);
+    }
+
+    @Override
+    public void artistPhotoError(String message) {
+
+    }
+
     private void setupToolbar() {
-        if (mToolbar == null) Log.d("fragment album detail", "tool bar null");
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setSupportActionBar(mToolbar);
         ActionBar actionBar = activity.getSupportActionBar();
@@ -224,31 +290,10 @@ public class FragmentArtistDetail extends BaseFragment implements IArtistDetailV
         });
     }
 
-    @TargetApi(21)
-    @Override
-    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-        //Initialize the size of the scroll
-        if (scrollRange == -1) {
-            scrollRange = appBarLayout.getTotalScrollRange();
-        }
-        Window window = getActivity().getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        //Check if the view is collapsed
-        if (scrollRange + verticalOffset == 0) {
-            mToolbar.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-            if (Common.isLollipop())
-                window.setStatusBarColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryDark));
-        } else {
-            mToolbar.setBackgroundColor(0);
-            if (Common.isLollipop())
-                window.setStatusBarColor(0);
-        }
-    }
 
     @Override
     public void onItemClickListener(View view, final int position) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.item_album_artist:
                 ImageView albumCover = (ImageView) view.findViewById(R.id.iv_cover_item_album);
                 Navigator.navigateToAlbumDetail(getContext(), lstAlbum.get(position), albumCover);
@@ -270,4 +315,5 @@ public class FragmentArtistDetail extends BaseFragment implements IArtistDetailV
         }
 
     }
+
 }

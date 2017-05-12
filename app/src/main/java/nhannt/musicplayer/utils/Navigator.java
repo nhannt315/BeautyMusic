@@ -45,7 +45,7 @@ public class Navigator {
 
         fragmentTransaction
 //                .hide(activity.getSupportFragmentManager().findFragmentById(R.id.container))
-                .replace(R.id.container, desFragment)
+                .replace(R.id.container, desFragment,FragmentAlbumDetail.TAG)
                 .addToBackStack(FragmentAlbumDetail.TAG)
                 .commit();
     }
@@ -72,7 +72,7 @@ public class Navigator {
 
         fragmentTransaction
 //                .hide(activity.getSupportFragmentManager().findFragmentById(R.id.container))
-                .replace(R.id.container, desFragment)
+                .replace(R.id.container, desFragment,FragmentArtistDetail.TAG)
                 .addToBackStack(FragmentAlbumDetail.TAG)
                 .commit();
     }
@@ -97,8 +97,7 @@ public class Navigator {
     }
 
     public static void navigateToEqualizer(Context context, int REQUEST_EQ) {
-        Intent intent = new Intent(AudioEffect
-                .ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL);
+        Intent intent = new Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL);
 
         if ((intent.resolveActivity(context.getPackageManager()) != null)) {
             ((AppCompatActivity) context).startActivityForResult(intent, REQUEST_EQ);

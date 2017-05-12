@@ -12,6 +12,7 @@ import nhannt.musicplayer.ui.base.BasePresenter;
 
 public interface IArtistDetailPresenter extends BasePresenter<IArtistDetailView> {
     void getListData(int artistId);
+    void getArtistPhoto(String artistName);
     void finishGetListSong(ArrayList<Song> lstSongs);
     void finishGetListAlbums(ArrayList<Album> lstAlbums);
 }

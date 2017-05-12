@@ -14,4 +14,6 @@ public interface IArtistDetailView extends BaseView {
     int getArtistId();
     void setListAlbum(ArrayList<Album> lstAlbum);
     void setListSong(ArrayList<Song> lstAlbum);
+    void artistPhotoSuccess(String url);
+    void artistPhotoError(String message);
 }

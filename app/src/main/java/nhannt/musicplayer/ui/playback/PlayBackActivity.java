@@ -182,6 +182,11 @@ public class PlayBackActivity extends BaseActivity implements IPlayBackView, IMu
     }
 
     @Override
+    protected ArrayList getSearchResultList(String query) {
+        return null;
+    }
+
+    @Override
     public void onBackPressed() {
         if (searchView.isSearchOpen())
             searchView.closeSearch();
