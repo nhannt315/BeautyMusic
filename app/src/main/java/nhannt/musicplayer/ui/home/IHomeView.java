@@ -1,5 +1,7 @@
 package nhannt.musicplayer.ui.home;
 
+import java.util.ArrayList;
+
 import nhannt.musicplayer.service.MusicService;
 import nhannt.musicplayer.ui.base.BaseView;
 
@@ -16,5 +18,7 @@ public interface IHomeView extends BaseView {
     MusicService getMusicService();
 
     void updateSongInfo();
+
+    void updateSearch(ArrayList lstResult);
 
 }

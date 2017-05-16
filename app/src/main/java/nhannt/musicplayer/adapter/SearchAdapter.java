@@ -123,7 +123,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchHold
                 holder.artistName.setText(artist.getName());
                 holder.artistInfo.setText(artist.getNumberOfSong() + " " + mContext.getString(R.string.song_low_case) +
                         " | " + artist.getNumberOfAlbum() + " " + mContext.getString(R.string.album_low_case));
-                new ArtistPhotoLastFmApi(mContext, artist.getName(), holder.artistCover, false);
+                new ArtistPhotoLastFmApi(mContext, artist.getName(), holder.artistCover, false).execute();
                 break;
             case ITEM_HEADER_TYPE:
                 String header = (String) lstResult.get(position);

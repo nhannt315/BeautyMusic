@@ -26,7 +26,7 @@ public class HomePresenter implements IHomePresenter, View.OnClickListener {
 
     public HomePresenter() {
         handler = new Handler();
-        mInteractor = new HomeInteractor();
+        mInteractor = new HomeInteractor(this);
     }
 
     @Override
@@ -95,6 +95,11 @@ public class HomePresenter implements IHomePresenter, View.OnClickListener {
     };
 
     @Override
+    public void searchComplete(ArrayList lstResult) {
+        mView.updateSearch(lstResult);
+    }
+
+    @Override
     public void onDestroy() {
 
     }
@@ -110,17 +115,17 @@ public class HomePresenter implements IHomePresenter, View.OnClickListener {
     }
 
     @Override
-    public ArrayList searchArtistDetail(String query, int id) {
-        return mInteractor.searchArtist(query, id);
+    public void searchArtistDetail(String query, int id) {
+        mInteractor.searchArtist(query, id);
     }
 
     @Override
-    public ArrayList searchAlbumDetail(String query, int id) {
-        return mInteractor.searchAlbum(query, id);
+    public void searchAlbumDetail(String query, int id) {
+        mInteractor.searchAlbum(query, id);
     }
 
     @Override
-    public ArrayList searchAll(String query) {
-        return mInteractor.searchAll(query);
+    public void searchAll(String query) {
+        mInteractor.searchAll(query);
     }
 }

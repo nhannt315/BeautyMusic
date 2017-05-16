@@ -13,6 +13,9 @@ public class Artist implements Serializable {
     private int numberOfAlbum;
     private int numberOfSong;
 
+    public Artist() {
+    }
+
     public Artist(int id, String name) {
         this.id = id;
         this.name = name;
@@ -23,6 +26,26 @@ public class Artist implements Serializable {
         this.name = name;
         this.numberOfAlbum = numberOfAlbum;
         this.numberOfSong = numberOfSong;
+    }
+
+    public Artist copy(){
+        return new Artist(this.id,this.name,this.numberOfAlbum, this.numberOfSong);
+    }
+
+    @Override
+    public int hashCode() {
+        int prime = 31;
+        return prime + this.id + this.name.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Artist) {
+            Artist temp = (Artist) obj;
+            if (this.hashCode() == temp.hashCode())
+                return true;
+        }
+        return false;
     }
 
     public int getId() {

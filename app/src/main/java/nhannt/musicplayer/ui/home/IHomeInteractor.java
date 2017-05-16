@@ -9,9 +9,10 @@ import java.util.ArrayList;
 
 public interface IHomeInteractor {
 
-    ArrayList searchAll(String query);
+    void searchAll(String query);
 
-    ArrayList searchAlbum(String query, int searchId);
+    void searchAlbum(String query, int searchId);
 
-    ArrayList searchArtist(String query, int searchId);
+    void searchArtist(String query, int searchId);
+
 }

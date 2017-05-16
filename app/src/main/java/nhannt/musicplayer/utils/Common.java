@@ -7,6 +7,9 @@ import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.os.Build;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Created by nhannt on 09/03/2017.
  */
@@ -37,17 +40,21 @@ public class Common {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
     }
 
-    public static int percentSeekbar(int msCurrent, int msSongEnd) {
-        return (int) ((msCurrent * 100.0f) / msSongEnd);
-    }
-
-    public static int msCurrentSeekbar(int percent, int msSongEnd) {
-        return (msSongEnd * percent) / 100;
-    }
 
     public static String miliSecondToString(long pTime) {
         int second = (int) (pTime/1000);
         return String.format("%02d:%02d", second/60, second % 60);
+    }
+    public static <T> List<T> safeSubList(List<T> list, int fromIndex, int toIndex) {
+        int size = list.size();
+        if (fromIndex >= size || toIndex <= 0 || fromIndex >= toIndex) {
+            return Collections.emptyList();
+        }
+
+        fromIndex = Math.max(0, fromIndex);
+        toIndex = Math.min(size, toIndex);
+
+        return list.subList(fromIndex, toIndex);
     }
 
     /**

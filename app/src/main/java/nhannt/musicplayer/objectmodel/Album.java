@@ -26,6 +26,27 @@ public class Album implements Serializable {
         this.songCount = songCount;
     }
 
+    public Album copy() {
+        return new Album(this.id, this.title, this.artist, this.coverPath, this.year, this.songCount);
+    }
+
+    @Override
+    public int hashCode() {
+        int prime = 31;
+        return prime + this.id + this.title.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Album) {
+            Album temp = (Album) obj;
+            if (this.hashCode() == temp.hashCode())
+                return true;
+        }
+
+        return false;
+    }
+
     public int getId() {
         return id;
     }

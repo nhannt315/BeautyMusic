@@ -182,8 +182,8 @@ public class PlayBackActivity extends BaseActivity implements IPlayBackView, IMu
     }
 
     @Override
-    protected ArrayList getSearchResultList(String query) {
-        return null;
+    protected void search(String query) {
+        mPresenter.search(query);
     }
 
     @Override
@@ -263,6 +263,11 @@ public class PlayBackActivity extends BaseActivity implements IPlayBackView, IMu
     @Override
     public void notifyDataSetChanged() {
         this.songAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void updateSearchView(ArrayList lstResult) {
+        super.updateSearchView(lstResult);
     }
 
     @Override

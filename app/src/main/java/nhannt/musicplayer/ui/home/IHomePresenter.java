@@ -13,7 +13,8 @@ import nhannt.musicplayer.ui.base.BasePresenter;
 public interface IHomePresenter extends BasePresenter<IHomeView> {
 
     BroadcastReceiver getReceiver();
-    ArrayList searchArtistDetail(String query,int id);
-    ArrayList searchAlbumDetail(String query,int id);
-    ArrayList searchAll(String query);
+    void searchArtistDetail(String query,int id);
+    void searchAlbumDetail(String query,int id);
+    void searchAll(String query);
+    void searchComplete(ArrayList lstResult);
 }

@@ -7,7 +7,11 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 
+import java.util.ArrayList;
+
 import nhannt.musicplayer.R;
+import nhannt.musicplayer.objectmodel.Album;
+import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.service.MusicService;
 import nhannt.musicplayer.ui.custom.CircularSeekBar;
 
@@ -20,6 +24,7 @@ public class PlayBackPresenter implements IPlayBackPresenter {
     private MusicService mService;
     private Handler mHandler;
     private boolean isSeeking;
+    private IPlayBackInteractor mInteractor;
 
     @Override
     public void cancelFetchingData() {
@@ -32,6 +37,7 @@ public class PlayBackPresenter implements IPlayBackPresenter {
         mService = mView.getMusicService();
         isSeeking = false;
         mHandler = new Handler();
+        mInteractor = new PlayBackInteractor(this);
     }
 
     @Override
@@ -92,6 +98,21 @@ public class PlayBackPresenter implements IPlayBackPresenter {
                 mService.playSong();
                 break;
         }
+    }
+
+    @Override
+    public void search(String query) {
+        mService = mView.getMusicService();
+        if (mService == null){
+            mView.updateSearchView(new ArrayList());
+            return;
+        }
+        mInteractor.search(mService.getLstSong(), query);
+    }
+
+    @Override
+    public void searchComplete(ArrayList lstResult) {
+        mView.updateSearchView(lstResult);
     }
 
     private Runnable mUpdateTimeTask = new Runnable() {

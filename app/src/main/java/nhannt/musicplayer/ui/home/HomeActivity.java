@@ -19,7 +19,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,10 +43,8 @@ import nhannt.musicplayer.objectmodel.Artist;
 import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.service.MusicService;
 import nhannt.musicplayer.ui.albumdetail.FragmentAlbumDetail;
-import nhannt.musicplayer.ui.albumdetail.IAlbumDetailView;
 import nhannt.musicplayer.ui.artistdetail.FragmentArtistDetail;
 import nhannt.musicplayer.ui.base.BaseActivity;
-import nhannt.musicplayer.ui.base.BaseFragment;
 import nhannt.musicplayer.ui.custom.MaterialSearchView;
 import nhannt.musicplayer.ui.itemlist.FragmentMain;
 import nhannt.musicplayer.ui.playback.PlayBackActivity;
@@ -320,22 +317,21 @@ public class HomeActivity extends BaseActivity implements IMusicServiceConnectio
     }
 
     @Override
-    protected ArrayList getSearchResultList(String query) {
+    protected void search(String query) {
         FragmentMain fragmentMain = (FragmentMain) getSupportFragmentManager().findFragmentByTag(FragmentMain.TAG);
         if (fragmentMain != null && fragmentMain.isVisible()) {
-            return mPresenter.searchAll(query);
+            mPresenter.searchAll(query);
         }
 
         FragmentAlbumDetail fragmentAlbum = (FragmentAlbumDetail) getSupportFragmentManager().findFragmentByTag(FragmentAlbumDetail.TAG);
         if (fragmentAlbum != null && fragmentAlbum.isVisible()) {
-            return mPresenter.searchAlbumDetail(query, fragmentAlbum.getAlbum().getId());
+            mPresenter.searchAlbumDetail(query, fragmentAlbum.getAlbum().getId());
         }
 
         FragmentArtistDetail fragmentArtist = (FragmentArtistDetail) getSupportFragmentManager().findFragmentByTag(FragmentArtistDetail.TAG);
         if (fragmentArtist != null && fragmentArtist.isVisible()) {
-            return mPresenter.searchArtistDetail(query, fragmentArtist.getArtistId());
+            mPresenter.searchArtistDetail(query, fragmentArtist.getArtistId());
         }
-        return new ArrayList();
     }
 
     @Override
@@ -402,6 +398,11 @@ public class HomeActivity extends BaseActivity implements IMusicServiceConnectio
                 .centerCrop()
                 .placeholder(R.drawable.music_background)
                 .into(albumCoverHeader);
+    }
+
+    @Override
+    public void updateSearch(ArrayList lstResult) {
+        super.updateSearchView(lstResult);
     }
 
     @Override

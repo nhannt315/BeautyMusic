@@ -79,6 +79,7 @@ public class PlaylistDetailActivity extends BaseActivity implements IMusicServic
         mRvSongList.addItemDecoration(new DividerDecoration(this));
     }
 
+
     @Override
     protected int getLayout() {
         return R.layout.activity_playlist_detail;
@@ -113,8 +114,7 @@ public class PlaylistDetailActivity extends BaseActivity implements IMusicServic
     }
 
     @Override
-    protected ArrayList getSearchResultList(String query) {
-        return null;
+    protected void search(String query) {
     }
 
     @Override

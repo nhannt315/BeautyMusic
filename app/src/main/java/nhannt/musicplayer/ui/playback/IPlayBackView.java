@@ -24,4 +24,6 @@ public interface IPlayBackView extends BaseView {
     void setItems(ArrayList<Song> lstItem);
 
     void notifyDataSetChanged();
+
+    void updateSearchView(ArrayList lstResult);
 }

@@ -21,12 +21,8 @@ import java.util.ArrayList;
 import butterknife.ButterKnife;
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.adapter.SearchAdapter;
-import nhannt.musicplayer.data.provider.MediaProvider;
 import nhannt.musicplayer.interfaces.IMusicServiceConnection;
 import nhannt.musicplayer.interfaces.OnBackPressedListener;
-import nhannt.musicplayer.objectmodel.Album;
-import nhannt.musicplayer.objectmodel.Artist;
-import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.service.MusicService;
 import nhannt.musicplayer.ui.custom.MaterialSearchView;
 
@@ -76,40 +72,22 @@ public abstract class BaseActivity extends AppCompatActivity implements Material
         }
         Log.d("searchKey", newText);
         lstSearchResult.clear();
-//        MediaProvider mediaProvider = MediaProvider.getInstance();
-//        ArrayList<Song> lstSong = mediaProvider.searchSongs(newText);
-//        ArrayList<Album> lstAlbum = mediaProvider.searchAlbums(newText);
-//        ArrayList<Artist> lstArtist = mediaProvider.searchArtists(newText);
-//
-//        if (!lstSong.isEmpty()) {
-//            lstSearchResult.add(getString(R.string.song));
-//            Log.d("searchSongSize",lstSong.size()+"");
-//            if (lstSong.size() > 5)
-//                lstSong = new ArrayList<>(lstSong.subList(0, 4));
-//            lstSearchResult.addAll(lstSong);
-//        }
-//        if (!lstAlbum.isEmpty()) {
-//            lstSearchResult.add(getString(R.string.album));
-//            Log.d("searchAlbumSize",lstAlbum.size()+"");
-//            if (lstAlbum.size() > 5)
-//                lstAlbum = new ArrayList<>(lstAlbum.subList(0, 4));
-//            lstSearchResult.addAll(lstAlbum);
-//        }
-//        if (!lstArtist.isEmpty()) {
-//            lstSearchResult.add(getString(R.string.artist));
-//            Log.d("searchArtistSize",lstArtist.size()+"");
-//            if (lstArtist.size() > 5)
-//                lstArtist = new ArrayList<>(lstArtist.subList(0, 4));
-//            lstSearchResult.addAll(lstArtist);
-//        }
-        lstSearchResult = getSearchResultList(newText);
-        searchAdapter.updateSearchResult(lstSearchResult);
-        searchView.setAdapter(searchAdapter);
-        searchAdapter.notifyDataSetChanged();
+        search(newText);
+//        lstSearchResult = search(newText);
+//        searchAdapter.updateSearchResult(lstSearchResult);
+//        searchView.setAdapter(searchAdapter);
+//        searchAdapter.notifyDataSetChanged();
         return false;
     }
 
-    protected abstract ArrayList getSearchResultList(String query);
+    protected void updateSearchView(ArrayList lstResult) {
+        lstSearchResult = lstResult;
+        searchAdapter.updateSearchResult(lstSearchResult);
+        searchView.setAdapter(searchAdapter);
+        searchAdapter.notifyDataSetChanged();
+    }
+
+    protected abstract void search(String query);
 
     @Override
     public void onBackPressed() {

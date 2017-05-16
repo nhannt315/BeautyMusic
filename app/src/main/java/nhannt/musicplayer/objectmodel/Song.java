@@ -9,6 +9,7 @@ import java.io.Serializable;
 public class Song implements Serializable {
     private String id;
     private int albumId;
+    private int artistId;
     private String title;
     private String album;
     private String artist;
@@ -38,6 +39,15 @@ public class Song implements Serializable {
         this.year = year;
         this.duration = duration;
         this.songPath = songPath;
+    }
+
+
+    public int getArtistId() {
+        return artistId;
+    }
+
+    public void setArtistId(int artistId) {
+        this.artistId = artistId;
     }
 
     public String getId() {
