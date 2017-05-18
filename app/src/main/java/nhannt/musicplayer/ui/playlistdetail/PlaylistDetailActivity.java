@@ -11,11 +11,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.adapter.SongAdapter;
 import nhannt.musicplayer.interfaces.IMusicServiceConnection;
@@ -104,9 +101,8 @@ public class PlaylistDetailActivity extends BaseActivity implements IMusicServic
     public void setPlaylistDetail(PlayList playList) {
         mSongAdapter = new SongAdapter(this, playList.getLstSong(),R.layout.item_song_playlist_detail);
         mSongAdapter.setTextColor(ContextCompat.getColor(this, R.color.white));
-        ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(mSongAdapter);
-        scaleInAnimationAdapter.setFirstOnly(false);
-        mRvSongList.setAdapter(scaleInAnimationAdapter);
+        mSongAdapter.setAnimator(mRvSongList);
+        mRvSongList.setAdapter(mSongAdapter);
         mSongAdapter.notifyDataSetChanged();
         tvTitle.setText(playList.getTitle());
 

@@ -11,4 +11,6 @@ import nhannt.musicplayer.ui.base.BaseView;
 
 public interface IPlaylistListView extends BaseView {
     void setPlaylist(ArrayList<PlayList> itemList);
+    void showProgress();
+    void hideProgress();
 }

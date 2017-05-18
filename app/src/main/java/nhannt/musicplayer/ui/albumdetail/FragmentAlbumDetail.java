@@ -93,8 +93,7 @@ public class FragmentAlbumDetail extends BaseFragment implements IAlbumDetailVie
             }
             statusbarColor = mainColor - diffColor;
             collapsingToolbarLayout.setContentScrimColor(mainColor);
-            if (Common.isLollipop())
-                getActivity().getWindow().setStatusBarColor(statusbarColor);
+            collapsingToolbarLayout.setStatusBarScrimColor(statusbarColor);
         }
     }
 
@@ -151,6 +150,7 @@ public class FragmentAlbumDetail extends BaseFragment implements IAlbumDetailVie
         collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedAppBarPlus1);
         collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppBarPlus1);
         collapsingToolbarLayout.setContentScrimColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+
     }
 
     @Override

@@ -1,35 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
+    app:theme="@style/AppTheme2"
     tools:context="nhannt.musicplayer.ui.playlistdetail.PlaylistDetailActivity">
-    <ImageView
-        android:id="@+id/iv_background_playlist_detail"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:background="@drawable/music_background"/>
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/transparent_50"/>
-    <TextView
-        android:id="@+id/tv_playlist_title_detail"
-        android:layout_marginTop="40dp"
-        android:layout_marginLeft="30dp"
-        android:text="@string/play_list"
-        android:textColor="@color/white"
-        android:textSize="30dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_song_playlist_detail"
-        android:layout_below="@id/tv_playlist_title_detail"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/iv_background_playlist_detail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:background="@drawable/music_background"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/transparent_50"/>
+        <TextView
+            android:id="@+id/tv_playlist_title_detail"
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="30dp"
+            android:text="@string/play_list"
+            android:textColor="@color/white"
+            android:textSize="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_song_playlist_detail"
+            android:layout_below="@id/tv_playlist_title_detail"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+    </RelativeLayout>
 
-</RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

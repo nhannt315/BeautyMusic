@@ -36,12 +36,20 @@ public class CreatePlaylistDialog extends Dialog implements View.OnClickListener
 
     private Song itemSongToAdd;
     private DBQuery dbQuery = DBQuery.getInstance(mContext);
+    private boolean isInsertSong = false;
 
 
     public CreatePlaylistDialog(@NonNull Context context, Song song) {
         super(context);
         this.mContext = context;
         this.itemSongToAdd = song;
+        isInsertSong = true;
+    }
+
+    public CreatePlaylistDialog(@NonNull Context context) {
+        super(context);
+        this.mContext = context;
+        isInsertSong = false;
     }
 
     @Override
@@ -88,12 +96,14 @@ public class CreatePlaylistDialog extends Dialog implements View.OnClickListener
                 long result = dbQuery.insertPlaylist(title);
                 if (result > 0) {
                     PlayList playList = dbQuery.getLastInsertedPlaylist();
-                    boolean isSuccess = dbQuery.insertSongToPlaylist(playList.getId(), itemSongToAdd.getId());
-                    if (isSuccess)
-                        Toast.makeText(mContext, "1" + mContext.getString(R.string.song_added_to_playlist), Toast.LENGTH_SHORT).show();
-                    else
-                        Toast.makeText(mContext, mContext.getString(R.string.failed_insert_song), Toast.LENGTH_SHORT).show();
-                }else{
+                    if (isInsertSong) {
+                        boolean isSuccess = dbQuery.insertSongToPlaylist(playList.getId(), itemSongToAdd.getId());
+                        if (isSuccess)
+                            Toast.makeText(mContext, "1" + mContext.getString(R.string.song_added_to_playlist), Toast.LENGTH_SHORT).show();
+                        else
+                            Toast.makeText(mContext, mContext.getString(R.string.failed_insert_song), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
                     Toast.makeText(mContext, mContext.getString(R.string.failed_to_create_playlist), Toast.LENGTH_SHORT).show();
                 }
 

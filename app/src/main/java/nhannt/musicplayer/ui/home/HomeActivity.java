@@ -106,7 +106,6 @@ public class HomeActivity extends BaseActivity implements IMusicServiceConnectio
         initToolbar();
         ButterKnife.bind(this);
         initSetting();
-
         if (Common.isMarshMallow()) {
             if (!checkPermission()) {
                 requestPermission();

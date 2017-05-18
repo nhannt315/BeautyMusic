@@ -10,12 +10,13 @@
 
     <dimen name="card_staggered_height">240dp</dimen>
     <dimen name="card_insets">8dp</dimen>
-    <dimen name="item_decoration">1dp</dimen>
+    <dimen name="item_decoration">5dp</dimen>
     <dimen name="column_width">250dp</dimen>
     <dimen name="playing_bar_height">55dp</dimen>
     <dimen name="notification_height">64dp</dimen>
     <dimen name="item_album_artist_detail_spacing">4dp</dimen>
     <dimen name="item_search_spacing">4dp</dimen>
+    <dimen name="item_playlist_spacing">10dp</dimen>
 
     <dimen name="search_icon_padding">12dp</dimen>
     <dimen name="search_view_text_padding">8dp</dimen>

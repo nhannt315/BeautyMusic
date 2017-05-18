@@ -57,7 +57,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
             holder.tvAutoPlaylist.setVisibility(View.VISIBLE);
         else
             holder.tvAutoPlaylist.setVisibility(View.INVISIBLE);
-        holder.tvPlaylistNumber.setText("" + position);
+        holder.tvPlaylistNumber.setText(String.valueOf(position));
         holder.tvPlaylistTitle.setText(item.getTitle());
         if (item.getLstSong() != null)
             holder.tvPlaylistSongNum.setText(item.getLstSong().size() + " " + mContext.getString(R.string.song_low_case));
@@ -67,7 +67,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
             holder.tvPlaylistTitle.setTransitionName("transition_playList_title" + position);
             holder.ivBackGround.setTransitionName("transition_playlist_cover" + position);
         }
-        if(item.getLstSong() != null) {
+        if(item.getLstSong() != null && item.getLstSong().size() > 0) {
             String backgroundPath = item.getLstSong()
                     .get(0).getCoverPath();
             Log.d(item.getTitle(), item.getLstSong().size() + "");

@@ -10,8 +10,6 @@ import android.view.View;
 import java.util.ArrayList;
 
 import nhannt.musicplayer.R;
-import nhannt.musicplayer.objectmodel.Album;
-import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.service.MusicService;
 import nhannt.musicplayer.ui.custom.CircularSeekBar;
 

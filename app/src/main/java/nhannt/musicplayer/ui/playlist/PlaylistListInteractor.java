@@ -18,11 +18,19 @@ import nhannt.musicplayer.utils.App;
 
 public class PlaylistListInteractor implements IPlaylistListInteractor {
     private LoaderListener listener;
+    private LoadListPlaylist asysnLoadPlayList;
 
     @Override
     public void loadPlaylistList(LoaderListener listener) {
         this.listener = listener;
-        new LoadListPlaylist().execute();
+        asysnLoadPlayList = new LoadListPlaylist();
+        asysnLoadPlayList.execute();
+    }
+
+    @Override
+    public void cancel() {
+        if(asysnLoadPlayList != null)
+            asysnLoadPlayList.cancel(true);
     }
 
     private class LoadListPlaylist extends AsyncTask<Void, Void, Void> {

@@ -8,7 +8,7 @@ import nhannt.musicplayer.objectmodel.PlayList;
  * Created by NhanNT on 04/21/2017.
  */
 
-public class PlaylistListPresenter implements IPlaylistListPresenter  {
+public class PlaylistListPresenter implements IPlaylistListPresenter {
 
     IPlaylistListView mView;
     IPlaylistListInteractor mInteractor;
@@ -30,6 +30,7 @@ public class PlaylistListPresenter implements IPlaylistListPresenter  {
 
     @Override
     public void onResume() {
+        mView.showProgress();
         mInteractor.loadPlaylistList(this);
     }
 
@@ -40,11 +41,13 @@ public class PlaylistListPresenter implements IPlaylistListPresenter  {
 
     @Override
     public void cancelFetchingData() {
-
+        mInteractor.cancel();
     }
 
     @Override
     public void onFinished(ArrayList<PlayList> itemList) {
+        if(mView == null) return;
+        mView.hideProgress();
         mView.setPlaylist(itemList);
     }
 }

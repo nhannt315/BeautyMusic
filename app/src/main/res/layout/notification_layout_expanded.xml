@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="13sp"
-            android:text="Khánh Phương"
+            android:text="@string/artist"
             android:maxLines="1"
             android:id="@+id/tv_song_info_notification" />
         <LinearLayout

@@ -1,8 +1,6 @@
 package nhannt.musicplayer.ui.home;
 
 
-import java.util.ArrayList;
-
 /**
  * Created by NhanNT on 05/12/2017.
  */

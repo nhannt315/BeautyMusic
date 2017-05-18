@@ -19,7 +19,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
+
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
 
@@ -48,9 +49,9 @@ public class FragmentSongList extends BaseFragment implements ItemListMvpView<So
     public static final String TITLE = "Songs";
     private ArrayList<Song> mData;
     @BindView(R.id.rv_song_list_main)
-    RecyclerView rvSongList;
-    @BindView(R.id.progress_bar)
-    ProgressBar progressBar;
+    protected RecyclerView rvSongList;
+    @BindView(R.id.loading_indicator)
+    protected AVLoadingIndicatorView mLoadingIndicator;
 
     private SongListPresenter songPresenter;
     private SongAdapter songAdapter;
@@ -209,13 +210,13 @@ public class FragmentSongList extends BaseFragment implements ItemListMvpView<So
 
     @Override
     public void showProgress() {
-        progressBar.setVisibility(View.VISIBLE);
+        mLoadingIndicator.setVisibility(View.VISIBLE);
         rvSongList.setVisibility(View.GONE);
     }
 
     @Override
     public void hideProgress() {
-        progressBar.setVisibility(View.GONE);
+        mLoadingIndicator.setVisibility(View.GONE);
         rvSongList.setVisibility(View.VISIBLE);
     }
 

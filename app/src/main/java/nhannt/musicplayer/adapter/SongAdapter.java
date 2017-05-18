@@ -22,6 +22,7 @@ import nhannt.musicplayer.R;
 import nhannt.musicplayer.interfaces.IMusicServiceConnection;
 import nhannt.musicplayer.interfaces.RecyclerItemClickListener;
 import nhannt.musicplayer.objectmodel.Song;
+import nhannt.musicplayer.recyclerhelper.RecyclerViewAnimator;
 import nhannt.musicplayer.service.MusicService;
 import nhannt.musicplayer.service.MusicServiceConnection;
 import nhannt.musicplayer.ui.dialog.PlaylistDialog;
@@ -41,6 +42,8 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
     private int layoutId = R.layout.item_song;
     private int textColor;
     private boolean[] playState;
+    private RecyclerViewAnimator mAnimator;
+    private boolean usingAnimator = false;
 
     public SongAdapter(Context mContext, ArrayList<Song> mData) {
         this.mContext = mContext;
@@ -49,6 +52,11 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
         textColor = ContextCompat.getColor(mContext,R.color.blue);
         if (mData != null)
             playState = new boolean[mData.size()];
+    }
+
+    public void setAnimator(RecyclerView recyclerView){
+        usingAnimator = true;
+        mAnimator = new RecyclerViewAnimator(recyclerView);
     }
 
     public void setTextColor(int textColor) {
@@ -76,6 +84,10 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
     @Override
     public SongViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mLayoutInflater.inflate(layoutId, parent, false);
+
+        if(usingAnimator && mAnimator != null)
+            mAnimator.onCreateViewHolder(view);
+
         return new SongViewHolder(view);
     }
 
@@ -112,6 +124,9 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
                 .dontAnimate()
                 .into(holder.ivAlbumCover);
         holder.position = position;
+
+        if(usingAnimator && mAnimator != null)
+            mAnimator.onBindViewHolder(holder.itemView, position);
     }
 
     @Override

@@ -291,6 +291,8 @@ public class FragmentArtistDetail extends BaseFragment implements IArtistDetailV
     }
 
 
+
+
     @Override
     public void onItemClickListener(View view, final int position) {
         switch (view.getId()) {

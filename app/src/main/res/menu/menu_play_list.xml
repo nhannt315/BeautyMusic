@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/btn_new_playList"
+        android:title="@string/create_new_playlist"
+        />
+    <item
+        android:id="@+id/btn_shuffle_all_menu"
+        android:title="@string/shuffle_all"
+        />
+    <item
+        android:id="@+id/btn_equalizer"
+        android:title="@string/equalizer"/>
+</menu>

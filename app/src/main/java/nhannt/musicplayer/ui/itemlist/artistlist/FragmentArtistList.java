@@ -12,7 +12,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
+
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
 
@@ -41,14 +42,17 @@ public class FragmentArtistList extends BaseFragment implements ItemListMvpView<
     public static final String TAG = FragmentArtistList.class.getName();
     public static final String TITLE = "Artist";
 
-    @BindView(R.id.progress_bar_artist)
-    protected ProgressBar mProgressBar;
+    @BindView(R.id.loading_indicator)
+    protected AVLoadingIndicatorView mLoadingIndicator;
     @BindView(R.id.rv_artist_list_main)
     protected RecyclerView mRvArtistList;
 
     private ArtistListPresenter artistPresenter;
     private ArtistAdapter mAdapter;
     private ArrayList<Artist> mData;
+
+    private DividerDecoration dividerItemDecoration;
+    private ItemOffsetDecoration itemOffsetDecoration;
 
     public FragmentArtistList() {
         // Required empty public constructor
@@ -82,18 +86,24 @@ public class FragmentArtistList extends BaseFragment implements ItemListMvpView<
 
     private void refreshRecyclerView() {
         RecyclerView.LayoutManager layoutManager;
-        if (mAdapter.getLayoutType() == ArtistAdapter.LAYOUT_ITEM_LIST) {
+
+        if (mAdapter.getLayoutType() == mAdapter.LAYOUT_ITEM_LIST) {
             layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+            mRvArtistList.removeItemDecoration(itemOffsetDecoration);
+            mRvArtistList.addItemDecoration(dividerItemDecoration);
         } else {
             layoutManager = new GridLayoutManager(getActivity(), 2);
+            mRvArtistList.removeItemDecoration(dividerItemDecoration);
+            mRvArtistList.addItemDecoration(itemOffsetDecoration);
         }
+
         mRvArtistList.setAdapter(mAdapter);
         mRvArtistList.setLayoutManager(layoutManager);
     }
 
     private void setUpRecyclerView() {
-        mRvArtistList.addItemDecoration(new DividerDecoration(getActivity()));
-        mRvArtistList.addItemDecoration(new ItemOffsetDecoration(getActivity(), R.dimen.item_decoration));
+        dividerItemDecoration = new DividerDecoration(getActivity());
+        itemOffsetDecoration = new ItemOffsetDecoration(getActivity(), R.dimen.item_decoration);
         mRvArtistList.setItemAnimator(new DefaultItemAnimator());
     }
 
@@ -112,8 +122,23 @@ public class FragmentArtistList extends BaseFragment implements ItemListMvpView<
         mData = itemList;
         mAdapter = new ArtistAdapter(getActivity(), itemList);
         mAdapter.setLayoutType(Setting.getInstance().get(Common.ARTIST_VIEW_MODE, ArtistAdapter.LAYOUT_ITEM_LIST));
+
+        if (mAdapter.getLayoutType() == mAdapter.LAYOUT_ITEM_LIST)
+            mRvArtistList.addItemDecoration(dividerItemDecoration);
+        else if (mAdapter.getLayoutType() == mAdapter.LAYOUT_ITEM_GRID)
+            mRvArtistList.addItemDecoration(itemOffsetDecoration);
+
         mAdapter.setRecyclerItemClickListener(this);
-        refreshRecyclerView();
+
+        RecyclerView.LayoutManager layoutManager;
+        if (mAdapter.getLayoutType() == ArtistAdapter.LAYOUT_ITEM_LIST) {
+            layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        } else {
+            layoutManager = new GridLayoutManager(getActivity(), 2);
+        }
+        mRvArtistList.setAdapter(mAdapter);
+        mRvArtistList.setLayoutManager(layoutManager);
+
         artistPresenter.sortAs(Setting.getInstance().get(Common.ARTIST_SORT_MODE, ItemListPresenter.SORT_AS_A_Z));
     }
 
@@ -172,13 +197,13 @@ public class FragmentArtistList extends BaseFragment implements ItemListMvpView<
 
     @Override
     public void showProgress() {
-        mProgressBar.setVisibility(View.VISIBLE);
+        mLoadingIndicator.setVisibility(View.VISIBLE);
         mRvArtistList.setVisibility(View.GONE);
     }
 
     @Override
     public void hideProgress() {
-        mProgressBar.setVisibility(View.GONE);
+        mLoadingIndicator.setVisibility(View.GONE);
         mRvArtistList.setVisibility(View.VISIBLE);
     }
 

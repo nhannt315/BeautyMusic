@@ -1,11 +1,8 @@
 package nhannt.musicplayer.ui.playback;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.data.provider.MediaProvider;

@@ -3,13 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="nhannt.musicplayer.ui.itemlist.albumlist.FragmentAlbumList">
 
     <!-- TODO: Update blank fragment layout -->
-    <ProgressBar
-        android:id="@+id/progress_bar_ablum"
+    <com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/loading_indicator"
         android:layout_centerInParent="true"
         android:visibility="gone"
+        app:indicatorName="BallSpinFadeLoaderIndicator"
+        app:indicatorColor="@color/colorRed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <android.support.v7.widget.RecyclerView

@@ -18,15 +18,27 @@
     </android.support.design.widget.AppBarLayout>
 
     <!-- TODO: Update blank fragment layout -->
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_playlist"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="40dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginTop="40dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        ></android.support.v7.widget.RecyclerView>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <com.wang.avi.AVLoadingIndicatorView
+            android:id="@+id/loading_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:indicatorName="BallClipRotateIndicator"
+            app:indicatorColor="@color/colorRed"
+            android:visibility="gone"
+            android:layout_gravity="center"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_playlist"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="40dp"
+
+            ></android.support.v7.widget.RecyclerView>
+    </FrameLayout>
+
 
 </android.support.design.widget.CoordinatorLayout>

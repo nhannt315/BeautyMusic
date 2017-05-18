@@ -32,6 +32,8 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.wang.avi.AVLoadingIndicatorView;
+
 import java.lang.reflect.Field;
 import java.util.List;
 
@@ -60,6 +62,7 @@ public class MaterialSearchView extends FrameLayout {
     private ImageButton mVoiceBtn;
     private ImageButton mEmptyBtn;
     private RelativeLayout mSearchTopBar;
+    private AVLoadingIndicatorView mLoadingIndicator;
 
     private CharSequence mOldQueryText;
     private CharSequence mUserQuery;
@@ -160,6 +163,7 @@ public class MaterialSearchView extends FrameLayout {
         mVoiceBtn = (ImageButton) mSearchLayout.findViewById(R.id.action_voice_btn);
         mEmptyBtn = (ImageButton) mSearchLayout.findViewById(R.id.action_empty_btn);
         mTintView = mSearchLayout.findViewById(R.id.transparent_view);
+        mLoadingIndicator = (AVLoadingIndicatorView) mSearchLayout.findViewById(R.id.loading_indicator);
 
         mSearchSrcTextView.setOnClickListener(mOnClickListener);
         mBackBtn.setOnClickListener(mOnClickListener);
@@ -250,12 +254,17 @@ public class MaterialSearchView extends FrameLayout {
 
         mUserQuery = text;
         boolean hasText = !TextUtils.isEmpty(text);
+        dismissSuggestions();
+        mLoadingIndicator.setVisibility(VISIBLE);
+
         if (hasText) {
             mEmptyBtn.setVisibility(VISIBLE);
+
             showVoice(false);
 
         } else {
             mEmptyBtn.setVisibility(GONE);
+            mLoadingIndicator.setVisibility(GONE);
             showVoice(true);
         }
         if (mOnQueryChangeListener != null)
@@ -407,6 +416,7 @@ public class MaterialSearchView extends FrameLayout {
      * @param adapter
      */
     public void setAdapter(RecyclerView.Adapter adapter) {
+        mLoadingIndicator.setVisibility(GONE);
         mAdapter = adapter;
         mSuggestionsRv.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -558,6 +568,7 @@ public class MaterialSearchView extends FrameLayout {
         if (!isSearchOpen()) {
             return;
         }
+        hideKeyboard(mSearchLayout);
         AnimationUtils.AnimationListener animationListener = new AnimationUtils.AnimationListener() {
 
             @Override
