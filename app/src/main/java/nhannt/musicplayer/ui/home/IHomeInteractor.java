@@ -5,7 +5,7 @@ package nhannt.musicplayer.ui.home;
  * Created by NhanNT on 05/12/2017.
  */
 
-public interface IHomeInteractor {
+interface IHomeInteractor {
 
     void searchAll(String query);
 

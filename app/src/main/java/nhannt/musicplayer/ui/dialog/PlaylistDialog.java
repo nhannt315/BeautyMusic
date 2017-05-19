@@ -29,13 +29,12 @@ import nhannt.musicplayer.utils.SystemUtils;
 
 public class PlaylistDialog extends Dialog implements RecyclerItemClickListener, View.OnClickListener {
 
-    private Context mContext;
-    private Song itemSongToAdd;
+    private final Context mContext;
+    private final Song itemSongToAdd;
     @BindView(R.id.tv_create_new_playlist)
     protected AppCompatTextView tvCreatePlaylist;
     @BindView(R.id.rv_playlist_list_dialog)
     protected RecyclerView rvPlaylist;
-    private PlaylistDialogAdapter mAdapter;
     private ArrayList<PlayList> mPlaylistList;
 
     public PlaylistDialog(@NonNull Context context, Song song) {
@@ -60,8 +59,8 @@ public class PlaylistDialog extends Dialog implements RecyclerItemClickListener,
     }
 
     private void setUpPlaylist() {
-        mPlaylistList = DBQuery.getInstance(mContext).getAllPlayList();
-        mAdapter = new PlaylistDialogAdapter(mContext, mPlaylistList);
+        mPlaylistList = DBQuery.getInstance().getAllPlayList();
+        PlaylistDialogAdapter mAdapter = new PlaylistDialogAdapter(mContext, mPlaylistList);
         mAdapter.setmClickListener(this);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
         rvPlaylist.setLayoutManager(layoutManager);

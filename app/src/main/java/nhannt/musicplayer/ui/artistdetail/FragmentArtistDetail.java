@@ -78,20 +78,16 @@ public class FragmentArtistDetail extends BaseFragment implements IArtistDetailV
     private Artist mArtist;
     private boolean isTransition = false;
     private String transitionName;
-    private AlbumAdapter albumAdapter;
     private ArrayList<Album> lstAlbum;
 
-    private SongAdapter songAdapter;
     private ArrayList<Song> lstSongs;
     private IArtistDetailPresenter mPresenter;
     private int mainColor;
-    private int statusBarColor;
-    private int diffColor = 987670;
     private static Handler handler;
 
 
     private class GetMainColorForToolbar implements Runnable {
-        Bitmap bitmap;
+        final Bitmap bitmap;
 
         public GetMainColorForToolbar(Bitmap bitmap) {
             this.bitmap = bitmap;
@@ -109,7 +105,7 @@ public class FragmentArtistDetail extends BaseFragment implements IArtistDetailV
                     mainColor = swatch.getRgb();
                 }
             }
-            statusBarColor = mainColor - diffColor;
+            int statusBarColor = mainColor - 987670;
             collapsingToolbarLayout.setContentScrimColor(mainColor);
             if (Common.isLollipop())
                 getActivity().getWindow().setStatusBarColor(statusBarColor);
@@ -219,10 +215,6 @@ public class FragmentArtistDetail extends BaseFragment implements IArtistDetailV
         return R.layout.fragment_artist_detail;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
 
     @Override
     public int getArtistId() {
@@ -232,7 +224,7 @@ public class FragmentArtistDetail extends BaseFragment implements IArtistDetailV
     @Override
     public void setListAlbum(ArrayList<Album> lstAlbum) {
         this.lstAlbum = lstAlbum;
-        albumAdapter = new AlbumAdapter(getContext(), lstAlbum);
+        AlbumAdapter albumAdapter = new AlbumAdapter(getContext(), lstAlbum);
         albumAdapter.setLayoutId(R.layout.item_album_artist_detail);
         albumAdapter.setAnimate(true);
         albumAdapter.setRecyclerItemClickListener(this);
@@ -243,7 +235,7 @@ public class FragmentArtistDetail extends BaseFragment implements IArtistDetailV
     @Override
     public void setListSong(ArrayList<Song> lstSongs) {
         this.lstSongs = lstSongs;
-        songAdapter = new SongAdapter(getContext(), this.lstSongs, R.layout.item_song);
+        SongAdapter songAdapter = new SongAdapter(getContext(), this.lstSongs, R.layout.item_song);
         rvSongList.setAdapter(songAdapter);
         songAdapter.setRecyclerItemClickListener(this);
         songAdapter.notifyDataSetChanged();

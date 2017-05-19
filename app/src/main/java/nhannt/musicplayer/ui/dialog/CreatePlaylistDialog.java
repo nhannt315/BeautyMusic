@@ -26,7 +26,7 @@ import nhannt.musicplayer.objectmodel.Song;
 
 public class CreatePlaylistDialog extends Dialog implements View.OnClickListener {
 
-    private Context mContext;
+    private final Context mContext;
     @BindView(R.id.tv_create_playlist)
     protected TextView tvCreate;
     @BindView(R.id.tv_cancel_create_playlist)
@@ -35,7 +35,7 @@ public class CreatePlaylistDialog extends Dialog implements View.OnClickListener
     protected EditText edtPlaylist;
 
     private Song itemSongToAdd;
-    private DBQuery dbQuery = DBQuery.getInstance(mContext);
+    private final DBQuery dbQuery = DBQuery.getInstance();
     private boolean isInsertSong = false;
 
 

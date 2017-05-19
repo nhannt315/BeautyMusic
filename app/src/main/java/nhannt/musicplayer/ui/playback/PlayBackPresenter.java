@@ -56,7 +56,7 @@ public class PlayBackPresenter implements IPlayBackPresenter {
 
     }
 
-    BroadcastReceiver receiver = new BroadcastReceiver() {
+    final BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -113,7 +113,7 @@ public class PlayBackPresenter implements IPlayBackPresenter {
         mView.updateSearchView(lstResult);
     }
 
-    private Runnable mUpdateTimeTask = new Runnable() {
+    private final Runnable mUpdateTimeTask = new Runnable() {
         @Override
         public void run() {
             if(mView == null) return;

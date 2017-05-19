@@ -18,7 +18,7 @@ import nhannt.musicplayer.utils.App;
 
 public class MediaProvider {
     private static MediaProvider mInstance = null;
-    private Context mContext;
+    private final Context mContext;
 
     public static MediaProvider getInstance() {
         if (mInstance == null) {

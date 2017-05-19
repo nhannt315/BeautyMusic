@@ -103,7 +103,7 @@ public abstract class BaseFragment extends Fragment implements BaseView,OnBackPr
     }
 
     protected void popCurrentFragment() {
-        ((AppCompatActivity) getActivity()).getSupportFragmentManager().popBackStack();
+        getActivity().getSupportFragmentManager().popBackStack();
     }
 
     @Override

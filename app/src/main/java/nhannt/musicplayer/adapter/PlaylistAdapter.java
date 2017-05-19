@@ -31,9 +31,9 @@ import nhannt.musicplayer.utils.Common;
 
 public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.PlaylistBigViewHolder> {
 
-    private Context mContext;
-    private ArrayList<PlayList> mData;
-    private LayoutInflater mLayoutInflater;
+    private final Context mContext;
+    private final ArrayList<PlayList> mData;
+    private final LayoutInflater mLayoutInflater;
 
     public PlaylistAdapter(Context mContext, ArrayList<PlayList> mData) {
         this.mContext = mContext;
@@ -45,8 +45,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
     @Override
     public PlaylistBigViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mLayoutInflater.inflate(R.layout.playlist_big_item, parent, false);
-        PlaylistBigViewHolder holder = new PlaylistBigViewHolder(view);
-        return holder;
+        return new PlaylistBigViewHolder(view);
     }
 
     @Override
@@ -62,12 +61,12 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         if (item.getLstSong() != null)
             holder.tvPlaylistSongNum.setText(item.getLstSong().size() + " " + mContext.getString(R.string.song_low_case));
         else
-            holder.tvPlaylistSongNum.setText("0 " + mContext.getString(R.string.song));
+            holder.tvPlaylistSongNum.setText(mContext.getString(R.string.song));
         if (Common.isLollipop()) {
             holder.tvPlaylistTitle.setTransitionName("transition_playList_title" + position);
             holder.ivBackGround.setTransitionName("transition_playlist_cover" + position);
         }
-        if(item.getLstSong() != null && item.getLstSong().size() > 0) {
+        if (item.getLstSong() != null && item.getLstSong().size() > 0) {
             String backgroundPath = item.getLstSong()
                     .get(0).getCoverPath();
             Log.d(item.getTitle(), item.getLstSong().size() + "");
@@ -108,19 +107,23 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         @Override
         public void onClick(View v) {
             Intent intentToDetail = new Intent(mContext, PlaylistDetailActivity.class);
-            if(Common.isLollipop()) {
+            if (Common.isLollipop()) {
                 intentToDetail.putExtra(PlaylistDetailActivity.KEY_COVER_TRANSITION, ivBackGround.getTransitionName());
                 intentToDetail.putExtra(PlaylistDetailActivity.KEY_TITLE_TRANSITION, tvPlaylistTitle.getTransitionName());
             }
             intentToDetail.putExtra(PlaylistDetailActivity.KEY_PLAYLIST_ID, mData.get(pos).getId());
-            intentToDetail.putExtra(PlaylistDetailActivity.KEY_COVER_PATH, mData.get(pos).getLstSong().get(0).getCoverPath());
-            if(Common.isLollipop()){
-                Pair<View,String> pairCover = Pair.create((View) ivBackGround, ivBackGround.getTransitionName());
-                Pair<View,String> pairTitle = Pair.create((View) tvPlaylistTitle, tvPlaylistTitle.getTransitionName());
+            String path = null;
+            if (mData.get(pos).getLstSong().size() > 0)
+                path = mData.get(pos).getLstSong().get(0).getCoverPath();
+            intentToDetail.putExtra(PlaylistDetailActivity.KEY_COVER_PATH, path);
+
+            if (Common.isLollipop()) {
+                Pair<View, String> pairCover = Pair.create((View) ivBackGround, ivBackGround.getTransitionName());
+                Pair<View, String> pairTitle = Pair.create((View) tvPlaylistTitle, tvPlaylistTitle.getTransitionName());
                 ActivityOptionsCompat options = ActivityOptionsCompat.
-                        makeSceneTransitionAnimation((AppCompatActivity)mContext, pairCover, pairTitle);
+                        makeSceneTransitionAnimation((AppCompatActivity) mContext, pairCover, pairTitle);
                 mContext.startActivity(intentToDetail, options.toBundle());
-            }else{
+            } else {
                 mContext.startActivity(intentToDetail);
             }
         }

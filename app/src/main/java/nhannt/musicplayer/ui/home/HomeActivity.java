@@ -83,7 +83,6 @@ public class HomeActivity extends BaseActivity implements IMusicServiceConnectio
     protected NavigationView navigationView;
     private MusicService mService;
     private HomePresenter mPresenter;
-    private View header;
     private TextView tvSongTitleHeader;
     private TextView tvArtistHeader;
     private ImageView albumCoverHeader;
@@ -160,16 +159,13 @@ public class HomeActivity extends BaseActivity implements IMusicServiceConnectio
         switch (navItemIndex) {
             case 0:
                 // library
-                FragmentMain homeFragment = FragmentMain.newInstance();
-                return homeFragment;
+                return FragmentMain.newInstance();
             case 1:
                 // playlist
-                FragmentPlaylist fragmentPlaylist = FragmentPlaylist.newInstance();
-                return fragmentPlaylist;
+                return FragmentPlaylist.newInstance();
             case 2:
                 // playing queue
-                FragmentPlayingQueue fragment = FragmentPlayingQueue.newInstance();
-                return fragment;
+                return FragmentPlayingQueue.newInstance();
             default:
                 return FragmentMain.newInstance();
         }
@@ -185,7 +181,7 @@ public class HomeActivity extends BaseActivity implements IMusicServiceConnectio
 
         navigationView.getMenu().performIdentifierAction(R.id.btn_lib_nav, 0);
 
-        header = navigationView.getHeaderView(0);
+        View header = navigationView.getHeaderView(0);
         tvSongTitleHeader = (TextView) header.findViewById(R.id.tv_song_name_nav_header);
         tvArtistHeader = (TextView) header.findViewById(R.id.tv_artist_name_nav_header);
         albumCoverHeader = (ImageView) header.findViewById(R.id.iv_nav_header_back_ground);
@@ -194,12 +190,6 @@ public class HomeActivity extends BaseActivity implements IMusicServiceConnectio
         mPresenter = new HomePresenter();
         mPresenter.attachedView(this);
         addOnMusicServiceListener(this);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        return super.onCreateOptionsMenu(menu);
     }
 
     @Override

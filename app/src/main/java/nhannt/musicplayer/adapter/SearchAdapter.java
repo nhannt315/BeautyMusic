@@ -33,8 +33,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchHold
     private static final int ITEM_HEADER_TYPE = 4;
     private ArrayList lstResult;
 
-    private Context mContext;
-    private LayoutInflater mLayoutInflater;
+    private final Context mContext;
+    private final LayoutInflater mLayoutInflater;
     private RecyclerItemClickListener itemClickListener;
 
 
@@ -76,7 +76,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchHold
     @Override
     public SearchHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mLayoutInflater.inflate(R.layout.item_song, parent, false);
-        ;
         switch (viewType) {
             case ITEM_SONG_TYPE:
                 view = mLayoutInflater.inflate(R.layout.item_song, parent, false);
@@ -145,20 +144,20 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchHold
     public class SearchHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         int pos;
 
-        protected TextView songTitle;
-        protected TextView songArtist;
-        protected ImageView albumCoverSong;
-        protected ImageView popupMenuSong;
+         TextView songTitle;
+         TextView songArtist;
+         ImageView albumCoverSong;
+         ImageView popupMenuSong;
 
-        protected ImageView albumCoverAlbum;
-        protected TextView albumArtist;
-        protected TextView albumTitle;
+         ImageView albumCoverAlbum;
+         TextView albumArtist;
+         TextView albumTitle;
 
-        protected ImageView artistCover;
-        protected TextView artistName;
-        protected TextView artistInfo;
+         ImageView artistCover;
+         TextView artistName;
+         TextView artistInfo;
 
-        protected TextView headerTitle;
+         TextView headerTitle;
 
         public SearchHolder(View itemView) {
             super(itemView);

@@ -9,6 +9,6 @@ import nhannt.musicplayer.ui.base.BasePresenter;
  * Created by nhannt on 07/04/2017.
  */
 
-public interface IPlayingQueuePresenter extends BasePresenter<IPlayingQueueView> {
+interface IPlayingQueuePresenter extends BasePresenter<IPlayingQueueView> {
     void loadingFinished(ArrayList<Song> lstSong);
 }

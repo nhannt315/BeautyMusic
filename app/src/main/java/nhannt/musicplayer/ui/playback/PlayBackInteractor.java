@@ -17,7 +17,7 @@ import nhannt.musicplayer.utils.App;
 
 public class PlayBackInteractor implements IPlayBackInteractor {
 
-    private IPlayBackPresenter mPresenter;
+    private final IPlayBackPresenter mPresenter;
     private ArrayList<Song> lstSongPlaying;
     private String keyword;
     private SearchNowPlayingSong asyncSearch;

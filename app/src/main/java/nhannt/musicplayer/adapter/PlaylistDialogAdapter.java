@@ -21,13 +21,11 @@ import nhannt.musicplayer.objectmodel.PlayList;
 
 public class PlaylistDialogAdapter extends RecyclerView.Adapter<PlaylistDialogAdapter.PlaylistViewHolder> {
 
-    private Context mContext;
-    private ArrayList<PlayList> mData;
-    private LayoutInflater mLayoutInflater;
+    private final ArrayList<PlayList> mData;
+    private final LayoutInflater mLayoutInflater;
     private RecyclerItemClickListener mClickListener;
 
     public PlaylistDialogAdapter(Context mContext, ArrayList<PlayList> mData) {
-        this.mContext = mContext;
         this.mData = mData;
         mLayoutInflater = LayoutInflater.from(mContext);
     }
@@ -39,9 +37,8 @@ public class PlaylistDialogAdapter extends RecyclerView.Adapter<PlaylistDialogAd
     @Override
     public PlaylistViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mLayoutInflater.inflate(R.layout.item_playlist_dialog, parent,false);
-        PlaylistViewHolder holder = new PlaylistViewHolder(view);
 
-        return holder;
+        return new PlaylistViewHolder(view);
     }
 
     @Override

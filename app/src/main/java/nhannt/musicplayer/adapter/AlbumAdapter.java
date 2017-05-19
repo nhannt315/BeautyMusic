@@ -25,13 +25,13 @@ import nhannt.musicplayer.utils.Common;
  */
 
 public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder> {
-    public static int LAYOUT_ITEM_LIST = 0;
-    public static int LAYOUT_ITEM_GRID = 1;
+    public static final int LAYOUT_ITEM_LIST = 0;
+    public static final int LAYOUT_ITEM_GRID = 1;
 
-    private Context mContext;
-    private ArrayList<Album> mData;
+    private final Context mContext;
+    private final ArrayList<Album> mData;
     private int layoutType;
-    private LayoutInflater mLayoutInflater;
+    private final LayoutInflater mLayoutInflater;
     private RecyclerItemClickListener recyclerItemClickListener;
     private int layoutId = R.layout.item_album_list;
     private boolean isAnimate = false;

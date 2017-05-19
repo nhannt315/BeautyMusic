@@ -15,7 +15,7 @@ import nhannt.musicplayer.ui.itemlist.ItemListInteractor;
 
 public class ArtistListInteractor implements ItemListInteractor {
 
-    private MediaProvider mediaProvider = MediaProvider.getInstance();
+    private final MediaProvider mediaProvider = MediaProvider.getInstance();
     private AsyncTask<Void, Void, ArrayList<Artist>> asyncLoadArtist;
 
     @Override

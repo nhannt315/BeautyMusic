@@ -8,6 +8,6 @@ import nhannt.musicplayer.objectmodel.Song;
  * Created by NhanNT on 05/16/2017.
  */
 
-public interface IPlayBackInteractor {
+interface IPlayBackInteractor {
     void search(ArrayList<Song> lstSongPlaying, String keyword);
 }

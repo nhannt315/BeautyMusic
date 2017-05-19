@@ -9,6 +9,6 @@ import nhannt.musicplayer.ui.base.BaseView;
  * Created by nhannt on 07/04/2017.
  */
 
-public interface IPlayingQueueView extends BaseView {
+interface IPlayingQueueView extends BaseView {
     void setItems(ArrayList<Song> lstSong);
 }

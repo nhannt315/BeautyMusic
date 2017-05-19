@@ -13,7 +13,7 @@ import nhannt.musicplayer.interfaces.IMusicServiceConnection;
  */
 
 public class MusicServiceConnection {
-    Context context;
+    final Context context;
     MusicService mService;
     IMusicServiceConnection connection;
     Intent intent;
@@ -29,7 +29,7 @@ public class MusicServiceConnection {
         this.intent = intent;
     }
 
-    private ServiceConnection mConnection = new ServiceConnection() {
+    private final ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             mService = ((MusicService.LocalBinder) service).getService();

@@ -45,8 +45,8 @@
     <string name="last_added">Last Added</string>
     <string name="add_playlist">Add to playlist</string>
     <string name="enter_playlist_name">Enter playlist name</string>
-    <string name="cancel">CANCEL</string>
-    <string name="create">CREATE</string>
+    <string name="cancel">Cancel</string>
+    <string name="create">Create</string>
     <string name="song_added_to_playlist">songs added to playlist</string>
     <string name="failed_insert_song">Failed to insert song to playlist</string>
     <string name="failed_to_create_playlist">Failed to create playlist</string>

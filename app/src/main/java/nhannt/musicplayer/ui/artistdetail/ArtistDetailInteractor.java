@@ -17,7 +17,7 @@ import nhannt.musicplayer.utils.App;
 
 public class ArtistDetailInteractor implements IArtistDetailInteractor {
 
-    private IArtistDetailPresenter mPresenter;
+    private final IArtistDetailPresenter mPresenter;
 
     public ArtistDetailInteractor(IArtistDetailPresenter presenter){
         this.mPresenter = presenter;
@@ -29,8 +29,7 @@ public class ArtistDetailInteractor implements IArtistDetailInteractor {
 
             @Override
             protected ArrayList<Album> doInBackground(Integer... params) {
-                ArrayList<Album> lstAlbum = MediaProvider.getInstance().getListAlbumOfArtist(params[0]);
-                return lstAlbum;
+                return MediaProvider.getInstance().getListAlbumOfArtist(params[0]);
             }
 
             @Override
@@ -47,8 +46,7 @@ public class ArtistDetailInteractor implements IArtistDetailInteractor {
 
             @Override
             protected ArrayList<Song> doInBackground(Integer... params) {
-                ArrayList<Song> lstSong = MediaProvider.getInstance().getListSongOfArtist(params[0]);
-                return lstSong;
+                return MediaProvider.getInstance().getListSongOfArtist(params[0]);
             }
 
             @Override

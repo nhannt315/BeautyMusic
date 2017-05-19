@@ -17,9 +17,9 @@ import android.view.ViewAnimationUtils;
 
 public class AnimationUtils {
 
-    public static int ANIMATION_DURATION_SHORT = 150;
-    public static int ANIMATION_DURATION_MEDIUM = 400;
-    public static int ANIMATION_DURATION_LONG = 800;
+    public static final int ANIMATION_DURATION_SHORT = 150;
+    public static final int ANIMATION_DURATION_MEDIUM = 400;
+    public static final int ANIMATION_DURATION_LONG = 800;
 
     public interface AnimationListener {
         /**
@@ -100,7 +100,7 @@ public class AnimationUtils {
 
             @Override
             public void onAnimationCancel(Animator animation) {
-                listener.onAnimationEnd(view);;
+                listener.onAnimationEnd(view);
             }
 
             @Override

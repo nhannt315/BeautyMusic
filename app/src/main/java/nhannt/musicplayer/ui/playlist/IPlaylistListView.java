@@ -9,7 +9,7 @@ import nhannt.musicplayer.ui.base.BaseView;
  * Created by NhanNT on 04/21/2017.
  */
 
-public interface IPlaylistListView extends BaseView {
+interface IPlaylistListView extends BaseView {
     void setPlaylist(ArrayList<PlayList> itemList);
     void showProgress();
     void hideProgress();

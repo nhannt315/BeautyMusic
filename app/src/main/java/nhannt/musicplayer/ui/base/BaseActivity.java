@@ -132,7 +132,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Material
         this.iConnection = connection;
     }
 
-    public ServiceConnection connection = new ServiceConnection() {
+    public final ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             MusicService.LocalBinder binder = (MusicService.LocalBinder) service;

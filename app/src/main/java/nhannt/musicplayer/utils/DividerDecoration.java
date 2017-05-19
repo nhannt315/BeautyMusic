@@ -19,8 +19,8 @@ public class DividerDecoration extends RecyclerView.ItemDecoration {
 
     private static final int[] ATTRS = { android.R.attr.listDivider };
 
-    private Drawable mDivider;
-    private int mInsets;
+    private final Drawable mDivider;
+    private final int mInsets;
 
     public DividerDecoration(Context context) {
         TypedArray a = context.obtainStyledAttributes(ATTRS);

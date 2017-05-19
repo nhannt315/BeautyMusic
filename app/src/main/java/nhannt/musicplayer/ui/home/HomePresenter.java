@@ -22,7 +22,7 @@ public class HomePresenter implements IHomePresenter, View.OnClickListener {
     private MusicService mService;
     private IHomeView mView;
     private static Handler handler;
-    private IHomeInteractor mInteractor;
+    private final IHomeInteractor mInteractor;
 
     public HomePresenter() {
         handler = new Handler();
@@ -61,7 +61,7 @@ public class HomePresenter implements IHomePresenter, View.OnClickListener {
         }
     }
 
-    BroadcastReceiver receiver = new BroadcastReceiver() {
+    final BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -79,7 +79,7 @@ public class HomePresenter implements IHomePresenter, View.OnClickListener {
         mUpdateTimeTask.run();
     }
 
-    private Runnable mUpdateTimeTask = new Runnable() {
+    private final Runnable mUpdateTimeTask = new Runnable() {
         @Override
         public void run() {
             if (mView == null) return;

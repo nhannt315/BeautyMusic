@@ -20,8 +20,7 @@ public class AlbumDetailInteractor implements IAlbumDetailInteractor{
 
             @Override
             protected ArrayList<Song> doInBackground(Integer... params) {
-                ArrayList lstSong = MediaProvider.getInstance().getListSongOfAlbum(params[0]);
-                return lstSong;
+                return MediaProvider.getInstance().getListSongOfAlbum(params[0]);
             }
 
             @Override

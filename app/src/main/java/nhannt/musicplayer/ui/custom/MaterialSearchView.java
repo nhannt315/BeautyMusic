@@ -80,7 +80,7 @@ public class MaterialSearchView extends FrameLayout {
     private boolean allowVoiceSearch;
     private Drawable suggestionIcon;
 
-    private Context mContext;
+    private final Context mContext;
 
     public MaterialSearchView(Context context) {
         this(context, null);
@@ -302,9 +302,7 @@ public class MaterialSearchView extends FrameLayout {
     }
 
     public void showKeyboard(View view) {
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.GINGERBREAD_MR1 && view.hasFocus()) {
             view.clearFocus();
-        }
         view.requestFocus();
         InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(view, 0);
@@ -314,11 +312,7 @@ public class MaterialSearchView extends FrameLayout {
 
     @Override
     public void setBackground(Drawable background) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             mSearchTopBar.setBackground(background);
-        } else {
-            mSearchTopBar.setBackgroundDrawable(background);
-        }
     }
 
     @Override
@@ -359,11 +353,7 @@ public class MaterialSearchView extends FrameLayout {
     }
 
     public void setSuggestionBackground(Drawable background) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             mSuggestionsRv.setBackground(background);
-        } else {
-            mSuggestionsRv.setBackgroundDrawable(background);
-        }
     }
 
     public void setCursorDrawable(int drawable) {
@@ -401,14 +391,6 @@ public class MaterialSearchView extends FrameLayout {
         this.submit = submit;
     }
 
-    /**
-     * Set Suggest List OnItemClickListener
-     *
-     * @param listener
-     */
-    public void setOnItemClickListener(AdapterView.OnItemClickListener listener) {
-//        mSuggestionsRv.setOnItemClickListener(listener);
-    }
 
     /**
      * Set Adapter for suggestions list. Should implement Filterable.

@@ -10,7 +10,7 @@ import nhannt.musicplayer.ui.base.BaseView;
  * Created by NhanNT on 05/03/2017.
  */
 
-public interface IArtistDetailView extends BaseView {
+ interface IArtistDetailView extends BaseView {
     int getArtistId();
     void setListAlbum(ArrayList<Album> lstAlbum);
     void setListSong(ArrayList<Song> lstAlbum);

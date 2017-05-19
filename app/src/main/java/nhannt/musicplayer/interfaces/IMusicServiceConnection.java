@@ -7,5 +7,5 @@ import nhannt.musicplayer.service.MusicService;
  */
 
 public interface IMusicServiceConnection {
-    public void onConnected(MusicService service);
+    void onConnected(MusicService service);
 }

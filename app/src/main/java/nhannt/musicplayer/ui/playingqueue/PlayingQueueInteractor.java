@@ -15,7 +15,7 @@ import nhannt.musicplayer.utils.App;
  */
 
 public class PlayingQueueInteractor implements IPlayingQueueInteractor {
-    private IPlayingQueuePresenter mPresenter;
+    private final IPlayingQueuePresenter mPresenter;
 
     public PlayingQueueInteractor(IPlayingQueuePresenter mPresenter) {
         this.mPresenter = mPresenter;

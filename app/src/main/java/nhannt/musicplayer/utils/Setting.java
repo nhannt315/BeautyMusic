@@ -12,7 +12,6 @@ import android.preference.PreferenceManager;
 public class Setting {
     private static Setting mInstance;
     private SharedPreferences preferences;
-    private Context context;
 
     public static Setting getInstance() {
         if (mInstance == null)
@@ -22,7 +21,6 @@ public class Setting {
 
     // Initialize the internal setting
     public void init(Context context) {
-        this.context = context.getApplicationContext();
         this.preferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
     }
 

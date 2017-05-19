@@ -18,7 +18,7 @@ import nhannt.musicplayer.utils.App;
 
 public class PlaylistDetailInteractor implements IPlaylistDetailInteractor {
 
-    private IPlaylistDetailPresenter mPresenter;
+    private final IPlaylistDetailPresenter mPresenter;
 
     public PlaylistDetailInteractor(IPlaylistDetailPresenter presenter) {
         this.mPresenter = presenter;
@@ -41,14 +41,14 @@ public class PlaylistDetailInteractor implements IPlaylistDetailInteractor {
                                 lstSong, true);
                         break;
                     case FragmentPlaylist.RECENT_PLAYED_ID:
-                        lstSong = DBQuery.getInstance(App.getContext()).getListSongRecentPlay();
+                        lstSong = DBQuery.getInstance().getListSongRecentPlay();
                         playList = new PlayList(FragmentPlaylist.RECENT_PLAYED_ID,
                                 App.getContext().getString(R.string.recent_played), lstSong.size(),
                                 lstSong, true);
                         break;
                     default:
-                        lstSong = DBQuery.getInstance(App.getContext()).getListSongByPlaylist(params[0]);
-                        playList = DBQuery.getInstance(App.getContext()).getPlayListById(params[0]);
+                        lstSong = DBQuery.getInstance().getListSongByPlaylist(params[0]);
+                        playList = DBQuery.getInstance().getPlayListById(params[0]);
                         break;
                 }
 

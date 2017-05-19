@@ -13,7 +13,7 @@ public class PlayingQueuePresenter implements IPlayingQueuePresenter {
 
     private IPlayingQueueView mView;
     private MusicServiceConnection mConnection;
-    private IPlayingQueueInteractor mInteractor;
+    private final IPlayingQueueInteractor mInteractor;
 
     public PlayingQueuePresenter() {
         mInteractor = new PlayingQueueInteractor(this);

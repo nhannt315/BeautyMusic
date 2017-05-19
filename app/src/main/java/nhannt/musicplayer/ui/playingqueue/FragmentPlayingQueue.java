@@ -69,10 +69,6 @@ public class FragmentPlayingQueue extends BaseFragment implements IPlayingQueueV
         return inflater.inflate(R.layout.fragment_playing_queue, container, false);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {

@@ -34,9 +34,9 @@ import nhannt.musicplayer.utils.App;
 
 public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder> {
 
-    private Context mContext;
-    private ArrayList<Song> mData;
-    private LayoutInflater mLayoutInflater;
+    private final Context mContext;
+    private final ArrayList<Song> mData;
+    private final LayoutInflater mLayoutInflater;
     private RecyclerItemClickListener recyclerItemClickListener;
     private MusicServiceConnection mConnection;
     private int layoutId = R.layout.item_song;

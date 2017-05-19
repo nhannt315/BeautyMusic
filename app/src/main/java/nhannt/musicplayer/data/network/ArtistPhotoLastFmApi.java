@@ -27,8 +27,8 @@ public class ArtistPhotoLastFmApi {
     private static final String URL_2 = "&api_key=" + LAST_FM_API_KEY + "&format=json";
 
     private ImageView imgArtist;
-    private String artistName;
-    private Context context;
+    private final String artistName;
+    private final Context context;
     private boolean isAnimate = false;
     private ArtistPhotoListener listener;
 
@@ -85,6 +85,6 @@ public class ArtistPhotoLastFmApi {
                     listener.onError(context.getString(R.string.error_fetching_data));
             }
         });
-        VolleyConnection.getInstance(context).addRequestToQueue(jsonObjectRequest);
+        VolleyConnection.getInstance().addRequestToQueue(jsonObjectRequest);
     }
 }

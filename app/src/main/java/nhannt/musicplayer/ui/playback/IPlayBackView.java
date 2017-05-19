@@ -10,7 +10,7 @@ import nhannt.musicplayer.ui.base.BaseView;
  * Created by nhannt on 04/04/2017.
  */
 
-public interface IPlayBackView extends BaseView {
+interface IPlayBackView extends BaseView {
     void updateSeekBar(int currentTime, int totalTime);
 
     void updateButtonState();

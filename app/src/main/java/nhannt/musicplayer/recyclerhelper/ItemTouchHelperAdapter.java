@@ -1,5 +1,8 @@
 package nhannt.musicplayer.recyclerhelper;
 
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
+
 /**
  * Created by nhannt on 07/04/2017.
  * Interface to listen for a move or dismissal event from a {@link ItemTouchHelper.Callback}.

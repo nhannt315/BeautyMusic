@@ -87,7 +87,7 @@ public class FragmentArtistList extends BaseFragment implements ItemListMvpView<
     private void refreshRecyclerView() {
         RecyclerView.LayoutManager layoutManager;
 
-        if (mAdapter.getLayoutType() == mAdapter.LAYOUT_ITEM_LIST) {
+        if (mAdapter.getLayoutType() == ArtistAdapter.LAYOUT_ITEM_LIST) {
             layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
             mRvArtistList.removeItemDecoration(itemOffsetDecoration);
             mRvArtistList.addItemDecoration(dividerItemDecoration);
@@ -123,9 +123,9 @@ public class FragmentArtistList extends BaseFragment implements ItemListMvpView<
         mAdapter = new ArtistAdapter(getActivity(), itemList);
         mAdapter.setLayoutType(Setting.getInstance().get(Common.ARTIST_VIEW_MODE, ArtistAdapter.LAYOUT_ITEM_LIST));
 
-        if (mAdapter.getLayoutType() == mAdapter.LAYOUT_ITEM_LIST)
+        if (mAdapter.getLayoutType() == ArtistAdapter.LAYOUT_ITEM_LIST)
             mRvArtistList.addItemDecoration(dividerItemDecoration);
-        else if (mAdapter.getLayoutType() == mAdapter.LAYOUT_ITEM_GRID)
+        else if (mAdapter.getLayoutType() == ArtistAdapter.LAYOUT_ITEM_GRID)
             mRvArtistList.addItemDecoration(itemOffsetDecoration);
 
         mAdapter.setRecyclerItemClickListener(this);

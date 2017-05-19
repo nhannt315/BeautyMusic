@@ -16,7 +16,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <service android:name=".service.MusicService">
+        <service android:name=".service.MusicService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="nhannt.musicplayer.ACTION_PLAY"/>
                 <action android:name="nhannt.musicplayer.ACTION_TOGGLE_PLAY_PAUSE"/>

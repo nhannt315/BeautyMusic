@@ -19,8 +19,8 @@ import nhannt.musicplayer.utils.App;
 
 public class HomeInteractor implements IHomeInteractor {
 
-    private MediaProvider mediaProvider = MediaProvider.getInstance();
-    private IHomePresenter mPresenter;
+    private final MediaProvider mediaProvider = MediaProvider.getInstance();
+    private final IHomePresenter mPresenter;
     private AsyncTask<Void, Void, ArrayList> asyncSearhAll;
     private AsyncTask<Void, Void, ArrayList> asyncSearchAlbum;
     private AsyncTask<Void, Void, ArrayList> asyncSearchArtist;
@@ -35,10 +35,6 @@ public class HomeInteractor implements IHomeInteractor {
             asyncSearhAll.cancel(true);
         asyncSearhAll = new AsyncTask<Void, Void, ArrayList>() {
 
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-            }
 
             @Override
             protected ArrayList doInBackground(Void... params) {
@@ -86,10 +82,6 @@ public class HomeInteractor implements IHomeInteractor {
         if (asyncSearchAlbum != null)
             asyncSearchAlbum.cancel(true);
         asyncSearchAlbum = new AsyncTask<Void, Void, ArrayList>() {
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-            }
 
             @Override
             protected ArrayList doInBackground(Void... params) {
@@ -125,10 +117,6 @@ public class HomeInteractor implements IHomeInteractor {
         if (asyncSearchArtist != null)
             asyncSearchArtist.cancel(true);
         asyncSearchArtist = new AsyncTask<Void, Void, ArrayList>() {
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-            }
 
             @Override
             protected ArrayList doInBackground(Void... params) {

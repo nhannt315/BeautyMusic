@@ -55,8 +55,7 @@ public class FragmentAlbumDetail extends BaseFragment implements IAlbumDetailVie
     private SongAdapter mSongAdapter;
     private ArrayList<Song> lstSong;
     private IAlbumDetailPresenter mPresenter;
-    private int statusbarColor;
-    private int diffColor = 987670;
+
 
     @BindView(R.id.iv_album_cover_album_detail)
     protected SquareImageView albumCover;
@@ -73,7 +72,7 @@ public class FragmentAlbumDetail extends BaseFragment implements IAlbumDetailVie
     private static Handler handler;
 
     private class GetMainColorForToolbar implements Runnable {
-        Bitmap bitmap;
+        final Bitmap bitmap;
 
         public GetMainColorForToolbar(Bitmap bitmap) {
             this.bitmap = bitmap;
@@ -91,7 +90,7 @@ public class FragmentAlbumDetail extends BaseFragment implements IAlbumDetailVie
                     mainColor = swatch.getRgb();
                 }
             }
-            statusbarColor = mainColor - diffColor;
+            int statusbarColor = mainColor - 987670;
             collapsingToolbarLayout.setContentScrimColor(mainColor);
             collapsingToolbarLayout.setStatusBarScrimColor(statusbarColor);
         }
@@ -184,10 +183,6 @@ public class FragmentAlbumDetail extends BaseFragment implements IAlbumDetailVie
         mPresenter.cancelFetchingData();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
 
     private void setupRecyclerView() {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);

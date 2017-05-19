@@ -113,10 +113,6 @@ public class FragmentAlbumList extends BaseFragment implements ItemListMvpView<A
         menuSortBy.removeItem(R.id.bt_sort_duration);
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
 
 
     @Override
@@ -168,15 +164,15 @@ public class FragmentAlbumList extends BaseFragment implements ItemListMvpView<A
         mAlbumAdapter = new AlbumAdapter(getActivity(), itemList);
         mAlbumAdapter.setLayoutType(Setting.getInstance().get(Common.ALBUM_VIEW_MODE, AlbumAdapter.LAYOUT_ITEM_LIST));
 
-        if (mAlbumAdapter.getLayoutType() == mAlbumAdapter.LAYOUT_ITEM_LIST)
+        if (mAlbumAdapter.getLayoutType() == AlbumAdapter.LAYOUT_ITEM_LIST)
             mRvAlbumList.addItemDecoration(dividerItemDecoration);
-        else if (mAlbumAdapter.getLayoutType() == mAlbumAdapter.LAYOUT_ITEM_GRID)
+        else if (mAlbumAdapter.getLayoutType() == AlbumAdapter.LAYOUT_ITEM_GRID)
             mRvAlbumList.addItemDecoration(itemOffsetDecoration);
 
         mAlbumAdapter.setRecyclerItemClickListener(this);
 
         RecyclerView.LayoutManager layoutManager;
-        if (mAlbumAdapter.getLayoutType() == mAlbumAdapter.LAYOUT_ITEM_LIST) {
+        if (mAlbumAdapter.getLayoutType() == AlbumAdapter.LAYOUT_ITEM_LIST) {
             layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         } else {
             layoutManager = new GridLayoutManager(getActivity(), 2);
@@ -189,7 +185,7 @@ public class FragmentAlbumList extends BaseFragment implements ItemListMvpView<A
 
     private void refreshRecyclerView() {
         RecyclerView.LayoutManager layoutManager;
-        if (mAlbumAdapter.getLayoutType() == mAlbumAdapter.LAYOUT_ITEM_LIST) {
+        if (mAlbumAdapter.getLayoutType() == AlbumAdapter.LAYOUT_ITEM_LIST) {
             layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
             mRvAlbumList.removeItemDecoration(itemOffsetDecoration);
             mRvAlbumList.addItemDecoration(dividerItemDecoration);

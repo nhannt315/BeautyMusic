@@ -40,11 +40,11 @@ public class PlaylistListInteractor implements IPlaylistListInteractor {
 
         @Override
         protected Void doInBackground(Void... params) {
-            lstPlaylist = DBQuery.getInstance(App.getContext()).getAllPlayList();
+            lstPlaylist = DBQuery.getInstance().getAllPlayList();
             lstSongAdded = MediaProvider.getInstance().getListSong();
-            lstSongRecent = DBQuery.getInstance(App.getContext()).getListSongRecentPlay();
+            lstSongRecent = DBQuery.getInstance().getListSongRecentPlay();
             for(PlayList playList : lstPlaylist){
-                playList.setLstSong(DBQuery.getInstance(App.getContext()).getListSongByPlaylist(playList.getId()));
+                playList.setLstSong(DBQuery.getInstance().getListSongByPlaylist(playList.getId()));
             }
             return null;
         }

@@ -13,15 +13,15 @@ import nhannt.musicplayer.utils.App;
  */
 public class VolleyConnection {
     private static VolleyConnection mInstance;
-    private Context context = App.getInstance().getContext();
+    private Context context;
     private RequestQueue mRequestQueue;
 
 
-    public static synchronized VolleyConnection getInstance(Context context) {
+    public static synchronized VolleyConnection getInstance() {
         if (mInstance == null) {
             synchronized (VolleyConnection.class) {
                 if (mInstance == null) {
-                    mInstance = new VolleyConnection(context);
+                    mInstance = new VolleyConnection(App.getInstance().getApplicationContext());
                 }
             }
         }

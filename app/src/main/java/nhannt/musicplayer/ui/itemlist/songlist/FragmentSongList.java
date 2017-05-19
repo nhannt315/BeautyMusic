@@ -79,7 +79,7 @@ public class FragmentSongList extends BaseFragment implements ItemListMvpView<So
         return fragment;
     }
 
-    BroadcastReceiver playstateChange = new BroadcastReceiver() {
+    final BroadcastReceiver playstateChange = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(MusicService.PLAY_STATE_CHANGE)) {
@@ -107,12 +107,6 @@ public class FragmentSongList extends BaseFragment implements ItemListMvpView<So
         songPresenter.cancelFetchingData();
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        return super.onCreateView(inflater, container, savedInstanceState);
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -205,6 +199,7 @@ public class FragmentSongList extends BaseFragment implements ItemListMvpView<So
         Song currentSong = App.getInstance().getCurrentPlayingSong();
         if (currentSong != null)
             songAdapter.updatePlayPosition(currentSong.getId());
+
     }
 
 

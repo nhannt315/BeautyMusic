@@ -12,7 +12,7 @@ import nhannt.musicplayer.ui.custom.CircularSeekBar;
  * Created by nhannt on 04/04/2017.
  */
 
-public interface IPlayBackPresenter extends BasePresenter<IPlayBackView>,CircularSeekBar.OnCircularSeekBarChangeListener
+interface IPlayBackPresenter extends BasePresenter<IPlayBackView>,CircularSeekBar.OnCircularSeekBarChangeListener
         ,View.OnClickListener {
     BroadcastReceiver getReceiver();
     void updateTimePlay();

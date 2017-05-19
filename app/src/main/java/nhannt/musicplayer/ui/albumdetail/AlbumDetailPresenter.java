@@ -16,7 +16,7 @@ import nhannt.musicplayer.utils.App;
 public class AlbumDetailPresenter implements IAlbumDetailPresenter {
 
     private IAlbumDetailView mView;
-    private AlbumDetailInteractor mInteractor;
+    private final AlbumDetailInteractor mInteractor;
 
     public AlbumDetailPresenter() {
         mInteractor = new AlbumDetailInteractor();

@@ -544,8 +544,7 @@ public class CircularSeekBar extends View {
      * @return The progress of the CircularSeekBar.
      */
     public int getProgress() {
-        int progress = Math.round((float) mMax * mProgressDegrees / mTotalCircleDegrees);
-        return progress;
+        return Math.round((float) mMax * mProgressDegrees / mTotalCircleDegrees);
     }
 
     /**
@@ -905,11 +904,11 @@ public class CircularSeekBar extends View {
      */
     public interface OnCircularSeekBarChangeListener {
 
-        public abstract void onProgressChanged(CircularSeekBar circularSeekBar, int progress, boolean fromUser);
+        void onProgressChanged(CircularSeekBar circularSeekBar, int progress, boolean fromUser);
 
-        public abstract void onStopTrackingTouch(CircularSeekBar seekBar);
+        void onStopTrackingTouch(CircularSeekBar seekBar);
 
-        public abstract void onStartTrackingTouch(CircularSeekBar seekBar);
+        void onStartTrackingTouch(CircularSeekBar seekBar);
     }
 
     /**

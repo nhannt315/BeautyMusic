@@ -32,10 +32,10 @@ import nhannt.musicplayer.utils.App;
 
 public class SongQueueAdapter extends RecyclerView.Adapter<SongQueueAdapter.SongQueueViewHolder>
         implements ItemTouchHelperAdapter {
-    private Context mContext;
+    private final Context mContext;
     private ArrayList<Song> mData = new ArrayList<>();
     private final OnStartDragListener mStartDragListener;
-    private LayoutInflater mInflater;
+    private final LayoutInflater mInflater;
 
     public SongQueueAdapter(Context mContext, ArrayList<Song> mData, OnStartDragListener dragStartListener) {
         this.mContext = mContext;
@@ -47,8 +47,7 @@ public class SongQueueAdapter extends RecyclerView.Adapter<SongQueueAdapter.Song
     @Override
     public SongQueueViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.item_song_queue, parent, false);
-        SongQueueViewHolder holder = new SongQueueViewHolder(view);
-        return holder;
+        return new SongQueueViewHolder(view);
     }
 
     @Override
@@ -102,9 +101,6 @@ public class SongQueueAdapter extends RecyclerView.Adapter<SongQueueAdapter.Song
         notifyDataSetChanged();
     }
 
-    private void showCustomToast() {
-
-    }
 
     public class SongQueueViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
         @BindView(R.id.bt_sort_queue)

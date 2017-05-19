@@ -38,10 +38,8 @@ public class PlaylistDetailActivity extends BaseActivity implements IMusicServic
     protected ImageView ivBackGround;
 
     private MusicService mService;
-    private SongAdapter mSongAdapter;
     private PlayList mPlayList = new PlayList();
     private IPlaylistDetailPresenter mPresenter;
-    private String coverPath;
 
 
     @Override
@@ -66,7 +64,7 @@ public class PlaylistDetailActivity extends BaseActivity implements IMusicServic
             tvTitle.setTransitionName(transitionTitle);
             ivBackGround.setTransitionName(transitionCover);
         }
-        coverPath = intent.getStringExtra(KEY_COVER_PATH);
+        String coverPath = intent.getStringExtra(KEY_COVER_PATH);
         Glide.with(this).load(coverPath).into(ivBackGround);
     }
 
@@ -99,7 +97,7 @@ public class PlaylistDetailActivity extends BaseActivity implements IMusicServic
 
     @Override
     public void setPlaylistDetail(PlayList playList) {
-        mSongAdapter = new SongAdapter(this, playList.getLstSong(),R.layout.item_song_playlist_detail);
+        SongAdapter mSongAdapter = new SongAdapter(this, playList.getLstSong(),R.layout.item_song_playlist_detail);
         mSongAdapter.setTextColor(ContextCompat.getColor(this, R.color.white));
         mSongAdapter.setAnimator(mRvSongList);
         mRvSongList.setAdapter(mSongAdapter);

@@ -6,6 +6,6 @@ import nhannt.musicplayer.interfaces.LoaderListener;
  * Created by NhanNT on 04/18/2017.
  */
 
-public interface IAlbumDetailInteractor {
+interface IAlbumDetailInteractor {
     void loadListSongOfAlbum(int albumId,LoaderListener loaderListener);
 }

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import nhannt.musicplayer.data.provider.MediaProvider;
 import nhannt.musicplayer.objectmodel.PlayList;
 import nhannt.musicplayer.objectmodel.Song;
+import nhannt.musicplayer.utils.App;
 
 /**
  * Created by nhannt on 24/03/2017.
@@ -18,22 +19,22 @@ import nhannt.musicplayer.objectmodel.Song;
 
 public class DBQuery {
     private static DBQuery mInstance;
-    private Context mContext;
+    private final Context mContext;
     private SQLiteDatabase db;
 
-    private DBQuery(Context context) {
-        this.mContext = context.getApplicationContext();
+    private DBQuery() {
+        this.mContext = App.getInstance().getApplicationContext();
     }
 
     /**
      * Get instance of DBQuery
      *
-     * @param context using this DbQuery
+     *
      * @return instance
      */
-    public static synchronized DBQuery getInstance(Context context) {
+    public static synchronized DBQuery getInstance() {
         if (mInstance == null) {
-            mInstance = new DBQuery(context);
+            mInstance = new DBQuery();
         }
         return mInstance;
     }
@@ -169,8 +170,11 @@ public class DBQuery {
         MediaProvider provider = MediaProvider.getInstance();
         db = getDatabase();
         StringBuilder builder = new StringBuilder();
-        builder.append("SELECT " + DBHelper.PLAYLIST_DETAIL_TABLE + ".*");
-        builder.append(" FROM " + DBHelper.PLAYLIST_DETAIL_TABLE);
+        builder.append("SELECT ");
+        builder.append(DBHelper.PLAYLIST_DETAIL_TABLE);
+        builder.append(".*");
+        builder.append(" FROM ");
+        builder.append(DBHelper.PLAYLIST_DETAIL_TABLE);
         builder.append(" WHERE " + DBHelper.PLAYLIST_DETAIL_TABLE + "." + DBHelper.DETAIL_COLUMN_PLAYLIST_ID + " = " + pID);
         Cursor result = db.rawQuery(builder.toString(), null);
         if (result != null && result.moveToFirst()) {

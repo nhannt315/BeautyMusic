@@ -25,12 +25,12 @@ import nhannt.musicplayer.utils.Navigator;
 
 public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ArtistViewHolder> {
 
-    public static int LAYOUT_ITEM_LIST = 0;
-    public static int LAYOUT_ITEM_GRID = 1;
+    public static final int LAYOUT_ITEM_LIST = 0;
+    public static final int LAYOUT_ITEM_GRID = 1;
 
-    private Activity mContext;
-    private ArrayList<Artist> mData;
-    private LayoutInflater mLayoutInflater;
+    private final Activity mContext;
+    private final ArrayList<Artist> mData;
+    private final LayoutInflater mLayoutInflater;
     private RecyclerItemClickListener recyclerItemClickListener;
     private int layoutType;
 
@@ -73,16 +73,15 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ArtistView
         holder.tvArtistInfo.setText(item.getNumberOfSong() + " " + mContext.getString(R.string.song_low_case) +
                 " | " + item.getNumberOfAlbum() + " " + mContext.getString(R.string.album_low_case));
         holder.position = position;
-        if(Common.isLollipop()){
-            holder.imageArtistCover.setTransitionName("transition_artist"+position);
+        if (Common.isLollipop()) {
+            holder.imageArtistCover.setTransitionName("transition_artist" + position);
         }
-        if(layoutType == LAYOUT_ITEM_LIST) {
+        if (layoutType == LAYOUT_ITEM_LIST) {
             new ArtistPhotoLastFmApi(mContext, item.getName(), holder.imageArtistCover, false).execute();
-        }else{
+        } else {
             new ArtistPhotoLastFmApi(mContext, item.getName(), holder.imageArtistCover, true).execute();
         }
     }
-
 
 
     @Override
@@ -109,7 +108,10 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ArtistView
 
         @Override
         public void onClick(View v) {
-            Navigator.navigateToArtistDetail(mContext,mData.get(position), this.imageArtistCover);
+            if (recyclerItemClickListener != null)
+                recyclerItemClickListener.onItemClickListener(v, position);
+            else
+                Navigator.navigateToArtistDetail(mContext, mData.get(position), this.imageArtistCover);
         }
     }
 }

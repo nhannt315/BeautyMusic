@@ -26,8 +26,7 @@ public class SystemUtils {
     public static int getActionBarHeight(Context context) {
         final TypedArray ta = context.getTheme().obtainStyledAttributes(
                 new int[]{android.R.attr.actionBarSize});
-        int actionBarHeight = (int) ta.getDimension(0, 0);
-        return actionBarHeight;
+        return (int) ta.getDimension(0, 0);
     }
 
 

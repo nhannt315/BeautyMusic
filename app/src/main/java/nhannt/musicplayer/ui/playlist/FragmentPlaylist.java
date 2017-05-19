@@ -48,7 +48,6 @@ public class FragmentPlaylist extends BaseFragment implements IPlaylistListView 
     @BindView(R.id.loading_indicator)
     protected AVLoadingIndicatorView mLoadingIndicator;
 
-    private PlaylistAdapter mPlaylistAdapter;
     private IPlaylistListPresenter mPresenter;
 
     public FragmentPlaylist() {
@@ -118,10 +117,6 @@ public class FragmentPlaylist extends BaseFragment implements IPlaylistListView 
         super.onStop();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
 
     @Override
     public void doBack() {
@@ -152,7 +147,7 @@ public class FragmentPlaylist extends BaseFragment implements IPlaylistListView 
 
     @Override
     public void setPlaylist(ArrayList<PlayList> itemList) {
-        mPlaylistAdapter = new PlaylistAdapter(getContext(), itemList);
+        PlaylistAdapter mPlaylistAdapter = new PlaylistAdapter(getContext(), itemList);
         rvPlaylistList.setAdapter(mPlaylistAdapter);
         mPlaylistAdapter.notifyDataSetChanged();
     }

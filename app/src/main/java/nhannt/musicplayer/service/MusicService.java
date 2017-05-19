@@ -42,7 +42,7 @@ import nhannt.musicplayer.utils.Common;
 public class MusicService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
         MediaPlayer.OnCompletionListener, MediaPlayer.OnSeekCompleteListener {
 
-    private IBinder mBinder = new LocalBinder();
+    private final IBinder mBinder = new LocalBinder();
     private MediaPlayer mediaPlayer;
 
     public enum MusicState {
@@ -174,7 +174,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         }
     };
 
-    AudioManager.OnAudioFocusChangeListener afChangeListener = new AudioManager.OnAudioFocusChangeListener() {
+    private final AudioManager.OnAudioFocusChangeListener afChangeListener = new AudioManager.OnAudioFocusChangeListener() {
         @Override
         public void onAudioFocusChange(int focusChange) {
             switch (focusChange) {
@@ -260,11 +260,10 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         builder.setContent(notificationView);
         builder.setCustomBigContentView(bigNotificationView);
 
-        Notification notification = builder.build();
-        return notification;
+        return builder.build();
     }
 
-    public void showLockScreen() {
+    private void showLockScreen() {
         if(!isSongSetted()) return;
         Song currentSong = lstSong.get(songPos);
         mediaSession = new MediaSessionCompat(this, MusicService.class.getName());
@@ -286,7 +285,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         mediaSession.setActive(true);
     }
 
-    public void setStatePlayPauseLockScreen() {
+    private void setStatePlayPauseLockScreen() {
         if (mediaSession.getController().getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING) {
             mediaSession.setPlaybackState(new PlaybackStateCompat.Builder()
                     .setState(PlaybackStateCompat.STATE_PAUSED, 0, 1.0f)
@@ -353,7 +352,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 
     }
 
-    public void stopSong() {
+    private void stopSong() {
         if (mediaPlayer != null) {
             mediaPlayer.stop();
             setState(MusicState.Stop);
@@ -448,7 +447,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         }
     }
 
-    public void releaseMediaPlayer() {
+    private void releaseMediaPlayer() {
         if (mediaPlayer != null) {
             if (mediaPlayer.isPlaying())
                 mediaPlayer.stop();
@@ -510,7 +509,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         notifyClients(PLAY_STATE_CHANGE);
         notifyClients(META_CHANGE);
         updateNotification();
-        DBQuery.getInstance(getApplicationContext()).insertRecentPlay(lstSong.get(songPos));
+        DBQuery.getInstance().insertRecentPlay(lstSong.get(songPos));
     }
 
     @Override
@@ -539,7 +538,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         notifyClients(what, null);
     }
 
-    public void setState(MusicState state) {
+    private void setState(MusicState state) {
         this.musicState = state;
     }
 
