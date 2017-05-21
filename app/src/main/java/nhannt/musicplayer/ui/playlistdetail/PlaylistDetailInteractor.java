@@ -4,13 +4,13 @@ import android.os.AsyncTask;
 
 import java.util.ArrayList;
 
+import nhannt.musicplayer.App;
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.data.database.DBQuery;
 import nhannt.musicplayer.data.provider.MediaProvider;
 import nhannt.musicplayer.objectmodel.PlayList;
 import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.ui.playlist.FragmentPlaylist;
-import nhannt.musicplayer.utils.App;
 
 /**
  * Created by NhanNT on 04/21/2017.

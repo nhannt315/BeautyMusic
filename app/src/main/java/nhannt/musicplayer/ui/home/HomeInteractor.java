@@ -6,12 +6,12 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
+import nhannt.musicplayer.App;
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.data.provider.MediaProvider;
 import nhannt.musicplayer.objectmodel.Album;
 import nhannt.musicplayer.objectmodel.Artist;
 import nhannt.musicplayer.objectmodel.Song;
-import nhannt.musicplayer.utils.App;
 
 /**
  * Created by NhanNT on 05/12/2017.

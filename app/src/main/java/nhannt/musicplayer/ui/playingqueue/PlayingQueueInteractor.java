@@ -4,11 +4,11 @@ import android.content.Intent;
 
 import java.util.ArrayList;
 
+import nhannt.musicplayer.App;
 import nhannt.musicplayer.interfaces.IMusicServiceConnection;
 import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.service.MusicService;
 import nhannt.musicplayer.service.MusicServiceConnection;
-import nhannt.musicplayer.utils.App;
 
 /**
  * Created by NhanNT on 04/18/2017.

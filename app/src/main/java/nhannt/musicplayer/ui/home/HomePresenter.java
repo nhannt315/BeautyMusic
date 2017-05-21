@@ -8,9 +8,9 @@ import android.view.View;
 
 import java.util.ArrayList;
 
+import nhannt.musicplayer.App;
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.service.MusicService;
-import nhannt.musicplayer.utils.App;
 import nhannt.musicplayer.utils.Navigator;
 
 /**

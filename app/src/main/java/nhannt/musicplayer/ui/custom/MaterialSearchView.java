@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.speech.RecognizerIntent;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -25,8 +26,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -57,7 +56,7 @@ public class MaterialSearchView extends FrameLayout {
     private View mSearchLayout;
     private View mTintView;
     private RecyclerView mSuggestionsRv;
-    private EditText mSearchSrcTextView;
+    private AppCompatEditText mSearchSrcTextView;
     private ImageButton mBackBtn;
     private ImageButton mVoiceBtn;
     private ImageButton mEmptyBtn;
@@ -158,7 +157,7 @@ public class MaterialSearchView extends FrameLayout {
         mSuggestionsRv.setLayoutManager(layoutManager);
         mSuggestionsRv.addItemDecoration(new ItemOffsetDecoration(mContext, R.dimen.item_search_spacing));
 
-        mSearchSrcTextView = (EditText) mSearchLayout.findViewById(R.id.searchTextView);
+        mSearchSrcTextView = (AppCompatEditText) mSearchLayout.findViewById(R.id.searchTextView);
         mBackBtn = (ImageButton) mSearchLayout.findViewById(R.id.action_up_btn);
         mVoiceBtn = (ImageButton) mSearchLayout.findViewById(R.id.action_voice_btn);
         mEmptyBtn = (ImageButton) mSearchLayout.findViewById(R.id.action_empty_btn);
@@ -302,7 +301,7 @@ public class MaterialSearchView extends FrameLayout {
     }
 
     public void showKeyboard(View view) {
-            view.clearFocus();
+//            view.clearFocus();
         view.requestFocus();
         InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(view, 0);

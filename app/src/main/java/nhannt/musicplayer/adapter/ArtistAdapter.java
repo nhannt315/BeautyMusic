@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import nhannt.musicplayer.R;
-import nhannt.musicplayer.data.network.ArtistPhotoLastFmApi;
+import nhannt.musicplayer.data.network.retrofit.LastFmApi;
 import nhannt.musicplayer.interfaces.RecyclerItemClickListener;
 import nhannt.musicplayer.objectmodel.Artist;
 import nhannt.musicplayer.utils.Common;
@@ -77,9 +77,11 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ArtistView
             holder.imageArtistCover.setTransitionName("transition_artist" + position);
         }
         if (layoutType == LAYOUT_ITEM_LIST) {
-            new ArtistPhotoLastFmApi(mContext, item.getName(), holder.imageArtistCover, false).execute();
+//            new ArtistPhotoLastFmApi(mContext, item.getName(), holder.imageArtistCover, false).execute();
+            new LastFmApi(mContext).getArtistPhoto(item.getName(), holder.imageArtistCover, false);
         } else {
-            new ArtistPhotoLastFmApi(mContext, item.getName(), holder.imageArtistCover, true).execute();
+//            new ArtistPhotoLastFmApi(mContext, item.getName(), holder.imageArtistCover, true).execute();
+            new LastFmApi(mContext).getArtistPhoto(item.getName(), holder.imageArtistCover, true);
         }
     }
 
@@ -108,9 +110,6 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ArtistView
 
         @Override
         public void onClick(View v) {
-            if (recyclerItemClickListener != null)
-                recyclerItemClickListener.onItemClickListener(v, position);
-            else
                 Navigator.navigateToArtistDetail(mContext, mData.get(position), this.imageArtistCover);
         }
     }

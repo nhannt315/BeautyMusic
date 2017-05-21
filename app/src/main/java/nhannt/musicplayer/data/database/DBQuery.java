@@ -8,10 +8,10 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
+import nhannt.musicplayer.App;
 import nhannt.musicplayer.data.provider.MediaProvider;
 import nhannt.musicplayer.objectmodel.PlayList;
 import nhannt.musicplayer.objectmodel.Song;
-import nhannt.musicplayer.utils.App;
 
 /**
  * Created by nhannt on 24/03/2017.

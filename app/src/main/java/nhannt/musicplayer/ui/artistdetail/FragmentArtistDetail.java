@@ -1,6 +1,7 @@
 package nhannt.musicplayer.ui.artistdetail;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -31,6 +32,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import nhannt.musicplayer.App;
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.adapter.AlbumAdapter;
 import nhannt.musicplayer.adapter.SongAdapter;
@@ -42,7 +44,6 @@ import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.service.MusicService;
 import nhannt.musicplayer.service.MusicServiceConnection;
 import nhannt.musicplayer.ui.base.BaseFragment;
-import nhannt.musicplayer.utils.App;
 import nhannt.musicplayer.utils.Common;
 import nhannt.musicplayer.utils.DividerDecoration;
 import nhannt.musicplayer.utils.ItemOffsetDecoration;
@@ -107,8 +108,9 @@ public class FragmentArtistDetail extends BaseFragment implements IArtistDetailV
             }
             int statusBarColor = mainColor - 987670;
             collapsingToolbarLayout.setContentScrimColor(mainColor);
-            if (Common.isLollipop())
-                getActivity().getWindow().setStatusBarColor(statusBarColor);
+            Activity activity = getActivity();
+            if (Common.isLollipop() && activity != null)
+                activity.getWindow().setStatusBarColor(statusBarColor);
         }
     }
 
@@ -194,7 +196,7 @@ public class FragmentArtistDetail extends BaseFragment implements IArtistDetailV
 
     @Override
     public void onDetach() {
-        if(Common.isLollipop())
+        if (Common.isLollipop())
             getActivity().getWindow().setStatusBarColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
         super.onDetach();
     }
@@ -243,6 +245,7 @@ public class FragmentArtistDetail extends BaseFragment implements IArtistDetailV
 
     @Override
     public void artistPhotoSuccess(String url) {
+        if (getContext() == null) return;
         Glide.with(getContext()).load(url).asBitmap().placeholder(R.drawable.google_play_music_logo)
                 .listener(new RequestListener<String, Bitmap>() {
                     @Override
@@ -281,8 +284,6 @@ public class FragmentArtistDetail extends BaseFragment implements IArtistDetailV
             }
         });
     }
-
-
 
 
     @Override

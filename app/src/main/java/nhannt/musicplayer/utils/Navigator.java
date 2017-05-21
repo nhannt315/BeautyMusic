@@ -53,6 +53,7 @@ public class Navigator {
 
 
         fragmentTransaction
+//                .hide(activity.getSupportFragmentManager().findFragmentById(R.id.container))
                 .replace(R.id.container, desFragment, FragmentAlbumDetail.TAG)
                 .addToBackStack(null)
                 .commit();

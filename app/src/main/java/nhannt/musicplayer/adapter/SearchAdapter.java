@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 
 import nhannt.musicplayer.R;
-import nhannt.musicplayer.data.network.ArtistPhotoLastFmApi;
+import nhannt.musicplayer.data.network.retrofit.LastFmApi;
 import nhannt.musicplayer.interfaces.RecyclerItemClickListener;
 import nhannt.musicplayer.objectmodel.Album;
 import nhannt.musicplayer.objectmodel.Artist;
@@ -41,6 +41,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchHold
 
 
     public SearchAdapter(Context context) {
+
         this.mContext = context;
         lstResult = new ArrayList();
         mLayoutInflater = LayoutInflater.from(mContext);
@@ -122,7 +123,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchHold
                 holder.artistName.setText(artist.getName());
                 holder.artistInfo.setText(artist.getNumberOfSong() + " " + mContext.getString(R.string.song_low_case) +
                         " | " + artist.getNumberOfAlbum() + " " + mContext.getString(R.string.album_low_case));
-                new ArtistPhotoLastFmApi(mContext, artist.getName(), holder.artistCover, false).execute();
+                new LastFmApi(mContext).getArtistPhoto(artist.getName(), holder.artistCover, false);
                 break;
             case ITEM_HEADER_TYPE:
                 String header = (String) lstResult.get(position);

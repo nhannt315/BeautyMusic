@@ -5,9 +5,9 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import nhannt.musicplayer.App;
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.objectmodel.Song;
-import nhannt.musicplayer.utils.App;
 
 /**
  * Created by nhannt on 30/03/2017.

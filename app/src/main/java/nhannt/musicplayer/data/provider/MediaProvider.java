@@ -7,10 +7,10 @@ import android.provider.MediaStore;
 
 import java.util.ArrayList;
 
+import nhannt.musicplayer.App;
 import nhannt.musicplayer.objectmodel.Album;
 import nhannt.musicplayer.objectmodel.Artist;
 import nhannt.musicplayer.objectmodel.Song;
-import nhannt.musicplayer.utils.App;
 
 /**
  * Created by nhannt on 01/03/2017.

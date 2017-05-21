@@ -4,12 +4,12 @@ import android.os.AsyncTask;
 
 import java.util.ArrayList;
 
-import nhannt.musicplayer.data.network.ArtistPhotoLastFmApi;
+import nhannt.musicplayer.App;
 import nhannt.musicplayer.data.network.ArtistPhotoListener;
+import nhannt.musicplayer.data.network.retrofit.LastFmApi;
 import nhannt.musicplayer.data.provider.MediaProvider;
 import nhannt.musicplayer.objectmodel.Album;
 import nhannt.musicplayer.objectmodel.Song;
-import nhannt.musicplayer.utils.App;
 
 /**
  * Created by NhanNT on 05/03/2017.
@@ -59,6 +59,7 @@ public class ArtistDetailInteractor implements IArtistDetailInteractor {
 
     @Override
     public void loadArtistPhoto(String artistName, ArtistPhotoListener listener) {
-        new ArtistPhotoLastFmApi(App.getInstance().getApplicationContext(), artistName, listener).execute();
+//        new ArtistPhotoLastFmApi(App.getInstance().getApplicationContext(), artistName, listener).execute();
+        new LastFmApi(App.getInstance().getApplicationContext()).getArtistPhoto(artistName, listener);
     }
 }

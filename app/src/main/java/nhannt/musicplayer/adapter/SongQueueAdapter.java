@@ -19,12 +19,12 @@ import java.util.Collections;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import nhannt.musicplayer.App;
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.recyclerhelper.ItemTouchHelperAdapter;
 import nhannt.musicplayer.recyclerhelper.ItemTouchHelperViewHolder;
 import nhannt.musicplayer.recyclerhelper.OnStartDragListener;
-import nhannt.musicplayer.utils.App;
 
 /**
  * Created by nhannt on 07/04/2017.
