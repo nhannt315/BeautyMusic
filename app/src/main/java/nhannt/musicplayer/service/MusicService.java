@@ -15,7 +15,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
+import android.support.v7.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
@@ -199,12 +199,21 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
             startForeground(NOTIFY_ID, notify);
             Log.d("notification", "update startForeground");
         } else if (getState() == MusicState.Pause || getState() == MusicState.Stop) {
-            stopForeground(true);
-            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            mNotificationManager.notify(NOTIFY_ID, notify);
-            Log.d("notification", "update clearable notification");
+            startForeground(NOTIFY_ID, notify);
+            stopForeground(false);
         }
+    }
 
+    public void shuffleAll(ArrayList<Song> lstSong) {
+        this.lstSong = lstSong;
+        shuffleAll();
+    }
+
+    public void shuffleAll(){
+        if (lstSong == null || lstSong.size() == 0) return;
+        isShuffle = true;
+        songPos = rand.nextInt(lstSong.size() - 1);
+        playSong();
     }
 
     private Notification createNotification(Song song) {
@@ -213,8 +222,9 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
                 notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
-        builder.setSmallIcon(R.mipmap.ic_launcher);
+        builder.setSmallIcon(getSmallIcon());
         builder.setContentIntent(contentIntent);
+        builder.setOngoing(false);
 
         RemoteViews notificationView = new RemoteViews(getPackageName(), R.layout.notification_layout);
         RemoteViews bigNotificationView = new RemoteViews(getPackageName(), R.layout.notification_layout_expanded);
@@ -257,14 +267,25 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         bigNotificationView.setOnClickPendingIntent(R.id.bt_next_notification, piSkipNext);
         bigNotificationView.setOnClickPendingIntent(R.id.bt_prev_notification, piSkipPrev);
 
-        builder.setContent(notificationView);
+        builder.setCustomContentView(notificationView);
         builder.setCustomBigContentView(bigNotificationView);
+
+        builder.setStyle(new NotificationCompat.DecoratedMediaCustomViewStyle().setMediaSession(mediaSession.getSessionToken())
+                .setShowActionsInCompactView(1));
 
         return builder.build();
     }
 
+    private int getSmallIcon() {
+        if (Common.isLollipop()) {
+            return R.drawable.ic_headset_white_24dp;
+        } else {
+            return R.mipmap.ic_launcher;
+        }
+    }
+
     private void showLockScreen() {
-        if(!isSongSetted()) return;
+        if (!isSongSetted()) return;
         Song currentSong = lstSong.get(songPos);
         mediaSession = new MediaSessionCompat(this, MusicService.class.getName());
         mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
@@ -286,6 +307,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     }
 
     private void setStatePlayPauseLockScreen() {
+        if (mediaSession == null) return;
         if (mediaSession.getController().getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING) {
             mediaSession.setPlaybackState(new PlaybackStateCompat.Builder()
                     .setState(PlaybackStateCompat.STATE_PAUSED, 0, 1.0f)
@@ -311,13 +333,13 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         }
     }
 
-    public boolean isSongSetted(){
+    public boolean isSongSetted() {
 //        if(lstSong == null || songPos == -1)
 //            return false;
 //        else
 //            return true;
 
-        return  !(lstSong == null || songPos == -1);
+        return !(lstSong == null || songPos == -1);
     }
 
     public void addToQueue(Song... song) {

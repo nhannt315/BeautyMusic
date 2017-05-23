@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import nhannt.musicplayer.App;
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.adapter.PlaylistAdapter;
 import nhannt.musicplayer.interfaces.DrawerLayoutContainer;
@@ -103,6 +104,7 @@ public class FragmentPlaylist extends BaseFragment implements IPlaylistListView 
                 new CreatePlaylistDialog(getContext()).show();
                 break;
             case R.id.btn_shuffle_all_menu:
+                App.getInstance().shuffeAll();
                 break;
             case R.id.btn_equalizer:
                 Navigator.navigateToEqualizer(getContext(), 1234);

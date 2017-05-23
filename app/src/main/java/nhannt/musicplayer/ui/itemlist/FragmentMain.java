@@ -30,7 +30,6 @@ public class FragmentMain extends BaseFragment {
     public static FragmentMain newInstance() {
         FragmentMain fragment = new FragmentMain();
         Bundle args = new Bundle();
-
         fragment.setArguments(args);
         return fragment;
     }
@@ -40,10 +39,9 @@ public class FragmentMain extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
+        setHasOptionsMenu(true);
         settingViews();
     }
-
-
 
     private void settingViews() {
         viewPager.setAdapter(new ViewPagerAdapter(getChildFragmentManager()));

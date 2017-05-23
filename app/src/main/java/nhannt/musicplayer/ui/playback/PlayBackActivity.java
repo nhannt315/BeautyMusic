@@ -208,6 +208,11 @@ public class PlayBackActivity extends BaseActivity implements IPlayBackView, IMu
             case android.R.id.home:
                 onBackPressed();
                 break;
+            case R.id.btn_shuffle_all_playback:
+                if(mService == null) return true;
+                mService.shuffleAll();
+                updateButtonState();
+                break;
             case R.id.btn_equalizer_playback:
                 Navigator.navigateToEqualizer(this, 126);
                 break;

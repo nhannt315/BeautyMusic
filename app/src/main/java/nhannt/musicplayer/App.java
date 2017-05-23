@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import nhannt.musicplayer.adapter.AlbumAdapter;
 import nhannt.musicplayer.adapter.ArtistAdapter;
+import nhannt.musicplayer.data.provider.MediaProvider;
 import nhannt.musicplayer.interfaces.IMusicServiceConnection;
 import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.service.MusicService;
@@ -81,9 +82,25 @@ public class App extends Application {
         }
     }
 
+    public void shuffeAll(){
+        if(musicService == null) return;
+        ArrayList<Song> lstSong = MediaProvider.getInstance().getListSong();
+        musicService.shuffleAll(lstSong);
+    }
+
+    public void shuffeAll(ArrayList<Song> lstSong){
+        if(musicService == null) return;
+        musicService.shuffleAll(lstSong);
+    }
+
     public Song getCurrentPlayingSong() {
         if (musicService == null || !musicService.isSongSetted()) return null;
         return musicService.getCurrentSong();
+    }
+
+    public ArrayList<Song> getCurrentPlayingList(){
+        if (musicService == null || !musicService.isSongSetted()) return null;
+        return musicService.getLstSong();
     }
 
     public void setSongPos(int songPsn){

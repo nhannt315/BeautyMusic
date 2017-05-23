@@ -24,6 +24,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -319,6 +320,20 @@ public class HomeActivity extends BaseActivity implements IMusicServiceConnectio
         FragmentArtistDetail fragmentArtist = (FragmentArtistDetail) getSupportFragmentManager().findFragmentByTag(FragmentArtistDetail.TAG);
         if (fragmentArtist != null && fragmentArtist.isVisible()) {
             mPresenter.searchArtistDetail(query, fragmentArtist.getArtistId());
+        }
+
+        FragmentPlayingQueue fragmentPlayingQueue = (FragmentPlayingQueue) getSupportFragmentManager().findFragmentByTag(FragmentPlayingQueue.TAG);
+        if (fragmentPlayingQueue != null && fragmentPlayingQueue.isVisible()) {
+            Toast.makeText(this, "Playing Queue", Toast.LENGTH_SHORT).show();
+            if (mService != null && mService.getLstSong() != null)
+                mPresenter.searchPlayingQueue(query, mService.getLstSong());
+            else
+                mPresenter.searchAll(query);
+        }
+
+        FragmentPlaylist fragmentPlaylist = (FragmentPlaylist) getSupportFragmentManager().findFragmentByTag(FragmentPlaylist.TAG);
+        if (fragmentPlaylist != null && fragmentPlaylist.isVisible()) {
+            mPresenter.searchAll(query);
         }
     }
 

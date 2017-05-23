@@ -2,6 +2,7 @@ package nhannt.musicplayer.ui.itemlist.artistlist;
 
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import nhannt.musicplayer.App;
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.adapter.ArtistAdapter;
 import nhannt.musicplayer.interfaces.RecyclerItemClickListener;
@@ -173,6 +175,13 @@ public class FragmentArtistList extends BaseFragment implements ItemListMvpView<
             case R.id.bt_sort_song_no:
                 artistPresenter.sortAs(ItemListPresenter.SORT_AS_NUMBER_OF_SONG);
                 break;
+            case R.id.btn_shuffle_all_menu:
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        App.getInstance().shuffeAll();
+                    }
+                });
             case R.id.bt_sort_album_no:
                 artistPresenter.sortAs(ItemListPresenter.SORT_AS_NUMBER_OF_ALBUM);
                 break;

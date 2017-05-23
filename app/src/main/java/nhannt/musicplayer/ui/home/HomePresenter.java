@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import nhannt.musicplayer.App;
 import nhannt.musicplayer.R;
+import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.service.MusicService;
 import nhannt.musicplayer.utils.Navigator;
 
@@ -51,9 +52,12 @@ public class HomePresenter implements IHomePresenter, View.OnClickListener {
         Intent intent;
         switch (v.getId()) {
             case R.id.btn_toggle_play_current_bar:
-                intent = new Intent(mView.getViewContext(), MusicService.class);
-                intent.setAction(MusicService.ACTION_TOGGLE_PLAY_PAUSE);
-                App.getContext().startService(intent);
+                mService = mView.getMusicService();
+                if (mService != null && mService.isSongSetted()) {
+                    intent = new Intent(mView.getViewContext(), MusicService.class);
+                    intent.setAction(MusicService.ACTION_TOGGLE_PLAY_PAUSE);
+                    App.getContext().startService(intent);
+                }
                 break;
             case R.id.current_play_bar:
                 Navigator.navigateToPlayBackActivity(mView.getViewContext());
@@ -127,5 +131,10 @@ public class HomePresenter implements IHomePresenter, View.OnClickListener {
     @Override
     public void searchAll(String query) {
         mInteractor.searchAll(query);
+    }
+
+    @Override
+    public void searchPlayingQueue(String query, ArrayList<Song> lstPlayingSong) {
+        mInteractor.searchPlayingQueue(query,lstPlayingSong);
     }
 }

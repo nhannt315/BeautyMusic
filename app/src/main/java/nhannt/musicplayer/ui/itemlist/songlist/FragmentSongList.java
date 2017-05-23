@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
@@ -59,6 +60,7 @@ public class FragmentSongList extends BaseFragment implements ItemListMvpView<So
         // Required empty public constructor
     }
 
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -68,6 +70,7 @@ public class FragmentSongList extends BaseFragment implements ItemListMvpView<So
         songPresenter.attachedView(this);
         songPresenter.onResume();
         enableDoBack();
+
     }
 
     public static FragmentSongList newInstance() {
@@ -140,6 +143,14 @@ public class FragmentSongList extends BaseFragment implements ItemListMvpView<So
             case R.id.bt_sort_duration:
                 songPresenter.sortAs(ItemListPresenter.SORT_AS_DURATION);
                 break;
+            case R.id.btn_shuffle_all_menu:
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        App.getInstance().shuffeAll();
+                    }
+                });
+                break;
             case R.id.bt_equalizer:
                 Navigator.navigateToEqualizer(getContext(), 125);
                 break;
@@ -162,7 +173,6 @@ public class FragmentSongList extends BaseFragment implements ItemListMvpView<So
         inflater.inflate(R.menu.main_menu, menu);
         Log.d("Option", "here");
     }
-
 
 
     private void setupRecyclerView() {
@@ -189,7 +199,7 @@ public class FragmentSongList extends BaseFragment implements ItemListMvpView<So
 
     @Override
     public void setItems(ArrayList<Song> itemList) {
-        songAdapter = new SongAdapter(getActivity(), itemList,R.layout.item_song);
+        songAdapter = new SongAdapter(getActivity(), itemList, R.layout.item_song);
         songAdapter.setRecyclerItemClickListener(this);
         rvSongList.setAdapter(songAdapter);
         mData = itemList;

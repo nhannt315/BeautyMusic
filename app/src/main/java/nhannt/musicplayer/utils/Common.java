@@ -34,6 +34,13 @@ public class Common {
     }
 
     /**
+     * @return true when the caller API version is at least nougat 24
+     */
+    public static boolean isNougat() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N;
+    }
+
+    /**
      * @return true when the caller API version is at least lollipop 21
      */
     public static boolean isLollipop() {

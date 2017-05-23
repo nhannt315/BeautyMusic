@@ -3,11 +3,15 @@ package nhannt.musicplayer.ui.playingqueue;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -15,6 +19,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import nhannt.musicplayer.App;
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.adapter.SongQueueAdapter;
 import nhannt.musicplayer.interfaces.DrawerLayoutContainer;
@@ -23,13 +28,14 @@ import nhannt.musicplayer.recyclerhelper.OnStartDragListener;
 import nhannt.musicplayer.recyclerhelper.SimpleItemTouchHelperCallback;
 import nhannt.musicplayer.ui.base.BaseFragment;
 import nhannt.musicplayer.utils.ItemOffsetDecoration;
+import nhannt.musicplayer.utils.Navigator;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link FragmentPlayingQueue#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentPlayingQueue extends BaseFragment implements IPlayingQueueView,OnStartDragListener {
+public class FragmentPlayingQueue extends BaseFragment implements IPlayingQueueView, OnStartDragListener {
 
     public static final String TAG = FragmentPlayingQueue.class.getName();
     private static final String KEY_LST_SONG_QUEUE = "key_lst_song";
@@ -78,6 +84,8 @@ public class FragmentPlayingQueue extends BaseFragment implements IPlayingQueueV
         mPresenter = new PlayingQueuePresenter();
         mPresenter.attachedView(this);
         mPresenter.onResume();
+        setHasOptionsMenu(true);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
         DrawerLayoutContainer container = (DrawerLayoutContainer) getActivity();
         container.setDrawerLayoutActionBarToggle(mToolbar);
         enableDoBack();
@@ -86,10 +94,35 @@ public class FragmentPlayingQueue extends BaseFragment implements IPlayingQueueV
     private void setupDragRecyclerView() {
         mAdapter = new SongQueueAdapter(getContext(), lstSong, this);
         mRvLstSong.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         mRvLstSong.setLayoutManager(layoutManager);
 //        mRvLstSong.addItemDecoration(new DividerDecoration(getContext()));
         mRvLstSong.addItemDecoration(new ItemOffsetDecoration(getContext(), R.dimen.item_album_artist_detail_spacing));
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_queue, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.bt_shuffle_all_menu:
+                if (lstSong == null || lstSong.size() == 0) {
+                    App.getInstance().shuffeAll();
+                    mPresenter.onResume();
+                }
+                else {
+                    App.getInstance().shuffeAll(lstSong);
+                }
+                break;
+            case R.id.bt_equalizer:
+                Navigator.navigateToEqualizer(getContext(), 12345);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -116,7 +149,7 @@ public class FragmentPlayingQueue extends BaseFragment implements IPlayingQueueV
 
     @Override
     public void setItems(ArrayList<Song> lstSong) {
-        mAdapter = new SongQueueAdapter(getContext(),lstSong,this);
+        mAdapter = new SongQueueAdapter(getContext(), lstSong, this);
         mRvLstSong.setAdapter(mAdapter);
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mAdapter);
         mItemTouchHelper = new ItemTouchHelper(callback);

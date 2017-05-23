@@ -53,6 +53,7 @@
     <string name="time">TIME</string>
     <string name="search">Search</string>
     <string name="error_fetching_data">Error fetching data</string>
+    <string name="no_song_selected">No song selected!</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

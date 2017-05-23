@@ -30,6 +30,7 @@
             </intent-filter>
         </service>
 
+
         <activity
             android:name=".ui.home.HomeActivity"
             android:screenOrientation="portrait"
@@ -50,6 +51,14 @@
             <intent-filter>
                 <action android:name="android.media.AUDIO_BECOMING_NOISY"/>
             </intent-filter>
+        </receiver>
+        
+        <receiver android:name=".ui.widget.MusicControlWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/myappwidgetprovider"/>
         </receiver>
 
         <activity
