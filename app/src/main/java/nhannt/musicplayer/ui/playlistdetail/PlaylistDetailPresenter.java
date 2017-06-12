@@ -1,5 +1,8 @@
 package nhannt.musicplayer.ui.playlistdetail;
 
+import android.view.View;
+
+import nhannt.musicplayer.App;
 import nhannt.musicplayer.objectmodel.PlayList;
 
 /**
@@ -28,7 +31,7 @@ public class PlaylistDetailPresenter implements IPlaylistDetailPresenter {
 
     @Override
     public void onResume() {
-        mInteractor.loadPlaylistDetail(mView.getPlaylistId());
+        mInteractor.loadPlaylistDetail(mView.getPlaylist().getId());
     }
 
     @Override
@@ -44,5 +47,13 @@ public class PlaylistDetailPresenter implements IPlaylistDetailPresenter {
     @Override
     public void setPlaylistDetail(PlayList playList) {
         mView.setPlaylistDetail(playList);
+    }
+
+    @Override
+    public void onItemClickListener(View view, int position) {
+        if(mView == null || mView.getPlaylist() == null
+                || mView.getPlaylist().getLstSong() == null
+                || mView.getPlaylist().getLstSong().size() == 0) return;
+        App.getInstance().playSong(mView.getPlaylist().getLstSong(), position);
     }
 }

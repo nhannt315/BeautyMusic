@@ -47,21 +47,8 @@ public class MediaProvider {
         if (cursor != null && cursor.moveToFirst()) {
             try {
                 do {
-                    String title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
-                    String album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
-                    String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
-                    String songId = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media._ID));
-                    int duration = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
-                    String path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
-                    int year = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.YEAR));
-                    int albumID = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
-                    String albumPath = getCoverArtPath(albumID);
-                    int artistId = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID));
-                    Song item = new Song(songId, title, album, artist, albumPath, year, duration, path);
-                    item.setArtistId(artistId);
-                    item.setAlbumId(albumID);
 
-                    lstSong.add(item);
+                    lstSong.add(makeSongCursor(cursor));
 
                 } while (cursor.moveToNext());
             } finally {
@@ -84,14 +71,8 @@ public class MediaProvider {
         if (cursor != null && cursor.moveToFirst()) {
             try {
                 do {
-                    String title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM));
-                    String pathArt = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
-                    int id = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Albums._ID));
-                    String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ARTIST));
-                    int songCount = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Albums.NUMBER_OF_SONGS));
-                    int year = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Albums.FIRST_YEAR));
-                    Album item = new Album(id, title, artist, pathArt, year, songCount);
-                    lstAlbum.add(item);
+
+                    lstAlbum.add(makeAlbumCursor(cursor));
                 } while (cursor.moveToNext());
             } finally {
                 cursor.close();
@@ -111,12 +92,7 @@ public class MediaProvider {
         if (cursor != null && cursor.moveToFirst()) {
             try {
                 do {
-                    String title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Artists.ARTIST));
-                    int id = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Artists._ID));
-                    int numberSong = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Artists.NUMBER_OF_TRACKS));
-                    int numberAlbum = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Artists.NUMBER_OF_ALBUMS));
-                    Artist item = new Artist(id, title, numberAlbum, numberSong);
-                    lstArtist.add(item);
+                    lstArtist.add(makeArtistCursor(cursor));
                 } while (cursor.moveToNext());
             } finally {
                 cursor.close();
@@ -140,20 +116,7 @@ public class MediaProvider {
         if (cursor != null && cursor.moveToFirst()) {
             try {
                 do {
-                    String title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
-                    String album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
-                    String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
-                    String songId = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media._ID));
-                    int duration = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
-                    String path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
-                    int year = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.YEAR));
-                    int albumID = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
-                    int artistId = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID));
-                    String albumPath = getCoverArtPath(albumID);
-                    Song item = new Song(songId, title, album, artist, albumPath, year, duration, path);
-                    item.setArtistId(artistId);
-                    item.setAlbumId(albumID);
-                    lstSong.add(item);
+                    lstSong.add(makeSongCursor(cursor));
                 } while (cursor.moveToNext());
             } finally {
                 cursor.close();
@@ -174,14 +137,7 @@ public class MediaProvider {
         if (cursor != null && cursor.moveToFirst()) {
             try {
                 do {
-                    String title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM));
-                    String pathArt = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
-                    int id = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Albums._ID));
-                    String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ARTIST));
-                    int songCount = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Albums.NUMBER_OF_SONGS));
-                    int year = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Albums.FIRST_YEAR));
-                    Album item = new Album(id, title, artist, pathArt, year, songCount);
-                    lstAlbum.add(item);
+                    lstAlbum.add(makeAlbumCursor(cursor));
                 } while (cursor.moveToNext());
             } finally {
                 cursor.close();
@@ -200,12 +156,7 @@ public class MediaProvider {
         if (cursor != null && cursor.moveToFirst()) {
             try {
                 do {
-                    String title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Artists.ARTIST));
-                    int id = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Artists._ID));
-                    int numberSong = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Artists.NUMBER_OF_TRACKS));
-                    int numberAlbum = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Artists.NUMBER_OF_ALBUMS));
-                    Artist item = new Artist(id, title, numberAlbum, numberSong);
-                    lstArtist.add(item);
+                    lstArtist.add(makeArtistCursor(cursor));
                 } while (cursor.moveToNext());
             } finally {
                 cursor.close();
@@ -223,10 +174,7 @@ public class MediaProvider {
                 , MediaStore.Audio.Artists._ID + " =?", new String[]{artistId + ""}, MediaStore.Audio.Artists.ARTIST + " ASC");
         if (cursor != null && cursor.moveToFirst()) {
             try {
-                artist.setName(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Artists.ARTIST)));
-                artist.setId(cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Artists._ID)));
-                artist.setNumberOfSong(cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Artists.NUMBER_OF_TRACKS)));
-                artist.setNumberOfAlbum(cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Artists.NUMBER_OF_ALBUMS)));
+                artist = makeArtistCursor(cursor);
             } finally {
                 cursor.close();
             }
@@ -252,18 +200,7 @@ public class MediaProvider {
         Cursor cursor = mContext.getContentResolver().query(mediaContentUri, projection, selection, selectionArgs, null);
         if (cursor != null && cursor.moveToFirst()) {
             try {
-                String title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
-                String album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
-                String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
-                int duration = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
-                String path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
-                int year = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.YEAR));
-                int albumID = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
-                int artistId = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID));
-                String albumPath = getCoverArtPath(albumID);
-                song = new Song(songId, title, album, artist, albumPath, year, duration, path);
-                song.setAlbumId(albumID);
-                song.setArtistId(artistId);
+                song = makeSongCursor(cursor);
             } finally {
                 cursor.close();
             }
@@ -288,20 +225,8 @@ public class MediaProvider {
         if (cursor != null && cursor.moveToFirst()) {
             try {
                 do {
-                    String title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
-                    String album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
-                    String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
-                    String songId = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media._ID));
-                    int duration = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
-                    String path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
-                    int year = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.YEAR));
-                    int albumID = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
-                    int artistId = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID));
-                    String albumPath = getCoverArtPath(albumID);
-                    Song item = new Song(songId, title, album, artist, albumPath, year, duration, path);
-                    item.setArtistId(artistId);
-                    item.setAlbumId(albumID);
-                    lstSong.add(item);
+
+                    lstSong.add(makeSongCursor(cursor));
 
                 } while (cursor.moveToNext());
             } finally {
@@ -326,20 +251,7 @@ public class MediaProvider {
         if (cursor != null && cursor.moveToFirst()) {
             try {
                 do {
-                    String title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
-                    String album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
-                    String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
-                    String songId = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media._ID));
-                    int duration = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
-                    String path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
-                    int year = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.YEAR));
-                    int albumID = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
-
-                    String albumPath = getCoverArtPath(albumID);
-                    Song item = new Song(songId, title, album, artist, albumPath, year, duration, path);
-                    item.setArtistId(artistId);
-                    item.setAlbumId(albumID);
-                    lstSong.add(item);
+                    lstSong.add(makeSongCursor(cursor));
 
                 } while (cursor.moveToNext());
             } finally {
@@ -358,13 +270,7 @@ public class MediaProvider {
                 , MediaStore.Audio.Albums._ID + "=?", new String[]{albumId+""}, MediaStore.Audio.Albums.ALBUM + " ASC");
         if (cursor != null && cursor.moveToFirst()) {
             try {
-                String title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM));
-                String pathArt = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
-                int id = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Albums._ID));
-                String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ARTIST));
-                int songCount = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Albums.NUMBER_OF_SONGS));
-                int year = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Albums.FIRST_YEAR));
-                album = new Album(id, title, artist, pathArt, year, songCount);
+                album = makeAlbumCursor(cursor);
 
             } finally {
                 cursor.close();
@@ -406,6 +312,67 @@ public class MediaProvider {
             }
         }
         return result;
+    }
+
+    private Song makeSongCursor(Cursor cursor){
+        Song song = new Song();
+
+        String title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
+        String album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
+        String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
+        String songId = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media._ID));
+        int duration = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
+        String path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
+        int year = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.YEAR));
+        int albumID = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
+        int artistId = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID));
+        String albumPath = getCoverArtPath(albumID);
+
+        song.setTitle(title);
+        song.setAlbum(album);
+        song.setId(songId);
+        song.setDuration(duration);
+        song.setSongPath(path);
+        song.setCoverPath(albumPath);
+        song.setYear(year);
+        song.setArtist(artist);
+        song.setArtistId(artistId);
+        song.setAlbumId(albumID);
+        return song;
+    }
+
+    private Album makeAlbumCursor(Cursor cursor){
+        Album album = new Album();
+        String title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM));
+        String pathArt = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
+        int id = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Albums._ID));
+        String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ARTIST));
+        int songCount = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Albums.NUMBER_OF_SONGS));
+        int year = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Albums.FIRST_YEAR));
+
+        album.setId(id);
+        album.setTitle(title);
+        album.setCoverPath(pathArt);
+        album.setArtist(artist);
+        album.setSongCount(songCount);
+        album.setYear(year);
+
+        return album;
+    }
+
+    private Artist makeArtistCursor(Cursor cursor){
+        Artist artist = new Artist();
+        String title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Artists.ARTIST));
+        int id = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Artists._ID));
+        int numberSong = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Artists.NUMBER_OF_TRACKS));
+        int numberAlbum = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Artists.NUMBER_OF_ALBUMS));
+
+        artist.setName(title);
+        artist.setId(id);
+        artist.setNumberOfSong(numberSong);
+        artist.setNumberOfAlbum(numberAlbum);
+
+        return artist;
     }
 
 }

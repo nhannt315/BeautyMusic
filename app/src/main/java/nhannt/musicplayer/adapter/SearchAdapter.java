@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 
 import nhannt.musicplayer.R;
-import nhannt.musicplayer.data.network.retrofit.LastFmApi;
+import nhannt.musicplayer.data.network.lastfmapi.LastFmApi;
 import nhannt.musicplayer.interfaces.RecyclerItemClickListener;
 import nhannt.musicplayer.objectmodel.Album;
 import nhannt.musicplayer.objectmodel.Artist;

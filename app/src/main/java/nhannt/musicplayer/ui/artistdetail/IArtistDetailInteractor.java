@@ -1,6 +1,6 @@
 package nhannt.musicplayer.ui.artistdetail;
 
-import nhannt.musicplayer.data.network.ArtistPhotoListener;
+import nhannt.musicplayer.data.network.lastfmapi.ArtistPhotoListener;
 
 /**
  * Created by NhanNT on 05/03/2017.

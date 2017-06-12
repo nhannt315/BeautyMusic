@@ -1,7 +1,6 @@
 package nhannt.musicplayer.service;
 
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -10,11 +9,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.session.MediaSessionManager;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.annotation.Nullable;
+import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v7.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.media.MediaMetadataCompat;
@@ -202,6 +203,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
             startForeground(NOTIFY_ID, notify);
             stopForeground(false);
         }
+
     }
 
     public void shuffleAll(ArrayList<Song> lstSong) {
@@ -258,6 +260,8 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
                 PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent piSkipPrev = PendingIntent.getService(getApplicationContext(), 0, new Intent(ACTION_PREVIOUS),
                 PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent piExit = PendingIntent.getService(getApplicationContext(), 0, new Intent(ACTION_EXIT),
+                PendingIntent.FLAG_UPDATE_CURRENT);
 
         notificationView.setOnClickPendingIntent(R.id.bt_play_pause_notification, piPlayPause);
         notificationView.setOnClickPendingIntent(R.id.bt_next_notification, piSkipNext);
@@ -267,11 +271,13 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         bigNotificationView.setOnClickPendingIntent(R.id.bt_next_notification, piSkipNext);
         bigNotificationView.setOnClickPendingIntent(R.id.bt_prev_notification, piSkipPrev);
 
-        builder.setCustomContentView(notificationView);
+        builder.setDeleteIntent(piExit);
+//        builder.setCustomContentView(notificationView);
         builder.setCustomBigContentView(bigNotificationView);
+        builder.setContent(notificationView);
 
-        builder.setStyle(new NotificationCompat.DecoratedMediaCustomViewStyle().setMediaSession(mediaSession.getSessionToken())
-                .setShowActionsInCompactView(1));
+//        builder.setStyle(new NotificationCompat.DecoratedMediaCustomViewStyle().setMediaSession(mediaSession.getSessionToken())
+//                .setShowActionsInCompactView(1));
 
         return builder.build();
     }
@@ -353,6 +359,8 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         }
         Toast.makeText(this, "1 " + getString(R.string.success_add_to_queue), Toast.LENGTH_SHORT).show();
     }
+
+
 
     public void playSong() {
         if (mediaPlayer == null) return;
@@ -505,6 +513,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         notifyClients(EXIT);
         releaseMediaPlayer();
         audioManager.abandonAudioFocus(afChangeListener);
+        Log.d("Service","onDestroy");
         super.onDestroy();
     }
 

@@ -11,12 +11,15 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.adapter.SongAdapter;
 import nhannt.musicplayer.interfaces.IMusicServiceConnection;
 import nhannt.musicplayer.objectmodel.PlayList;
+import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.service.MusicService;
 import nhannt.musicplayer.ui.base.BaseActivity;
 import nhannt.musicplayer.utils.Common;
@@ -91,8 +94,8 @@ public class PlaylistDetailActivity extends BaseActivity implements IMusicServic
     }
 
     @Override
-    public int getPlaylistId() {
-        return this.mPlayList.getId();
+    public PlayList getPlaylist() {
+        return this.mPlayList;
     }
 
     @Override
@@ -102,10 +105,11 @@ public class PlaylistDetailActivity extends BaseActivity implements IMusicServic
         mSongAdapter.setAnimator(mRvSongList);
         mRvSongList.setAdapter(mSongAdapter);
         mSongAdapter.notifyDataSetChanged();
+        mSongAdapter.setRecyclerItemClickListener(mPresenter);
         tvTitle.setText(playList.getTitle());
-
         this.mPlayList = playList;
     }
+
 
     @Override
     protected void search(String query) {

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import nhannt.musicplayer.R;
-import nhannt.musicplayer.data.network.retrofit.LastFmApi;
+import nhannt.musicplayer.data.network.lastfmapi.LastFmApi;
 import nhannt.musicplayer.interfaces.RecyclerItemClickListener;
 import nhannt.musicplayer.objectmodel.Artist;
 import nhannt.musicplayer.utils.Common;

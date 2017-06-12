@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -60,7 +61,9 @@ public class HomePresenter implements IHomePresenter, View.OnClickListener {
                 }
                 break;
             case R.id.current_play_bar:
+                Log.d("current bar","clicked");
                 Navigator.navigateToPlayBackActivity(mView.getViewContext());
+
                 break;
         }
     }

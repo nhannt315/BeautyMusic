@@ -1,6 +1,9 @@
 package nhannt.musicplayer.ui.playlistdetail;
 
+import java.util.ArrayList;
+
 import nhannt.musicplayer.objectmodel.PlayList;
+import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.ui.base.BaseView;
 
 /**
@@ -8,6 +11,6 @@ import nhannt.musicplayer.ui.base.BaseView;
  */
 
 interface IPlaylistDetailView extends BaseView {
-    int getPlaylistId();
+    PlayList getPlaylist();
     void setPlaylistDetail(PlayList playList);
 }

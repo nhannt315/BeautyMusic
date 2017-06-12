@@ -2,7 +2,7 @@ package nhannt.musicplayer.ui.artistdetail;
 
 import java.util.ArrayList;
 
-import nhannt.musicplayer.data.network.ArtistPhotoListener;
+import nhannt.musicplayer.data.network.lastfmapi.ArtistPhotoListener;
 import nhannt.musicplayer.objectmodel.Album;
 import nhannt.musicplayer.objectmodel.Song;
 

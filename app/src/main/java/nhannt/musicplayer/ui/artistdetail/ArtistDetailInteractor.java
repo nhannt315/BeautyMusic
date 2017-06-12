@@ -5,8 +5,8 @@ import android.os.AsyncTask;
 import java.util.ArrayList;
 
 import nhannt.musicplayer.App;
-import nhannt.musicplayer.data.network.ArtistPhotoListener;
-import nhannt.musicplayer.data.network.retrofit.LastFmApi;
+import nhannt.musicplayer.data.network.lastfmapi.ArtistPhotoListener;
+import nhannt.musicplayer.data.network.lastfmapi.LastFmApi;
 import nhannt.musicplayer.data.provider.MediaProvider;
 import nhannt.musicplayer.objectmodel.Album;
 import nhannt.musicplayer.objectmodel.Song;

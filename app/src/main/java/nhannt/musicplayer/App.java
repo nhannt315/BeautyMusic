@@ -93,6 +93,13 @@ public class App extends Application {
         musicService.shuffleAll(lstSong);
     }
 
+    public void playSong(ArrayList<Song> lstSong, int songPosn){
+        if(musicService == null) return;
+        musicService.setLstSong(lstSong);
+        musicService.setSongPos(songPosn);
+        musicService.playSong();
+    }
+
     public Song getCurrentPlayingSong() {
         if (musicService == null || !musicService.isSongSetted()) return null;
         return musicService.getCurrentSong();
