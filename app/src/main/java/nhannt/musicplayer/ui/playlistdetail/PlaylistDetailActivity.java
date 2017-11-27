@@ -11,15 +11,12 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import nhannt.musicplayer.R;
 import nhannt.musicplayer.adapter.SongAdapter;
 import nhannt.musicplayer.interfaces.IMusicServiceConnection;
 import nhannt.musicplayer.objectmodel.PlayList;
-import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.service.MusicService;
 import nhannt.musicplayer.ui.base.BaseActivity;
 import nhannt.musicplayer.utils.Common;

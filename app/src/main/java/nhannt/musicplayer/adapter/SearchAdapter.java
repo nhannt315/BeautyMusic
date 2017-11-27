@@ -187,7 +187,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchHold
                 itemClickListener.onItemClickListener(itemView, pos);
             switch (getItemViewType()) {
                 case ITEM_SONG_TYPE:
-
                     break;
                 case ITEM_ALBUM_TYPE:
                     Navigator.gotoAlbumDetail(mContext, (Album) lstResult.get(pos));

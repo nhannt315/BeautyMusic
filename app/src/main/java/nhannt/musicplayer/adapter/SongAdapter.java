@@ -26,6 +26,7 @@ import nhannt.musicplayer.objectmodel.Song;
 import nhannt.musicplayer.recyclerhelper.RecyclerViewAnimator;
 import nhannt.musicplayer.service.MusicService;
 import nhannt.musicplayer.service.MusicServiceConnection;
+import nhannt.musicplayer.ui.custom.MusicVisualizer;
 import nhannt.musicplayer.ui.dialog.PlaylistDialog;
 
 /**
@@ -114,9 +115,12 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
         if (playState[position]) {
             holder.tvSongTitle.setTextColor(ContextCompat.getColor(mContext, R.color.colorRed));
             holder.tvArtist.setTextColor(ContextCompat.getColor(mContext, R.color.colorRed));
+            holder.musicVisualizer.setColor(ContextCompat.getColor(mContext, R.color.colorRed));
+            holder.musicVisualizer.setVisibility(View.VISIBLE);
         } else {
             holder.tvSongTitle.setTextColor(textColor);
             holder.tvArtist.setTextColor(textColor);
+            holder.musicVisualizer.setVisibility(View.GONE);
         }
         Glide.with(mContext).load(item.getCoverPath())
                 .placeholder(R.drawable.music_background)
@@ -149,6 +153,8 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
         }
 
         int position;
+        @BindView(R.id.song_visualizer)
+        protected MusicVisualizer musicVisualizer;
         @BindView(R.id.iv_cover_item_song)
         protected ImageView ivAlbumCover;
         @BindView(R.id.tv_song_title_item)

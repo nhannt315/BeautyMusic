@@ -71,6 +71,8 @@ public class PlaylistDialog extends Dialog implements RecyclerItemClickListener,
     @Override
     public void onItemClickListener(View view, int position) {
         Toast.makeText(mContext, mPlaylistList.get(position).getTitle(), Toast.LENGTH_SHORT).show();
+        DBQuery.getInstance().insertSongToPlaylist(mPlaylistList.get(position).getId(), itemSongToAdd.getId());
+        dismiss();
     }
 
     @Override

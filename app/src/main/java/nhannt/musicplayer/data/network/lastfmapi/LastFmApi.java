@@ -32,7 +32,7 @@ public class LastFmApi {
         mService = NetworkClient.provideLastFmService();
     }
 
-    private class ArtistCallBack implements Callback<Result>{
+    private class ArtistCallBack implements Callback<Result> {
 
         @Override
         public void onResponse(Call<Result> call, Response<Result> response) {
@@ -45,13 +45,13 @@ public class LastFmApi {
                 String url = null;
 
 
-                if (artistmatches.getArtist() != null) {
+                if (artistmatches.getArtist() != null && artistmatches.getArtist().size() > 0) {
                     artist = artistmatches.getArtist().get(0);
                     if (artist != null)
                         url = artist.getImage().get(2).getText();
                 }
 
-                if(imgArtist != null) {
+                if (imgArtist != null) {
                     if (isAnimate)
                         Glide.with(mContext).load(url).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .placeholder(R.drawable.google_play_music_logo)
@@ -62,7 +62,7 @@ public class LastFmApi {
                                 .dontAnimate()
                                 .into(imgArtist);
                 }
-                if(listener != null){
+                if (listener != null) {
                     listener.onSuccess(url);
                 }
             }

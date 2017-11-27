@@ -53,6 +53,13 @@
             android:textSize="13sp"/>
 
     </LinearLayout>
+    <nhannt.musicplayer.ui.custom.MusicVisualizer
+        android:id="@+id/song_visualizer"
+        android:visibility="gone"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="0"
+        android:layout_width="55dp"
+        android:layout_height="45dp"/>
 
     <ImageView
         android:id="@+id/btn_menu_song_item"

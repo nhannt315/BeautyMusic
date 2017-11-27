@@ -61,9 +61,7 @@ public class HomePresenter implements IHomePresenter, View.OnClickListener {
                 }
                 break;
             case R.id.current_play_bar:
-                Log.d("current bar","clicked");
                 Navigator.navigateToPlayBackActivity(mView.getViewContext());
-
                 break;
         }
     }

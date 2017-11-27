@@ -209,7 +209,7 @@ public class PlayBackActivity extends BaseActivity implements IPlayBackView, IMu
                 onBackPressed();
                 break;
             case R.id.btn_shuffle_all_playback:
-                if(mService == null) return true;
+                if (mService == null) return true;
                 mService.shuffleAll();
                 updateButtonState();
                 break;
@@ -255,7 +255,7 @@ public class PlayBackActivity extends BaseActivity implements IPlayBackView, IMu
 
     @Override
     public void setItems(ArrayList<Song> lstItem) {
-        songAdapter = new SongAdapter(PlayBackActivity.this, lstItem,R.layout.item_song);
+        songAdapter = new SongAdapter(PlayBackActivity.this, lstItem, R.layout.item_song);
         Log.d("playback", "set item");
         songAdapter.setRecyclerItemClickListener(this);
         mRvSongList.setAdapter(songAdapter);
@@ -330,13 +330,15 @@ public class PlayBackActivity extends BaseActivity implements IPlayBackView, IMu
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            Blurry.with(PlayBackActivity.this)
-                    .radius(25)
-                    .sampling(1)
-                    .color(Color.argb(57, 54, 54, 0))
-                    .async()
-                    .from(bitmap)
-                    .into(ivBackGround);
+            if (bitmap != null) {
+                Blurry.with(PlayBackActivity.this)
+                        .radius(25)
+                        .sampling(1)
+                        .color(Color.argb(57, 54, 54, 0))
+                        .async()
+                        .from(bitmap)
+                        .into(ivBackGround);
+            }
             super.onPostExecute(aVoid);
         }
     }

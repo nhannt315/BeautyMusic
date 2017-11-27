@@ -9,6 +9,7 @@
     android:layout_alignParentBottom="true"
     app:cardBackgroundColor="@color/white"
     app:cardElevation="5dp"
+    android:focusable="false"
     android:orientation="horizontal">
 
     <LinearLayout
