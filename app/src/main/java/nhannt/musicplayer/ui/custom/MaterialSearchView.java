@@ -42,7 +42,7 @@ import nhannt.musicplayer.utils.Common;
 import nhannt.musicplayer.utils.ItemOffsetDecoration;
 
 /**
- * @author Miguel Catalan Bañuls
+ * @author NhanNT
  */
 public class MaterialSearchView extends FrameLayout {
     public static final int REQUEST_VOICE = 9999;
